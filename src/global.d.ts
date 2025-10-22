@@ -1,9 +1,9 @@
 type ApiEventMapping = {
-  ping: undefined;
-};
+    ping: undefined
+}
 
 interface Window {
-  api: {
-    ping: () => string;
-  };
+    api: {
+        ping: () => string
+    }
 }

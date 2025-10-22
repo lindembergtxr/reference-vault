@@ -1,0 +1,6 @@
+node_modules/
+build/
+dist/
+dist-electron/
+dist-react/
+*.min.js

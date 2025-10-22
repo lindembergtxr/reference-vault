@@ -1,7 +1,7 @@
 declare const _default: ({
-  mode,
+    mode,
 }: {
-  mode: string;
-}) => import("vite").UserConfig;
+    mode: string
+}) => import('vite').UserConfig
 
-export default _default;
+export default _default
