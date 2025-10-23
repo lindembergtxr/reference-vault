@@ -1,0 +1,34 @@
+CREATE TABLE IF NOT EXISTS artists (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS groups (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    artist_id TEXT,
+    FOREIGN KEY (artist_id) REFERENCES artists(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS images (
+    id TEXT PRIMARY KEY,
+    title TEXT,
+    path TEXT NOT NULL,
+    artist_id TEXT,
+    group_id TEXT,
+    FOREIGN KEY (artist_id) REFERENCES artists(id) ON DELETE SET NULL,
+    FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS tags (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS image_tags (
+    image_id TEXT NOT NULL,
+    tag_id TEXT NOT NULL,
+    PRIMARY KEY (image_id, tag_id),
+    FOREIGN KEY (image_id) REFERENCES images(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);

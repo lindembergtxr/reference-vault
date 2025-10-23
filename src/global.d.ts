@@ -1,9 +1,14 @@
+type Tag = {
+    id: string
+    name: string
+}
+
 type ApiEventMapping = {
-    ping: undefined
+    getAllTags: Tag[]
 }
 
 interface Window {
     api: {
-        ping: () => string
+        getAllTags: () => Promise<Tag[]>
     }
 }
