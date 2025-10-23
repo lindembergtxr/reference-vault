@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
+import Sidebar from '../features/sidebar'
 
-import './App.css'
-
-function App() {
+const Home = () => {
     const [tags, setTags] = useState<Tag[]>([])
 
     useEffect(() => {
@@ -10,16 +9,14 @@ function App() {
     }, [])
 
     return (
-        <>
-            <h1>Vite + React</h1>
+        <div>
+            <Sidebar />
+            <h1>React</h1>
             <div className="card">
                 <p>{JSON.stringify(tags)}</p>
             </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        </div>
     )
 }
 
-export default App
+export default Home
