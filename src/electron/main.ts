@@ -9,8 +9,11 @@ dotenv.config()
 import './database/index.js'
 
 import { getAllTags } from './services/tags.js'
+import { runSqlMigrations } from './database/migration.js'
 
-app.on('ready', () => {
+app.whenReady().then(async () => {
+    await runSqlMigrations()
+
     const mainWindow = new BrowserWindow({
         webPreferences: {
             preload: getPreloadPath(),
