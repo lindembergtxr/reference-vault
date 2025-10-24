@@ -1,73 +1,101 @@
-# React + TypeScript + Vite
+# Reference Vault
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/react-19.x-blue)
+![Node.js](https://img.shields.io/badge/node-24.x-brightgreen)
+![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
+![In Progress](https://img.shields.io/badge/status-in%20progress-yellow)
 
-Currently, two official plugins are available:
+Reference Vault is a local, offline-first media manager for images, books, and other references. It allows you to organize, tag, and quickly browse your collection with thumbnails, search, and metadata.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## React Compiler
+- **Frontend:** React, TailwindCSS
+- **Backend:** Electron, Node.js
+- **Database:** SQLite (via better-sqlite3)
+- **Build Tools:** Vite, TypeScript
+- **Other:** React Icons, Headless UI
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Import and organize media into a structured local database
+- Add, view, and filter tags for items
+- Generate thumbnails for faster browsing
+- Offline-first: no internet required
+- Supports custom metadata for future-proof organization
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
+### Prerequisites
 
-            // Remove tseslint.configs.recommended and replace with this
-            tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            tseslint.configs.stylisticTypeChecked,
+- Node.js ≥ 24.x
+- NPM ≥ 9.x
+- macOS, Windows, or Linux
+- (macOS) Xcode Command Line Tools if building Electron binaries
 
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
+### Installation
+
+#### Clone the repository:
+
+```bash
+git clone https://github.com/lindembergtxr/reference-vault.git
+cd reference-vault
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended,
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
+```bash
+npm install
 ```
+
+#### Create a .env file in the project root (example values)
+
+```
+VITE_DEVELOPMENT_PORT=3000
+VITE_DATABASE_FILENAME=database.db
+```
+
+#### Run in development
+
+```bash
+npm run dev
+```
+
+#### Building the App
+
+##### For macOS
+
+```bash
+npm run dist:mac
+```
+
+##### For Linux
+
+```bash
+npm run dist:linux
+```
+
+##### For Windows
+
+```bash
+npm run dist:win
+```
+
+### Project structure
+
+```
+/src/electron               - Backend and preload scripts
+/src/ui                     - React frontend
+/src/electron/databases     - SQLite schema & migrations
+.env                        - Environment variables
+```
+
+### Notes
+
+- Database is auto-created on first run.
+- Images are not stored in the database, only paths and metadata.
+- Dev mode requires webSecurity: false for local image loading.
+- Migrations are stored as .sql files and executed automatically.
+
+## License
+
+MIT
