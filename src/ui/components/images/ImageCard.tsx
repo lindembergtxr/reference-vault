@@ -47,7 +47,8 @@ export const ImageCard = (props: ImageCardType) => {
                         'cursor-pointer': mode !== 'disabled',
                         // hover
                         'hover:scale-105 hover:outline-2 hover:ring-4 hover:ring-blue-500/75':
-                            mode === 'open',
+                            mode === 'open' ||
+                            (mode === 'select' && !isSelected),
                         'ring-4 ring-blue-500/75': isSelected,
                     },
                 )}
@@ -61,7 +62,10 @@ export const ImageCard = (props: ImageCardType) => {
 
                 {isSelected && (
                     <div className="absolute bottom-0 right-0">
-                        <MdCheckCircle className="text-blue-700 w-6 h-6 filter drop-shadow-[0_0_4px_white]" />
+                        <MdCheckCircle
+                            data-testid={`image-card-selected-icon-${url}`}
+                            className="text-blue-700 w-6 h-6 filter drop-shadow-[0_0_4px_white]"
+                        />
                     </div>
                 )}
             </a>
