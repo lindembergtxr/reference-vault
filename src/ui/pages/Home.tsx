@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Sidebar from '../features/sidebar'
+import { ImageList } from '../components/images/ImageList'
 
 const Home = () => {
     const [tags, setTags] = useState<Tag[]>([])
@@ -10,11 +10,11 @@ const Home = () => {
 
     return (
         <div>
-            <Sidebar />
             <h1>React</h1>
             <div className="card">
                 <p>{JSON.stringify(tags)}</p>
             </div>
+            <ImageList images={[]} />
         </div>
     )
 }
