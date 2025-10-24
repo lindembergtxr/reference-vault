@@ -16,6 +16,16 @@ export const ipcHandle = <Key extends keyof ApiEventMapping>(
     })
 }
 
+export const ipcAsyncHandle = <Key extends keyof ApiEventMapping>(
+    key: Key,
+    handler: () => Promise<ApiEventMapping[Key]>,
+) => {
+    ipcMain.handle(key, (event) => {
+        validateEventFrame(event.senderFrame)
+        return handler()
+    })
+}
+
 export const ipcWebContentsSend = <Key extends keyof ApiEventMapping>(
     key: Key,
     webContents: WebContents,

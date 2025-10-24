@@ -2,6 +2,7 @@ const electron = require('electron')
 
 electron.contextBridge.exposeInMainWorld('api', {
     getAllTags: () => ipcInvoke('getAllTags'),
+    getConfig: () => ipcInvoke('getConfig'),
 } satisfies Window['api'])
 
 function ipcInvoke<Key extends keyof ApiEventMapping>(

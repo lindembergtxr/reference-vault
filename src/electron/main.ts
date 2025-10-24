@@ -2,13 +2,14 @@ import dotenv from 'dotenv'
 import { app, BrowserWindow } from 'electron'
 
 import { getPreloadPath, getUIPath } from './pathResolver.js'
-import { ipcHandle, isDev } from './util.js'
+import { ipcAsyncHandle, ipcHandle, isDev } from './util.js'
 
 dotenv.config()
 
 import './database/index.js'
 
 import { runSqlMigrations } from './database/migration.js'
+import { getConfig, setupConfig } from './services/config.js'
 import { getAllTags } from './services/tags.js'
 
 app.whenReady().then(async () => {
@@ -32,5 +33,9 @@ app.whenReady().then(async () => {
         mainWindow.loadFile(getUIPath())
     }
 
+    setupConfig()
+
     ipcHandle('getAllTags', () => getAllTags())
+
+    ipcAsyncHandle('getConfig', () => getConfig())
 })
