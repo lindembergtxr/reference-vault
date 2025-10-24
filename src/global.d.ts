@@ -1,3 +1,5 @@
+/// <reference types="@testing-library/jest-dom" />
+
 type Tag = {
     id: string
     name: string
