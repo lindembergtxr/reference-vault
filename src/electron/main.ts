@@ -11,6 +11,7 @@ import './database/index.js'
 import { runSqlMigrations } from './database/migration.js'
 import { getConfig, setupConfig } from './services/config.js'
 import { importFromFolder } from './services/files/import.js'
+import { getStagedFiles } from './services/index.js'
 import { getAllTags } from './services/tags.js'
 
 app.whenReady().then(async () => {
@@ -41,4 +42,6 @@ app.whenReady().then(async () => {
     ipcAsyncHandle('getConfig', () => getConfig())
 
     ipcAsyncHandle('importFiles', () => importFromFolder())
+
+    ipcAsyncHandle('getStagedFiles', () => getStagedFiles())
 })

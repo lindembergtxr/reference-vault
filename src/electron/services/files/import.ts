@@ -1,17 +1,11 @@
-import fs from 'fs/promises'
-import { customAlphabet } from 'nanoid'
 import path from 'path'
 
 import { app, dialog } from 'electron'
 
+import * as utils from '../../utils/index.js'
 import { ImageService } from '../images/imageService.js'
 import { addThumbnail } from './addThumbnail.js'
 import { copyFileToFolder } from './move.js'
-
-const alphabet =
-    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-
-const nanoid = customAlphabet(alphabet, 12)
 
 export const getTempFolderPath = () => {
     const localPath = app.getPath('userData')
@@ -22,27 +16,20 @@ export const getTempFolderPath = () => {
     return path.join(localPath, tempFolderName)
 }
 
-const getFolderImages = async (): Promise<string[]> => {
+export const importFromFolder = async () => {
     const result = await dialog.showOpenDialog({
         properties: ['openDirectory'],
     })
-    if (result.canceled || result.filePaths.length === 0) return []
 
-    const folderPath = result.filePaths[0]
+    let fileURLs: string[]
 
-    const imageRegex = /\.(jpe?g|png|gif|webp|bmp|tiff)$/i
+    if (result.canceled || result.filePaths.length === 0) {
+        fileURLs = []
+    } else {
+        const folderPath = result.filePaths[0]
 
-    const files = await fs.readdir(folderPath)
-
-    const fileURLs = files
-        .filter((file) => imageRegex.test(file))
-        .map((file) => path.join(folderPath, file))
-
-    return fileURLs
-}
-
-export const importFromFolder = async () => {
-    const fileURLs = await getFolderImages()
+        fileURLs = await utils.getFolderImages(folderPath)
+    }
 
     const limit = Number(process.env.VITE_CONCURRENCY_LIMIT) || 1
 
@@ -52,7 +39,7 @@ export const importFromFolder = async () => {
         const batchPromises = batch.map(async (url) => {
             try {
                 const extension = path.extname(url)
-                const filename = `${nanoid(12)}${extension}`
+                const filename = `${utils.generateId()}${extension}`
                 const destination = path.join(getTempFolderPath(), filename)
 
                 await copyFileToFolder(url, destination)
