@@ -17,11 +17,12 @@ type Tag = {
 type ApiEventMapping = {
     getAllTags: Tag[]
     getConfig: ConfigData
+    importFiles: void
 }
-
 interface Window {
     api: {
         getAllTags: () => Promise<Tag[]>
         getConfig: () => Promise<ConfigData>
+        importFiles: () => Promise<void>
     }
 }
