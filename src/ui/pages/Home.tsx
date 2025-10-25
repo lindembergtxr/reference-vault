@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ImageList } from '../components/images/ImageList'
 
-const Home = () => {
+export const Home = () => {
     const [tags, setTags] = useState<Tag[]>([])
 
     useEffect(() => {
@@ -10,7 +10,7 @@ const Home = () => {
 
     return (
         <div>
-            <h1>React</h1>
+            <h1>Home</h1>
             <div className="card">
                 <p>{JSON.stringify(tags)}</p>
             </div>
@@ -18,5 +18,3 @@ const Home = () => {
         </div>
     )
 }
-
-export default Home
