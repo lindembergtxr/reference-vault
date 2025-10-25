@@ -1,18 +1,14 @@
 import dotenv from 'dotenv'
 import { app, BrowserWindow } from 'electron'
 
-import { getPreloadPath, getUIPath } from './pathResolver.js'
-import { ipcAsyncHandle, ipcHandle, isDev } from './util.js'
-
 dotenv.config()
 
 import './database/index.js'
 
 import { runSqlMigrations } from './database/migration.js'
-import { getConfig, setupConfig } from './services/config.js'
-import { importFromFolder } from './services/files/import.js'
-import { getStagedFiles } from './services/index.js'
-import { getAllTags } from './services/tags.js'
+import { registerAllIpcs } from './ipc/index.js'
+import { setupConfig } from './services/config.js'
+import { getPreloadPath, getUIPath, isDev } from './utils/index.js'
 
 app.whenReady().then(async () => {
     await runSqlMigrations()
@@ -26,22 +22,16 @@ app.whenReady().then(async () => {
     })
 
     if (isDev()) {
+        const devLocation = `http://localhost:${process.env.VITE_DEVELOPMENT_PORT}`
+
         mainWindow.webContents.openDevTools()
 
-        mainWindow.loadURL(
-            `http://localhost:${process.env.VITE_DEVELOPMENT_PORT}`,
-        )
+        mainWindow.loadURL(devLocation)
     } else {
         mainWindow.loadFile(getUIPath())
     }
 
     setupConfig()
 
-    ipcHandle('getAllTags', () => getAllTags())
-
-    ipcAsyncHandle('getConfig', () => getConfig())
-
-    ipcAsyncHandle('importFiles', () => importFromFolder())
-
-    ipcAsyncHandle('getStagedFiles', () => getStagedFiles())
+    registerAllIpcs()
 })

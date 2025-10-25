@@ -1,3 +1,5 @@
+export * from './config.js'
 export * from './folders.js'
 export * from './id.js'
-export * from './thumbnails.js'
+export * from './images.js'
+export * from './ipc.js'

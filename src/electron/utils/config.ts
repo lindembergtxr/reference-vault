@@ -1,7 +1,16 @@
-import path from 'path'
 import { app } from 'electron'
+import path from 'path'
 
-import { isDev } from './util.js'
+export const isDev = (): boolean => {
+    return process.env.NODE_ENV === 'development'
+}
+
+export const getConfigPath = () => {
+    return path.join(
+        app.getPath('userData'),
+        process.env.VITE_DATABASE_CONFIG_FILENAME || 'config.json',
+    )
+}
 
 export const getPreloadPath = () => {
     return path.join(

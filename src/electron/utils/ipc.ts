@@ -1,10 +1,6 @@
 import { ipcMain, WebContents, WebFrameMain } from 'electron'
 import { pathToFileURL } from 'url'
-import { getUIPath } from './pathResolver.js'
-
-export const isDev = (): boolean => {
-    return process.env.NODE_ENV === 'development'
-}
+import { getUIPath, isDev } from './index.js'
 
 export const ipcHandle = <Key extends keyof ApiEventMapping>(
     key: Key,

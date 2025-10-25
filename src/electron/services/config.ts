@@ -1,12 +1,5 @@
 import fs from 'fs'
-import path from 'path'
-
-import { app } from 'electron'
-
-const configPath = path.join(
-    app.getPath('userData'),
-    process.env.VITE_DATABASE_CONFIG_FILENAME || 'config.json',
-)
+import { getConfigPath } from '../utils/index.js'
 
 const defaultConfig: ConfigData = {
     theme: 'dark',
@@ -23,10 +16,12 @@ export const writeConfig = (newConfig: Partial<ConfigData>) => {
 
     localConfig = { ...localConfig, ...newConfig }
 
-    fs.writeFileSync(configPath, JSON.stringify(localConfig, null, 2))
+    fs.writeFileSync(getConfigPath(), JSON.stringify(localConfig, null, 2))
 }
 
 export const setupConfig = async () => {
+    const configPath = getConfigPath()
+
     try {
         await fs.promises.access(configPath)
     } catch {
@@ -43,6 +38,8 @@ export const getConfig = async (): Promise<ConfigData> => {
     if (localConfig) return localConfig
 
     let temp: ConfigData
+
+    const configPath = getConfigPath()
 
     try {
         const data = await fs.promises.readFile(configPath, 'utf8')
