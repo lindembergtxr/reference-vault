@@ -1,7 +1,7 @@
 const electron = require('electron')
 
-type IpcKey = keyof ApiEventMapping
-type IpcData<Key extends IpcKey> = ApiEventMapping[Key]
+type IpcKey = keyof ApiEventMap
+type IpcData<Key extends IpcKey> = ApiEventMap[Key]
 
 export const ipcInvoke = <K extends IpcKey>(key: K): Promise<IpcData<K>> => {
     return electron.ipcRenderer.invoke(key)

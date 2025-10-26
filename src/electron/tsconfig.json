@@ -5,7 +5,7 @@
         "module": "nodenext",
         "outDir": "../../dist-electron",
         "skipLibCheck": true,
-        "types": ["../global"]
+        "types": ["../types/index"]
     },
     "exclude": ["../../vite.config.ts"]
 }

@@ -2,9 +2,9 @@ import { ipcMain, WebContents, WebFrameMain } from 'electron'
 import { pathToFileURL } from 'url'
 import { getUIPath, isDev } from './index.js'
 
-export const ipcHandle = <Key extends keyof ApiEventMapping>(
+export const ipcHandle = <Key extends keyof ApiEventMap>(
     key: Key,
-    handler: () => ApiEventMapping[Key],
+    handler: () => ApiEventMap[Key],
 ) => {
     ipcMain.handle(key, (event) => {
         validateEventFrame(event.senderFrame)
@@ -12,9 +12,9 @@ export const ipcHandle = <Key extends keyof ApiEventMapping>(
     })
 }
 
-export const ipcAsyncHandle = <Key extends keyof ApiEventMapping>(
+export const ipcAsyncHandle = <Key extends keyof ApiEventMap>(
     key: Key,
-    handler: () => Promise<ApiEventMapping[Key]>,
+    handler: () => Promise<ApiEventMap[Key]>,
 ) => {
     ipcMain.handle(key, (event) => {
         validateEventFrame(event.senderFrame)
@@ -22,10 +22,10 @@ export const ipcAsyncHandle = <Key extends keyof ApiEventMapping>(
     })
 }
 
-export const ipcWebContentsSend = <Key extends keyof ApiEventMapping>(
+export const ipcWebContentsSend = <Key extends keyof ApiEventMap>(
     key: Key,
     webContents: WebContents,
-    payload: () => ApiEventMapping[Key],
+    payload: () => ApiEventMap[Key],
 ) => {
     webContents.send(key, payload)
 }
