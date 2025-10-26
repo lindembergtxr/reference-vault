@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { app, BrowserWindow } from 'electron'
+import * as helpers from './helpers/electron.js'
 
 dotenv.config()
 
@@ -10,10 +10,10 @@ import { registerAllIpcs } from './ipc/index.js'
 import { setupConfig } from './services/config.js'
 import { getPreloadPath, getUIPath, isDev } from './utils/index.js'
 
-app.whenReady().then(async () => {
+helpers.whenElectronAppReady().then(async () => {
     await runSqlMigrations()
 
-    const mainWindow = new BrowserWindow({
+    const mainWindow = helpers.createBrowserWindow({
         webPreferences: {
             preload: getPreloadPath(),
             contextIsolation: true,

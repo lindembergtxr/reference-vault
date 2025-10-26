@@ -24,7 +24,7 @@ export default defineConfig([
             globals: globals.browser,
         },
         rules: {
-            'prettier/prettier': 'warn', // Faz o Prettier rodar via ESLint
+            'prettier/prettier': 'warn',
             '@typescript-eslint/triple-slash-reference': 'off',
         },
     },

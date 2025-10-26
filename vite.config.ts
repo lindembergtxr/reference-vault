@@ -17,7 +17,7 @@ export default ({ mode }: { mode: string }) => {
         test: {
             globals: true,
             environment: 'jsdom',
-            setupFiles: './vitest.setup.ts',
+            setupFiles: ['./vitest.setup.ts'],
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)

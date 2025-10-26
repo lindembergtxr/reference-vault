@@ -3,14 +3,6 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { getThumbnailTempFolderPath } from './getThumbnailTempFolderPath.js'
 
-const test_url = '/fake/userData'
-
-vi.mock('electron', () => ({
-    app: {
-        getPath: vi.fn(() => test_url),
-    },
-}))
-
 describe('getThumbnailTempFolderPath', () => {
     afterEach(() => {
         vi.unstubAllEnvs()
@@ -21,7 +13,7 @@ describe('getThumbnailTempFolderPath', () => {
 
         const result = getThumbnailTempFolderPath()
 
-        expect(result).toBe(path.join(test_url, 'temp_thumbnails'))
+        expect(result).toBe(path.join('/fake/userData', 'temp_thumbnails'))
     })
 
     it('respects the env var if defined', () => {
@@ -29,6 +21,6 @@ describe('getThumbnailTempFolderPath', () => {
 
         const result = getThumbnailTempFolderPath()
 
-        expect(result).toBe(path.join(test_url, 'custom_folder'))
+        expect(result).toBe(path.join('/fake/userData', 'custom_folder'))
     })
 })

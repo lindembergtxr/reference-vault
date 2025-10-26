@@ -18,8 +18,8 @@ export const addThumbnail = async (src: string) => {
 
         return outputPath
     } catch (error) {
-        console.error(`Thumbnail generation failed for ${src}:`, error)
-
-        throw error
+        const message = utils.errorMessages['ThumbnailCreationFailed'](src)
+        await utils.logError({ message, error })
+        throw utils.generateError('ThumbnailCreationFailed', src)
     }
 }

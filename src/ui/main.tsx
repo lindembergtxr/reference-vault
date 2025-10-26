@@ -6,6 +6,8 @@ import './index.css'
 import { Navbar } from './components/navbar'
 import { Home, Import } from './pages'
 
+import './errorLogging.js'
+
 const main = async () => {
     const config = await window.api.getConfig()
 

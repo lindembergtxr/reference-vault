@@ -3,3 +3,5 @@
 /// <reference path="./ipc.d.ts" />
 /// <reference path="./images.d.ts" />
 /// <reference path="./tags.d.ts" />
+/// <reference path="./functions.d.ts" />
+/// <reference path="./errors.d.ts" />

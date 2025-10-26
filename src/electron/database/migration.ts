@@ -1,12 +1,13 @@
 import fs from 'fs'
 import path from 'path'
-import { app } from 'electron'
 
+import * as helpers from '../helpers/index.js'
+import * as utils from '../utils/index.js'
 import { db } from './index.js'
 
 const relativeDir = '/src/electron/database/migrations'
 
-const migrationsDir = path.join(app.getAppPath(), relativeDir)
+const migrationsDir = path.join(helpers.getAppPathHelper(), relativeDir)
 
 export const runSqlMigrations = (): void => {
     const files = fs
@@ -19,9 +20,7 @@ export const runSqlMigrations = (): void => {
     for (const file of files) {
         const migrationName = path.basename(file)
 
-        const exists = db
-            .prepare('SELECT 1 FROM migrations WHERE name = ?')
-            .get(migrationName)
+        const exists = db.prepare('SELECT 1 FROM migrations WHERE name = ?').get(migrationName)
 
         if (exists) {
             console.log(`Skipping already run migration: ${migrationName}`)
@@ -39,8 +38,9 @@ export const runSqlMigrations = (): void => {
 
             console.log(`Migration executed: ${migrationName}`)
         } catch (err) {
-            console.error(`Failed migration: ${migrationName}`, err)
-            throw err
+            const message = utils.errorMessages['MigrationError'](migrationName)
+            utils.logError({ message, error: err })
+            throw utils.generateError('MigrationError', migrationName)
         }
     }
 }

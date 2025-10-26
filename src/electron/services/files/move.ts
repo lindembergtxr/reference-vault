@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
+import * as utils from '../../utils/index.js'
 
 type Mode = 'move' | 'copy'
 
@@ -8,11 +9,7 @@ type FileToFolderHandler = {
     destination: string
     mode: Mode
 }
-const fileToFolderHandler = async ({
-    src,
-    destination,
-    mode,
-}: FileToFolderHandler) => {
+const fileToFolderHandler = async ({ src, destination, mode }: FileToFolderHandler) => {
     const dirname = path.dirname(destination)
 
     await fs.mkdir(dirname, { recursive: true })
@@ -29,13 +26,13 @@ const fileToFolderHandler = async ({
 
                 if (mode === 'move') await fs.unlink(src)
             } else {
-                console.error('Failed to move file:', e)
-                throw e
+                await utils.logError({ message: utils.errorMessages['FailedToMoveFile'](), error })
+                throw utils.generateError('FailedToMoveFile')
             }
         } else {
-            console.error('Unknown error moving file:', error)
-
-            throw error
+            const message = utils.errorMessages['UnknownErrorWhenMovingFile']()
+            await utils.logError({ message, error })
+            throw utils.generateError('UnknownErrorWhenMovingFile')
         }
     }
 }

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { getConfigPath } from '../utils/index.js'
+import * as utils from '../utils/index.js'
 
 const defaultConfig: ConfigData = {
     theme: 'dark',
@@ -10,17 +10,18 @@ const defaultConfig: ConfigData = {
 
 export let localConfig: ConfigData | null = null
 
-export const writeConfig = (newConfig: Partial<ConfigData>) => {
-    if (!localConfig)
-        throw new Error('Config not initialized. Call setupConfig first.')
-
+export const writeConfig = async (newConfig: Partial<ConfigData>) => {
+    if (!localConfig) {
+        await utils.logError({ message: utils.errorMessages['MissingConfig']() })
+        throw utils.generateError('MissingConfig')
+    }
     localConfig = { ...localConfig, ...newConfig }
 
-    fs.writeFileSync(getConfigPath(), JSON.stringify(localConfig, null, 2))
+    fs.writeFileSync(utils.getConfigPath(), JSON.stringify(localConfig, null, 2))
 }
 
 export const setupConfig = async () => {
-    const configPath = getConfigPath()
+    const configPath = utils.getConfigPath()
 
     try {
         await fs.promises.access(configPath)
@@ -39,7 +40,7 @@ export const getConfig = async (): Promise<ConfigData> => {
 
     let temp: ConfigData
 
-    const configPath = getConfigPath()
+    const configPath = utils.getConfigPath()
 
     try {
         const data = await fs.promises.readFile(configPath, 'utf8')

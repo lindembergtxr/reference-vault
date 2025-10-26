@@ -1,13 +1,14 @@
+import Database from 'better-sqlite3'
+import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import Database from 'better-sqlite3'
-import { app } from 'electron'
-import dotenv from 'dotenv'
+
+import * as helpers from '../helpers/index.js'
 
 dotenv.config()
 
 const dbPath = path.join(
-    app.getPath('userData'),
+    helpers.getUserDataPath(),
     process.env.VITE_DATABASE_FILENAME ?? 'reference_vault.db',
 )
 
@@ -17,10 +18,7 @@ export const db = new Database(dbPath)
 
 db.pragma('journal_mode = WAL')
 
-const schemaPath = path.join(
-    app.getAppPath(),
-    'src/electron/database/schema.sql',
-)
+const schemaPath = path.join(helpers.getAppPathHelper(), 'src/electron/database/schema.sql')
 
 if (fs.existsSync(schemaPath)) {
     const schema = fs.readFileSync(schemaPath, 'utf8')

@@ -1,7 +1,7 @@
 const electron = require('electron')
 
 type IpcKey = keyof ApiEventMap
-type IpcData<Key extends IpcKey> = ApiEventMap[Key]
+type IpcData<Key extends IpcKey> = ApiEventMap[Key]['return']
 
 export const ipcInvoke = <K extends IpcKey>(key: K): Promise<IpcData<K>> => {
     return electron.ipcRenderer.invoke(key)
@@ -23,4 +23,5 @@ electron.contextBridge.exposeInMainWorld('api', {
     getConfig: () => ipcInvoke('getConfig'),
     importFiles: () => ipcInvoke('importFiles'),
     getStagedFiles: () => ipcInvoke('getStagedFiles'),
+    logError: () => ipcInvoke('logError'),
 } satisfies Window['api'])

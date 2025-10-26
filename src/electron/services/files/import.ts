@@ -1,25 +1,21 @@
 import path from 'path'
 
-import { app, dialog } from 'electron'
-
+import * as helpers from '../../helpers/index.js'
 import * as utils from '../../utils/index.js'
 import { ImageService } from '../images/imageService.js'
 import { addThumbnail } from './addThumbnail.js'
 import { copyFileToFolder } from './move.js'
 
 export const getTempFolderPath = () => {
-    const localPath = app.getPath('userData')
+    const localPath = helpers.getUserDataPath()
 
-    const tempFolderName =
-        process.env.VITE_IMAGE_STAGING_FOLDER || 'temp_images'
+    const tempFolderName = process.env.VITE_IMAGE_STAGING_FOLDER || 'temp_images'
 
     return path.join(localPath, tempFolderName)
 }
 
 export const importFromFolder = async () => {
-    const result = await dialog.showOpenDialog({
-        properties: ['openDirectory'],
-    })
+    const result = await helpers.showOpenDialog()
 
     let fileURLs: string[]
 
@@ -48,7 +44,9 @@ export const importFromFolder = async () => {
 
                 ImageService.add(filename)
             } catch (error) {
-                console.error(`Failed to import ${url}:`, error)
+                const message = utils.errorMessages['FailedToImportFile'](url)
+                await utils.logError({ message, error })
+                throw utils.generateError('FailedToImportFile', url)
             }
         })
 

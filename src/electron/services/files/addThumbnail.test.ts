@@ -1,17 +1,8 @@
 import path from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-
 import * as utils from '../../utils/index.js'
 import { addThumbnail } from './addThumbnail.js'
 import * as getThumbnailTempFolderPath from './getThumbnailTempFolderPath.js'
-
-const test_url = '/fake/userData'
-
-vi.mock('electron', () => ({
-    app: {
-        getPath: vi.fn(() => test_url),
-    },
-}))
 
 describe('addThumbnail', () => {
     const fakeSrc = '/fake/path/image.jpg'
@@ -24,16 +15,13 @@ describe('addThumbnail', () => {
     })
 
     it('creates thumbnail successfully', async () => {
-        vi.spyOn(
-            getThumbnailTempFolderPath,
-            'getThumbnailTempFolderPath',
-        ).mockReturnValue(fakeFolder)
+        vi.spyOn(getThumbnailTempFolderPath, 'getThumbnailTempFolderPath').mockReturnValue(
+            fakeFolder,
+        )
 
         const mkdirMock = vi.spyOn(utils, 'createFolder').mockReturnThis()
 
-        const thumbMock = vi
-            .spyOn(utils, 'createThumbOnFolder')
-            .mockResolvedValue()
+        const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockResolvedValue()
 
         const result = await addThumbnail(fakeSrc)
 
@@ -43,31 +31,19 @@ describe('addThumbnail', () => {
     })
 
     it('throws and logs error if createThumbOnFolder fails', async () => {
-        const error = new Error('resize failed')
+        const error = utils.generateError('ThumbnailCreationFailed', fakeSrc)
 
-        vi.spyOn(
-            getThumbnailTempFolderPath,
-            'getThumbnailTempFolderPath',
-        ).mockReturnValue(fakeFolder)
+        vi.spyOn(getThumbnailTempFolderPath, 'getThumbnailTempFolderPath').mockReturnValue(
+            fakeFolder,
+        )
 
         const mkdirMock = vi.spyOn(utils, 'createFolder').mockReturnThis()
 
-        const thumbMock = vi
-            .spyOn(utils, 'createThumbOnFolder')
-            .mockRejectedValue(error)
-
-        const consoleSpy = vi
-            .spyOn(console, 'error')
-            .mockImplementation(() => {})
+        const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockRejectedValue(error)
 
         await expect(addThumbnail(fakeSrc)).rejects.toThrow(error)
 
         expect(mkdirMock).toHaveBeenCalledWith(fakeFolder)
         expect(thumbMock).toHaveBeenCalled()
-
-        expect(consoleSpy).toHaveBeenCalledWith(
-            `Thumbnail generation failed for ${fakeSrc}:`,
-            error,
-        )
     })
 })
