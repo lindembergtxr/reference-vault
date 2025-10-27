@@ -1,7 +1,7 @@
 import path from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import * as utils from '../../utils/index.js'
-import { addThumbnail } from './addThumbnail.js'
+import { createThumbnailFromImage } from '../images/thumbnail.js'
 import * as getThumbnailTempFolderPath from './getThumbnailTempFolderPath.js'
 
 describe('addThumbnail', () => {
@@ -23,7 +23,7 @@ describe('addThumbnail', () => {
 
         const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockResolvedValue()
 
-        const result = await addThumbnail(fakeSrc)
+        const result = await createThumbnailFromImage(fakeSrc)
 
         expect(mkdirMock).toHaveBeenCalledWith(fakeFolder)
         expect(thumbMock).toHaveBeenCalledWith(fakeSrc, fakeOutputPath)
@@ -41,7 +41,7 @@ describe('addThumbnail', () => {
 
         const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockRejectedValue(error)
 
-        await expect(addThumbnail(fakeSrc)).rejects.toThrow(error)
+        await expect(createThumbnailFromImage(fakeSrc)).rejects.toThrow(error)
 
         expect(mkdirMock).toHaveBeenCalledWith(fakeFolder)
         expect(thumbMock).toHaveBeenCalled()

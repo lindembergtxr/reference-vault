@@ -3,6 +3,16 @@ import path from 'path'
 import * as helpers from '../helpers/index.js'
 import * as utils from './index.js'
 
+export const selectFolder = async () => {
+    const result = await helpers.showOpenDialog()
+
+    if (result.canceled || result.filePaths.length === 0) {
+        utils.logError({ message: 'User opted to not select a folder' })
+        return
+    }
+    return result.filePaths[0]
+}
+
 export const createFolder = async (directory: string) => {
     await fs.mkdir(directory, { recursive: true })
 }
@@ -20,13 +30,15 @@ export const getFolderImages = async (src: string): Promise<string[]> => {
 }
 
 export const getTempThumbnailFolderPath = async () => {
-    const tempFolderName = process.env.VITE_IMAGE_STAGING_FOLDER
+    const localPath = helpers.getUserDataPath()
+    const tempFolderName = process.env.VITE_IMAGE_STAGING_THUMBNAIL_FOLDER
 
     if (!tempFolderName) {
-        const message = utils.errorMessages['MissingEnvVar']('VITE_THUMBNAIL_STAGING_FOLDER')
+        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_STAGING_THUMBNAIL_FOLDER')
         await utils.logError({ message })
-        throw utils.generateError('MissingEnvVar', 'VITE_THUMBNAIL_STAGING_FOLDER')
+        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_STAGING_THUMBNAIL_FOLDER')
     }
+    return path.join(localPath, tempFolderName)
 }
 
 export const getTempImagesFolderPath = async () => {
@@ -38,6 +50,5 @@ export const getTempImagesFolderPath = async () => {
         await utils.logError({ message })
         throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_STAGING_FOLDER')
     }
-
     return path.join(localPath, tempFolderName)
 }

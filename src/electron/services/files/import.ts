@@ -1,57 +1,44 @@
-import path from 'path'
-
-import * as helpers from '../../helpers/index.js'
 import * as utils from '../../utils/index.js'
-import { ImageService } from '../images/imageService.js'
-import { addThumbnail } from './addThumbnail.js'
-import { copyFileToFolder } from './move.js'
-
-export const getTempFolderPath = () => {
-    const localPath = helpers.getUserDataPath()
-
-    const tempFolderName = process.env.VITE_IMAGE_STAGING_FOLDER || 'temp_images'
-
-    return path.join(localPath, tempFolderName)
-}
+import { batchAddImages } from '../images/database.js'
+import { batchCreateThumbnails } from '../images/thumbnail.js'
+import { copyImagesToTempFolder } from '../images/filesystem.js'
 
 export const importFromFolder = async () => {
-    const result = await helpers.showOpenDialog()
+    const folderPath = await utils.selectFolder()
 
-    let fileURLs: string[]
+    if (!folderPath) return
 
-    if (result.canceled || result.filePaths.length === 0) {
-        fileURLs = []
-    } else {
-        const folderPath = result.filePaths[0]
+    const fileURLs = await utils.getFolderImages(folderPath)
+    const failures = []
 
-        fileURLs = await utils.getFolderImages(folderPath)
-    }
+    const moveImagesResults = await copyImagesToTempFolder(fileURLs)
 
-    const limit = Number(process.env.VITE_CONCURRENCY_LIMIT) || 1
+    failures.push(...utils.getRejected(moveImagesResults, 'copyImagesToTempFolder'))
 
-    for (let i = 0; i < fileURLs.length; i += limit) {
-        const batch = fileURLs.slice(i, i + limit)
+    const successfulImages = utils
+        .getFulfilled(moveImagesResults)
+        .map((result) => ({ url: result.destination, filename: result.filename }))
 
-        const batchPromises = batch.map(async (url) => {
-            try {
-                const extension = path.extname(url)
-                const filename = `${utils.generateId()}${extension}`
-                const destination = path.join(getTempFolderPath(), filename)
+    const createThumbnailsResults = await batchCreateThumbnails(successfulImages)
 
-                await copyFileToFolder(url, destination)
+    failures.push(...utils.getRejected(createThumbnailsResults, 'batchCreateThumbnails'))
 
-                await addThumbnail(destination)
-
-                ImageService.add(filename)
-            } catch (error) {
-                const message = utils.errorMessages['FailedToImportFile'](url)
-                await utils.logError({ message, error })
-                throw utils.generateError('FailedToImportFile', url)
+    const successfulThumbnails: InternalImage[] = utils
+        .getFulfilled(createThumbnailsResults)
+        .map((result) => {
+            return {
+                id: result.filename,
+                thumbnailPath: result.thumbnail,
+                imagePath: result.image,
+                artistId: null,
+                groupId: null,
             }
         })
 
-        await Promise.all(batchPromises)
-    }
+    const addImagesResults = await batchAddImages(successfulThumbnails)
 
-    console.log('SUCCESS! Operation finalized!')
+    failures.push(...utils.getRejected(addImagesResults, 'batchAddImages'))
+
+    if (failures.length > 0) console.log(failures, 'FAILURES!!!!')
+    console.log(`SUCCESS! Imported ${addImagesResults.length} files.`)
 }
