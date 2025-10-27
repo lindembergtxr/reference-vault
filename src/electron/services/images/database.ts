@@ -28,5 +28,16 @@ export const batchAddImages = (images: InternalImage[]) => {
 }
 
 export const getTemporaryFiles = () => {
-    return db.prepare(`SELECT * FROM images WHERE situation = 'pending'`).all()
+    const query = `
+        SELECT i.*,
+            COALESCE(
+                json_group_array(json_object('id', t.id, 'name', t.name)) FILTER (WHERE t.id IS NOT NULL), json('[]')
+            ) AS tags 
+        FROM images i
+        LEFT JOIN image_tags it ON i.id = it.image_id
+        LEFT JOIN tags t ON t.id = it.tag_id
+        GROUP BY i.id
+        ORDER BY i.id;
+    `
+    return db.prepare(query).all()
 }

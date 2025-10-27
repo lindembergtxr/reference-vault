@@ -4,4 +4,10 @@ export type ImageDB = {
     image_path: string | null
     artist_id: string | null
     group_id: string | null
+    tags: string
+}
+
+export type TagDB = {
+    id: string
+    name: string
 }

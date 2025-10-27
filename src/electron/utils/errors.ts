@@ -44,7 +44,9 @@ export type LogError = {
     message: string
     error?: unknown
 }
-export const logError = async ({ message, error }: LogError) => {
+export const logError = async (args: LogError) => {
+    const { message, error } = args || { message: 'Invalid properties' }
+
     const errorLogFolderPath = path.join(helpers.getAppPathHelper(), 'error_log')
 
     // makes sure the folder exists first

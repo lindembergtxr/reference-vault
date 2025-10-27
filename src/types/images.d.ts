@@ -4,4 +4,5 @@ type InternalImage = {
     imagePath: string | null
     artistId: string | null
     groupId: string | null
+    tags: InternalTag[]
 }

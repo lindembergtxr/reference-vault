@@ -1,5 +1,5 @@
 type ApiEventMap = {
-    getAllTags: { args: []; return: Tag[] }
+    getAllTags: { args: []; return: InternalTag[] }
     getConfig: { args: []; return: ConfigData }
     importFiles: { args: []; return: void }
     getStagedFiles: { args: []; return: InternalImage[] }

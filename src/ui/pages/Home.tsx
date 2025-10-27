@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ImageList } from '../components/images/ImageList'
 
 export const Home = () => {
-    const [tags, setTags] = useState<Tag[]>([])
+    const [tags, setTags] = useState<InternalTag[]>([])
 
     useEffect(() => {
         window.api.getAllTags().then((res) => setTags(res))

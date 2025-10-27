@@ -32,6 +32,7 @@ export const importFromFolder = async () => {
                 imagePath: result.image,
                 artistId: null,
                 groupId: null,
+                tags: [],
             }
         })
 
