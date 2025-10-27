@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { ImageList } from '../components/images/ImageList'
 
 export const Home = () => {
     const [tags, setTags] = useState<InternalTag[]>([])
@@ -14,7 +13,6 @@ export const Home = () => {
             <div className="card">
                 <p>{JSON.stringify(tags)}</p>
             </div>
-            <ImageList images={[]} />
         </div>
     )
 }

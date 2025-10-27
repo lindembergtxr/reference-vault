@@ -5,6 +5,7 @@ import { ImageCard } from './ImageCard'
 describe('ImageCard', () => {
     const defaultProps = {
         url: '/fake/path/uuid.jpg',
+        imageId: 'uuid.jpg',
         size: 'md' as const,
         isSelected: false,
         mode: 'disabled' as const,
@@ -15,7 +16,7 @@ describe('ImageCard', () => {
     beforeEach(() => vi.clearAllMocks())
 
     it('renders the image with the correct src', () => {
-        render(<ImageCard url="test.jpg" size="md" isSelected={false} />)
+        render(<ImageCard imageId="test.jpg" url="test.jpg" size="md" isSelected={false} />)
 
         const img = screen.getByAltText('test.jpg') as HTMLImageElement
 
@@ -82,9 +83,7 @@ describe('ImageCard', () => {
         }
         render(<ImageCard {...props} />)
 
-        const icon = screen.queryByTestId(
-            `image-card-selected-icon-${props.url}`,
-        )
+        const icon = screen.queryByTestId(`image-card-selected-icon-${props.url}`)
 
         expect(icon).not.toBeInTheDocument()
     })
@@ -113,9 +112,7 @@ describe('ImageCard', () => {
 
         const link = screen.getByRole('link')
 
-        const baseClasses = link.className
-            .split(' ')
-            .filter((c) => !c.startsWith('hover:'))
+        const baseClasses = link.className.split(' ').filter((c) => !c.startsWith('hover:'))
 
         expect(baseClasses).not.toContain('ring-4')
         expect(baseClasses).not.toContain('ring-blue-500/75')
