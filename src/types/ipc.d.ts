@@ -2,7 +2,7 @@ type ApiEventMap = {
     getAllTags: { args: []; return: Tag[] }
     getConfig: { args: []; return: ConfigData }
     importFiles: { args: []; return: void }
-    getStagedFiles: { args: []; return: string[] }
+    getStagedFiles: { args: []; return: InternalImage[] }
     logError: { args: [LogErrorArgs]; return: void }
 }
 

@@ -1,10 +1,7 @@
-type Image = {
+type InternalImage = {
     id: string
-    artistId?: string
-}
-
-type ImageData = {
-    filename: string
-    imagePath: string
-    thumbnailPath: string
+    thumbnailPath: string | null
+    imagePath: string | null
+    artistId: string | null
+    groupId: string | null
 }

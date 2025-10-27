@@ -1,7 +1,7 @@
 import { ImageCard } from './ImageCard'
 
 type ImageListProps = {
-    images: string[]
+    images: InternalImage[]
 }
 export const ImageList = ({ images }: ImageListProps) => {
     // TODO: turn this data into mutable states
@@ -10,15 +10,17 @@ export const ImageList = ({ images }: ImageListProps) => {
 
     return (
         <div className="flex flex-wrap items-center gap-3">
-            {images.map((image) => (
-                <ImageCard
-                    key={image}
-                    size={size}
-                    isSelected={false}
-                    mode={mode}
-                    url={image}
-                />
-            ))}
+            {images
+                .filter((images) => images && images.thumbnailPath != null)
+                .map((image) => (
+                    <ImageCard
+                        key={image.id}
+                        size={size}
+                        isSelected={false}
+                        mode={mode}
+                        url={image.thumbnailPath!}
+                    />
+                ))}
         </div>
     )
 }

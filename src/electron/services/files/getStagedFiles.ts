@@ -1,10 +1,9 @@
-import * as utils from '../../utils/folders.js'
-import { getTempFolderPath } from './import.js'
+import { adaptDBImageToInternal } from '../../adapters/images.js'
+import { ImageDB } from '../../types/database.js'
+import { getTemporaryFiles } from '../images/database.js'
 
 export const getStagedFiles = async () => {
-    const tempFolderPath = getTempFolderPath()
+    const dbFiles = (await getTemporaryFiles()) as ImageDB[]
 
-    const fileURLs = await utils.getFolderImages(tempFolderPath)
-
-    return fileURLs
+    return dbFiles.map(adaptDBImageToInternal)
 }

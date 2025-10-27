@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import { ImageList } from '../components/images/ImageList'
 
 export const Import = () => {
-    const [fileURLs, setFileURLs] = useState<string[]>([])
+    const [files, setFiles] = useState<InternalImage[]>([])
 
     const importData = () => {
         window.api.importFiles()
     }
     const refreshData = () => {
-        window.api.getStagedFiles().then((res) => setFileURLs(res))
+        window.api.getStagedFiles().then((res) => setFiles(res))
     }
     const commitData = () => {
         //
@@ -48,11 +48,7 @@ export const Import = () => {
             <h1>Import</h1>
 
             <div className="flex px-8 py-6 w-full">
-                {fileURLs.length > 0 ? (
-                    <ImageList images={fileURLs} />
-                ) : (
-                    <p>Lista Vazia</p>
-                )}
+                {files.length > 0 ? <ImageList images={files} /> : <p>Lista Vazia</p>}
             </div>
         </div>
     )

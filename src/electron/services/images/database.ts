@@ -26,3 +26,7 @@ export const batchAddImages = (images: InternalImage[]) => {
     )
     return Promise.allSettled(promises)
 }
+
+export const getTemporaryFiles = () => {
+    return db.prepare(`SELECT * FROM images WHERE situation = 'pending'`).all()
+}
