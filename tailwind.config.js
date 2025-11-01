@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: ['./index.html', './src/ui/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
@@ -8,6 +9,8 @@ export default {
                 body: ['Manrope', 'sans-serif'],
             },
             colors: {
+                black: 'rgb(var(--color-black))',
+                white: 'rgb(var(--color-white))',
                 aoi: {
                     50: 'rgb(var(--color-aoi-50))',
                     100: 'rgb(var(--color-aoi-100))',
@@ -19,6 +22,7 @@ export default {
                     700: 'rgb(var(--color-aoi-700))',
                     800: 'rgb(var(--color-aoi-800))',
                     900: 'rgb(var(--color-aoi-900))',
+                    950: 'rgb(var(--color-aoi-950))',
                 },
                 sakura: {
                     50: 'rgb(var(--color-sakura-50))',
