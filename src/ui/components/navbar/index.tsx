@@ -6,10 +6,11 @@ export const Navbar = ({ theme }: { theme: ConfigDataTheme }) => {
     }
 
     return (
-        <header className="flex flex-col gap-y-2 px-6 py-1 shadow-lg border-b-1">
-            <div className="flex items-center h-10">Logo</div>
-            <div className="flex items-center justify-between h-6">
-                <nav className="flex items-center gap-x-4 h-6">
+        <header className="header-container">
+            <div className="header-inner py-2">
+                <div className="row-span-1">Logo</div>
+
+                <nav className="col-span-11 row-span-1 row-start-2 flex gap-4">
                     <a href="/" className="flex items-center gap-x-1">
                         Home
                     </a>
@@ -21,9 +22,11 @@ export const Navbar = ({ theme }: { theme: ConfigDataTheme }) => {
                     </a>
                 </nav>
 
-                <button onClick={toggleTheme}>
-                    {theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
-                </button>
+                <div className="col-span-1 row-span-1 row-start-2 flex justify-end">
+                    <button onClick={toggleTheme}>
+                        {theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
+                    </button>
+                </div>
             </div>
         </header>
     )

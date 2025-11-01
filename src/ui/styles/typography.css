@@ -1,0 +1,47 @@
+@layer components {
+    .h1 {
+        @apply font-heading text-[3rem] leading-[1.16] font-semibold;
+    }
+    .h2 {
+        @apply font-heading text-[2.5rem] leading-[1.33] font-semibold;
+    }
+    .h3 {
+        @apply font-heading text-[2rem] leading-[1.33] font-semibold;
+    }
+    .h4 {
+        @apply font-heading text-[1.75rem] leading-[1.33] font-medium;
+    }
+    .h5 {
+        @apply font-heading text-[1.5rem] leading-[1.33] font-medium;
+    }
+    .h6 {
+        @apply font-heading text-[1.25rem] leading-[1.33] font-medium;
+    }
+
+    .paragraph-sm {
+        @apply font-body text-[0.75rem] leading-[1.5] font-normal;
+    }
+    .paragraph-md {
+        @apply font-body text-[0.875rem] leading-[1.5] font-normal;
+    }
+    .paragraph-lg {
+        @apply font-body text-[1rem] leading-[1.6] font-normal;
+    }
+    .paragraph-xl {
+        @apply font-body text-[1.125rem] leading-[1.6] font-normal;
+    }
+
+    .subtitle-sm {
+        @apply font-body text-[0.875rem] leading-[1.33] font-medium;
+    }
+    .subtitle-lg {
+        @apply font-body text-[1rem] leading-[1.33] font-medium;
+    }
+
+    .label {
+        @apply font-body text-[0.875rem] leading-[1] font-medium tracking-wider;
+    }
+    .caption {
+        @apply font-body text-[0.655rem] leading-[1.24] font-normal tracking-wider;
+    }
+}

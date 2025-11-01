@@ -1,0 +1,17 @@
+@layer components {
+    .header-container {
+        @apply w-full bg-aoi-100 shadow-md border border-aoi-200/75 relative z-50;
+    }
+
+    .header-inner {
+        @apply max-w-6xl mx-auto grid grid-cols-12 grid-rows-2 items-center gap-4 px-4;
+    }
+
+    .content-container {
+        @apply w-full min-h-full bg-aoi-50;
+    }
+
+    .content-inner {
+        @apply max-w-6xl mx-auto grid grid-cols-12;
+    }
+}
