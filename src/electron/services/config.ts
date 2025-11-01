@@ -17,7 +17,9 @@ export const writeConfig = async (newConfig: Partial<ConfigData>) => {
     }
     localConfig = { ...localConfig, ...newConfig }
 
-    fs.writeFileSync(utils.getConfigPath(), JSON.stringify(localConfig, null, 2))
+    await fs.writeFileSync(utils.getConfigPath(), JSON.stringify(localConfig, null, 2))
+
+    return localConfig
 }
 
 export const setupConfig = async () => {
@@ -57,4 +59,8 @@ export const getConfig = async (): Promise<ConfigData> => {
     localConfig = temp
 
     return localConfig
+}
+
+export const setTheme = async (theme: ConfigData['theme']) => {
+    return await writeConfig({ theme })
 }

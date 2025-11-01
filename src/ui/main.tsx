@@ -8,25 +8,24 @@ import { Navbar } from './components/navbar'
 import { Home, Import } from './pages'
 
 import './errorLogging.js'
+import { ConfigProvider } from './components/ConfigProvider.js'
 
 const main = async () => {
-    const config = await window.api.getConfig()
-
-    const theme = config.theme
-
     const root = createRoot(document.getElementById('root')!)
 
     root.render(
         <StrictMode>
-            <BrowserRouter>
-                <Navbar theme={theme} />
+            <ConfigProvider>
+                <BrowserRouter>
+                    <Navbar />
 
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/import" element={<Import />} />
-                    <Route path="/search" element={<Home />} />
-                </Routes>
-            </BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/import" element={<Import />} />
+                        <Route path="/search" element={<Home />} />
+                    </Routes>
+                </BrowserRouter>
+            </ConfigProvider>
         </StrictMode>,
     )
 }

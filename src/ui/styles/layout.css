@@ -1,6 +1,14 @@
 @layer components {
+    .bg-surface {
+        @apply bg-white dark:bg-aoi-900;
+    }
+
+    .bg-elevated {
+        @apply bg-aoi-100 dark:bg-aoi-950;
+    }
+
     .header-container {
-        @apply w-full bg-aoi-100 shadow-md border border-aoi-200/75 relative z-50;
+        @apply w-full bg-elevated shadow-md border border-aoi-100/75 dark:border-aoi-950/75 relative z-50;
     }
 
     .header-inner {
@@ -8,7 +16,7 @@
     }
 
     .content-container {
-        @apply w-full min-h-full bg-aoi-50;
+        @apply w-full min-h-full bg-surface;
     }
 
     .content-inner {
