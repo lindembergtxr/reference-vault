@@ -1,8 +1,6 @@
 import { ImageCard } from './ImageCard'
 import { useImageListContext } from '../contexts/imageList'
 
-export type ImageListSize = 'sm' | 'md' | 'lg'
-
 export const ImageList = () => {
     // TODO: turn this data into mutable states
     const size = 'lg'

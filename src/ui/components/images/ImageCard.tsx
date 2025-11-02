@@ -1,20 +1,24 @@
 import clsx from 'clsx'
+import { MouseEvent } from 'react'
 import { MdCheckCircle } from 'react-icons/md'
-import { ImageListSize } from './ImageList'
+
+export type ImageListSize = 'sm' | 'md' | 'lg' | 'xl'
 
 const cardSizeMap: Record<ImageListSize, string> = {
     sm: 'w-8 h-8',
     md: 'w-16 h-16',
     lg: 'w-32 h-32',
+    xl: 'w-64 h-64',
 }
 
 const thumbnailSizeMap: Record<ImageListSize, string> = {
     sm: 'max-w-8 max-h-8',
     md: 'max-w-16 max-h-16',
     lg: 'max-w-32 max-h-32',
+    xl: 'max-w-64 max-h-64',
 }
 
-type ImageCardType = {
+export type ImageCardProps = {
     url: string
     imageId: string
     size: ImageListSize
@@ -23,12 +27,14 @@ type ImageCardType = {
     onSelect?: (url: string) => void
     onOpen?: (url: string) => void
 }
-export const ImageCard = (props: ImageCardType) => {
+export const ImageCard = (props: ImageCardProps) => {
     const { url, imageId, size, mode = 'disabled', isSelected, onOpen, onSelect } = props
 
-    const onClick = () => {
-        if (mode === 'disabled') return
-
+    const onClick = (evt: MouseEvent<HTMLAnchorElement>) => {
+        if (mode === 'disabled') {
+            evt.preventDefault()
+            return
+        }
         if (mode === 'select') onSelect?.(imageId)
         else onOpen?.(imageId)
     }
@@ -36,7 +42,7 @@ export const ImageCard = (props: ImageCardType) => {
     return (
         <div className={`flex items-center justify-center ${cardSizeMap[size]}`}>
             <a
-                href="#"
+                href=""
                 className={clsx(`relative inline-block rounded-md overflow-hidden shadow-md`, {
                     // cursor
                     'cursor-default': mode === 'disabled',
