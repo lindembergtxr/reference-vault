@@ -14,9 +14,14 @@ export const getConfigPath = () => {
 }
 
 export const getPreloadPath = () => {
-    return path.join(helpers.getAppPathHelper(), isDev() ? '.' : '..', 'dist-electron/preload.cjs')
+    return path.join(
+        helpers.getAppPathHelper(),
+        isDev() ? '.' : '..',
+        'dist-electron',
+        'preload.cjs',
+    )
 }
 
 export const getUIPath = () => {
-    return path.join(helpers.getAppPathHelper(), '/dist-react/index.html')
+    return path.join(helpers.getAppPathHelper(), '/dist-react', 'index.html')
 }

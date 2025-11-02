@@ -1,6 +1,6 @@
 {
     "appId": "com.lindembergtxr.reference-vault",
-    "files": ["dist-electron", "dist-react"],
+    "files": ["dist-electron", "dist-react", "src/electron/database/**/*", "package.json"],
     "extraResources": ["dist-electron/preload.cjs"],
     "mac": {
         "target": "dmg"
