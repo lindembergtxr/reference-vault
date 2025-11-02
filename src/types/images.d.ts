@@ -1,3 +1,5 @@
+type ImageSituation = 'pending' | 'committed'
+
 type InternalImage = {
     id: string
     thumbnailPath: string | null
@@ -5,4 +7,5 @@ type InternalImage = {
     artistId: string | null
     groupId: string | null
     tags: InternalTag[]
+    situation: ImageSituation
 }

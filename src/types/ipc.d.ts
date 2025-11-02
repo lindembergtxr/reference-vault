@@ -5,6 +5,10 @@ type ApiEventMap = {
     importFiles: { args: []; return: void }
     getStagedFiles: { args: []; return: InternalImage[] }
     logError: { args: [LogErrorArgs]; return: void }
+    commitImage: {
+        args: [InternalImage]
+        return: { success: boolean; data?: { imageId: string }; error?: unknown }
+    }
 }
 
 interface Window {

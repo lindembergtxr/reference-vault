@@ -33,6 +33,7 @@ export const importFromFolder = async () => {
                 artistId: null,
                 groupId: null,
                 tags: [],
+                situation: 'pending',
             }
         })
 

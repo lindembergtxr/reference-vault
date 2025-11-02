@@ -5,9 +5,11 @@ export type ImageDB = {
     artist_id: string | null
     group_id: string | null
     tags: string
+    situation: ImageSituation
 }
 
 export type TagDB = {
     id: string
     name: string
+    franchise: string | null
 }

@@ -23,4 +23,5 @@ electron.contextBridge.exposeInMainWorld('api', {
     importFiles: () => ipcInvoke('importFiles'),
     getStagedFiles: () => ipcInvoke('getStagedFiles'),
     logError: (args) => ipcInvoke('logError', args),
+    commitImage: (args) => ipcInvoke('commitImage', args),
 } satisfies Window['api'])

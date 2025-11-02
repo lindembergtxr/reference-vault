@@ -52,3 +52,27 @@ export const getTempImagesFolderPath = async () => {
     }
     return path.join(localPath, tempFolderName)
 }
+
+export const getThumbnailFolderPath = async () => {
+    const localPath = helpers.getUserDataPath()
+    const tempFolderName = process.env.VITE_IMAGE_THUMBNAIL_FOLDER
+
+    if (!tempFolderName) {
+        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_THUMBNAIL_FOLDER')
+        await utils.logError({ message })
+        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_THUMBNAIL_FOLDER')
+    }
+    return path.join(localPath, tempFolderName)
+}
+
+export const getImagesFolderPath = async () => {
+    const localPath = helpers.getUserDataPath()
+    const tempFolderName = process.env.VITE_IMAGE_FOLDER
+
+    if (!tempFolderName) {
+        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_FOLDER')
+        await utils.logError({ message })
+        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_FOLDER')
+    }
+    return path.join(localPath, tempFolderName)
+}

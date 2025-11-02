@@ -6,5 +6,6 @@ export const adaptDBImageToInternal = (image: ImageDB): InternalImage => ({
     thumbnailPath: image.thumbnail_path,
     artistId: image.artist_id,
     groupId: image.group_id,
+    situation: image.situation,
     tags: JSON.parse(image.tags),
 })
