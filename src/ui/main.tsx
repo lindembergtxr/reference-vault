@@ -1,14 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 
 import './styles/index.css'
 
-import { Navbar } from './components/navbar'
-import { Home, Import } from './pages'
-
 import './errorLogging.js'
+import { Home, Import } from './pages'
 import { ConfigProvider } from './components/ConfigProvider.js'
+import { Layout } from './components/Layout.js'
 
 const main = async () => {
     const root = createRoot(document.getElementById('root')!)
@@ -16,15 +15,15 @@ const main = async () => {
     root.render(
         <StrictMode>
             <ConfigProvider>
-                <BrowserRouter>
-                    <Navbar />
-
+                <HashRouter>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/import" element={<Import />} />
-                        <Route path="/search" element={<Home />} />
+                        <Route element={<Layout />}>
+                            <Route path="" element={<Home />} />
+                            <Route path="import" element={<Import />} />
+                            <Route path="search" element={<Home />} />
+                        </Route>
                     </Routes>
-                </BrowserRouter>
+                </HashRouter>
             </ConfigProvider>
         </StrictMode>,
     )

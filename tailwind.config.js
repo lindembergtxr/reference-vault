@@ -6,7 +6,7 @@ export default {
         extend: {
             fontFamily: {
                 heading: ['Neuton', 'serif'],
-                body: ['Manrope', 'sans-serif'],
+                body: ['Satoshi', 'sans-serif'],
             },
             colors: {
                 black: 'rgb(var(--color-black))',

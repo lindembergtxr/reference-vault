@@ -8,12 +8,10 @@ export const Home = () => {
     }, [])
 
     return (
-        <div className="content-container">
-            <div className="content-inner">
-                <h1>Home</h1>
-                <div className="card">
-                    <p>{JSON.stringify(tags)}</p>
-                </div>
+        <div className="col-span-12 col-start-1 px-4 py-8">
+            <h1>Home</h1>
+            <div className="card">
+                <p>{JSON.stringify(tags)}</p>
             </div>
         </div>
     )
