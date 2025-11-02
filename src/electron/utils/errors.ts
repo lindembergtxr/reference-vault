@@ -47,7 +47,7 @@ export type LogError = {
 export const logError = async (args: LogError) => {
     const { message, error } = args || { message: 'Invalid properties' }
 
-    const errorLogFolderPath = path.join(helpers.getAppPathHelper(), 'error_log')
+    const errorLogFolderPath = path.join(helpers.getUserDataPath(), 'error_log')
 
     // makes sure the folder exists first
     await fs.promises.mkdir(errorLogFolderPath, { recursive: true })
