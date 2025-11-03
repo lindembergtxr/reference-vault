@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { MdImportExport, MdRefresh } from 'react-icons/md'
+import { MdImportExport } from 'react-icons/md'
 
 import { ImportImage } from '../components/import/ImportImage'
 import { Button } from 'react-aria-components'
@@ -29,18 +29,12 @@ export const Import = () => {
                     <MdImportExport />
                     Import
                 </Button>
-
-                <Button
-                    className="flex items-center gap-1 label bg-aoi-500 text-aoi-100 font-medium dark:bg-aoi-300 dark:text-aoi-900 rounded-md pl-3 pr-4 py-1"
-                    onClick={refreshData}
-                >
-                    <MdRefresh />
-                    Refresh
-                </Button>
             </div>
             <div className="flex px-4 py-6 w-full">
                 {images.length > 0 ? (
-                    images.map((image) => <ImportImage key={image.id} image={image} />)
+                    images.map((image) => (
+                        <ImportImage key={image.id} image={image} onCommit={refreshData} />
+                    ))
                 ) : (
                     <p>Import something to begin.</p>
                 )}

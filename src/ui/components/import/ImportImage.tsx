@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { ImageCard, ImageCardProps } from '../images/ImageCard'
 import { TagsInput } from '../tags/TagInput'
@@ -6,19 +6,19 @@ import { Button, Input, Label } from 'react-aria-components'
 
 type ImportImageProps = {
     image: InternalImage
+    onCommit: () => void
 }
-export const ImportImage = ({ image }: ImportImageProps) => {
+export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
     const [mode] = useState<ImageCardProps['mode']>(undefined)
 
     const [tags, setTags] = useState<InternalTag[]>([])
 
     const commitImage = () => {
-        window.api.commitImage({ ...image, tags }).then((res) => console.log(res, 'commit res'))
+        window.api.commitImage({ ...image, tags }).then((res) => {
+            console.log(res)
+            onCommit()
+        })
     }
-
-    useEffect(() => {
-        console.log(tags, 'data')
-    }, [tags])
 
     return (
         <div className="flex flex-row gap-4 border-[1px] px-8 py-4 w-full rounded-md">
