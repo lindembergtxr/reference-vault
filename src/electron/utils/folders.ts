@@ -3,6 +3,16 @@ import path from 'path'
 import * as helpers from '../helpers/index.js'
 import * as utils from './index.js'
 
+const folderNames = {
+    tempImages: 'temp_images',
+    tempThumbnails: 'temp_thumbnails',
+    images: 'images',
+    thumbnails: 'thumbnails',
+}
+export const getGalleryFolderPath = (folder: keyof typeof folderNames) => {
+    return path.join(helpers.getUserDataPath(), 'gallery', folderNames[folder])
+}
+
 export const selectFolder = async () => {
     const result = await helpers.showOpenDialog()
 
@@ -27,52 +37,4 @@ export const getFolderImages = async (src: string): Promise<string[]> => {
         .map((file) => path.join(src, file))
 
     return fileURLs
-}
-
-export const getTempThumbnailFolderPath = async () => {
-    const localPath = helpers.getUserDataPath()
-    const tempFolderName = process.env.VITE_IMAGE_STAGING_THUMBNAIL_FOLDER
-
-    if (!tempFolderName) {
-        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_STAGING_THUMBNAIL_FOLDER')
-        await utils.logError({ message })
-        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_STAGING_THUMBNAIL_FOLDER')
-    }
-    return path.join(localPath, tempFolderName)
-}
-
-export const getTempImagesFolderPath = async () => {
-    const localPath = helpers.getUserDataPath()
-    const tempFolderName = process.env.VITE_IMAGE_STAGING_FOLDER
-
-    if (!tempFolderName) {
-        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_STAGING_FOLDER')
-        await utils.logError({ message })
-        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_STAGING_FOLDER')
-    }
-    return path.join(localPath, tempFolderName)
-}
-
-export const getThumbnailFolderPath = async () => {
-    const localPath = helpers.getUserDataPath()
-    const tempFolderName = process.env.VITE_IMAGE_THUMBNAIL_FOLDER
-
-    if (!tempFolderName) {
-        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_THUMBNAIL_FOLDER')
-        await utils.logError({ message })
-        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_THUMBNAIL_FOLDER')
-    }
-    return path.join(localPath, tempFolderName)
-}
-
-export const getImagesFolderPath = async () => {
-    const localPath = helpers.getUserDataPath()
-    const tempFolderName = process.env.VITE_IMAGE_FOLDER
-
-    if (!tempFolderName) {
-        const message = utils.errorMessages['MissingEnvVar']('VITE_IMAGE_FOLDER')
-        await utils.logError({ message })
-        throw utils.generateError('MissingEnvVar', 'VITE_IMAGE_FOLDER')
-    }
-    return path.join(localPath, tempFolderName)
 }

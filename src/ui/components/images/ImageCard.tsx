@@ -42,6 +42,7 @@ export const ImageCard = (props: ImageCardProps) => {
     return (
         <div className={`flex items-center justify-center ${cardSizeMap[size]}`}>
             <a
+                data-testid="image-link"
                 href=""
                 className={clsx(`relative inline-block rounded-md overflow-hidden shadow-md`, {
                     // cursor

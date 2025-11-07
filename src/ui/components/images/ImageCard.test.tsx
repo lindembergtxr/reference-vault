@@ -27,9 +27,9 @@ describe('ImageCard', () => {
     it('does not call onSelect or onOpen when mode is disabled', () => {
         render(<ImageCard {...defaultProps} />)
 
-        const card = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
-        fireEvent.click(card)
+        fireEvent.click(link)
 
         expect(defaultProps.onSelect).not.toHaveBeenCalled()
         expect(defaultProps.onOpen).not.toHaveBeenCalled()
@@ -40,11 +40,11 @@ describe('ImageCard', () => {
 
         render(<ImageCard {...props} />)
 
-        const card = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
-        fireEvent.click(card)
+        fireEvent.click(link)
 
-        expect(props.onSelect).toHaveBeenCalledWith(props.url)
+        expect(props.onSelect).toHaveBeenCalledWith(props.imageId)
         expect(props.onOpen).not.toHaveBeenCalled()
     })
 
@@ -53,11 +53,11 @@ describe('ImageCard', () => {
 
         render(<ImageCard {...props} />)
 
-        const card = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
-        fireEvent.click(card)
+        fireEvent.click(link)
 
-        expect(props.onOpen).toHaveBeenCalledWith(props.url)
+        expect(props.onOpen).toHaveBeenCalledWith(props.imageId)
         expect(props.onSelect).not.toHaveBeenCalled()
     })
 
@@ -96,7 +96,7 @@ describe('ImageCard', () => {
         }
         render(<ImageCard {...props} />)
 
-        const link = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
         expect(link.className).toContain('ring-4')
         expect(link.className).toContain('ring-blue-500/75')
@@ -110,7 +110,7 @@ describe('ImageCard', () => {
         }
         render(<ImageCard {...props} />)
 
-        const link = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
         const baseClasses = link.className.split(' ').filter((c) => !c.startsWith('hover:'))
 
@@ -125,7 +125,7 @@ describe('ImageCard', () => {
         }
         render(<ImageCard {...props} />)
 
-        const link = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
         expect(link.className).toContain('hover:ring-4')
         expect(link.className).toContain('hover:ring-blue-500/75')
@@ -139,7 +139,7 @@ describe('ImageCard', () => {
         }
         render(<ImageCard {...props} />)
 
-        const link = screen.getByRole('link')
+        const link = screen.getByTestId('image-link')
 
         expect(link.className).toContain('hover:ring-4')
         expect(link.className).toContain('hover:ring-blue-500/75')

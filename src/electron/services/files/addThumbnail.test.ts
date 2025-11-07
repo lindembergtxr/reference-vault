@@ -2,7 +2,6 @@ import path from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import * as utils from '../../utils/index.js'
 import { createThumbnailFromImage } from '../images/thumbnail.js'
-import * as getThumbnailTempFolderPath from './getThumbnailTempFolderPath.js'
 
 describe('addThumbnail', () => {
     const fakeSrc = '/fake/path/image.jpg'
@@ -10,16 +9,14 @@ describe('addThumbnail', () => {
     const fakeOutputPath = path.join(fakeFolder, 'image.jpg')
 
     beforeEach(() => {
-        vi.restoreAllMocks()
         vi.resetAllMocks()
+        vi.restoreAllMocks()
     })
 
     it('creates thumbnail successfully', async () => {
-        vi.spyOn(getThumbnailTempFolderPath, 'getThumbnailTempFolderPath').mockReturnValue(
-            fakeFolder,
-        )
+        vi.spyOn(utils, 'getGalleryFolderPath').mockReturnValue(fakeFolder)
 
-        const mkdirMock = vi.spyOn(utils, 'createFolder').mockReturnThis()
+        const mkdirMock = vi.spyOn(utils, 'createFolder').mockResolvedValue()
 
         const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockResolvedValue()
 
@@ -33,17 +30,21 @@ describe('addThumbnail', () => {
     it('throws and logs error if createThumbOnFolder fails', async () => {
         const error = utils.generateError('ThumbnailCreationFailed', fakeSrc)
 
-        vi.spyOn(getThumbnailTempFolderPath, 'getThumbnailTempFolderPath').mockReturnValue(
-            fakeFolder,
-        )
+        vi.spyOn(utils, 'getGalleryFolderPath').mockReturnValue(fakeFolder)
 
         const mkdirMock = vi.spyOn(utils, 'createFolder').mockReturnThis()
 
         const thumbMock = vi.spyOn(utils, 'createThumbOnFolder').mockRejectedValue(error)
 
+        const logErrorMock = vi.spyOn(utils, 'logError').mockReturnThis()
+
+        const generateErrorMock = vi.spyOn(utils, 'generateError').mockReturnValue(error)
+
         await expect(createThumbnailFromImage(fakeSrc)).rejects.toThrow(error)
 
         expect(mkdirMock).toHaveBeenCalledWith(fakeFolder)
+        expect(logErrorMock).toHaveBeenCalled()
+        expect(generateErrorMock).toHaveBeenCalled()
         expect(thumbMock).toHaveBeenCalled()
     })
 })

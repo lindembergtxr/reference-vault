@@ -18,6 +18,7 @@ export default ({ mode }: { mode: string }) => {
             globals: true,
             environment: 'jsdom',
             setupFiles: ['./vitest.setup.ts'],
+            exclude: ['dist/**', 'dist-react/**', 'dist-electron/**', 'node_modules/**'],
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)

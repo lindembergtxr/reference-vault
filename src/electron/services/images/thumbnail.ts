@@ -2,13 +2,12 @@ import path from 'path'
 import pLimit from 'p-limit'
 
 import * as utils from '../../utils/index.js'
-import { getThumbnailTempFolderPath } from '../files/getThumbnailTempFolderPath.js'
 
 export const createThumbnailFromImage = async (src: string) => {
     try {
         const fileName = path.basename(src)
 
-        const outputDir = getThumbnailTempFolderPath()
+        const outputDir = utils.getGalleryFolderPath('tempThumbnails')
         const outputPath = path.join(outputDir, fileName)
 
         // makes sure the folder exists
@@ -34,7 +33,7 @@ export const batchCreateThumbnails = async (data: BatchCreateThumbnailsData) => 
     const concurrency = Number(process.env.VITE_CONCURRENCY_LIMIT) || 5
     const limit = pLimit(concurrency)
 
-    const destinationPath = await utils.getTempThumbnailFolderPath()
+    const destinationPath = await utils.getGalleryFolderPath('tempThumbnails')
 
     const promises = data.map(({ url, filename }) =>
         limit(async () => {
