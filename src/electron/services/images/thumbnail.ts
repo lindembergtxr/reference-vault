@@ -42,7 +42,7 @@ export const batchCreateThumbnails = async (data: BatchCreateThumbnailsData) => 
             await createThumbnailFromImage(url)
 
             return { filename, thumbnail: destination, image: url }
-        }),
+        })
     )
     return Promise.allSettled(promises)
 }

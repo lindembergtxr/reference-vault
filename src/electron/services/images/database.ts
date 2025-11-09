@@ -29,7 +29,7 @@ export const batchAddImages = (images: InternalImage[]) => {
         limit(async () => {
             upsertImage(image)
             return image
-        }),
+        })
     )
     return Promise.allSettled(promises)
 }

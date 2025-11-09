@@ -3,5 +3,5 @@ export default {
     tabWidth: 4,
     singleQuote: true,
     semi: false,
-    traillingComma: 'lf',
+    trailingComma: 'es5',
 }

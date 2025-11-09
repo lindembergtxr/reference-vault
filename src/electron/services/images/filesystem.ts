@@ -27,7 +27,7 @@ export const copyImagesToFolder = async ({ urls, destinationPath }: CopyImagesTo
             copyFileToFolder(url, destination)
 
             return { filename, destination, origin: url }
-        }),
+        })
     )
     return Promise.allSettled(promises)
 }

@@ -13,7 +13,7 @@ export const getPreloadPath = () => {
         helpers.getAppPathHelper(),
         isDev() ? '.' : '..',
         'dist-electron',
-        'preload.cjs',
+        'preload.cjs'
     )
 }
 

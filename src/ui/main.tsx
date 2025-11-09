@@ -25,7 +25,7 @@ const main = async () => {
                     </Routes>
                 </HashRouter>
             </ConfigProvider>
-        </StrictMode>,
+        </StrictMode>
     )
 }
 

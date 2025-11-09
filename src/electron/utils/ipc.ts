@@ -4,7 +4,7 @@ import * as helpers from '../helpers/electron.js'
 
 export const ipcHandle = <Key extends keyof ApiEventMap>(
     key: Key,
-    handler: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return'],
+    handler: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return']
 ) => {
     helpers.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
         await validateEventFrame(event.senderFrame)
@@ -14,7 +14,7 @@ export const ipcHandle = <Key extends keyof ApiEventMap>(
 
 export const ipcAsyncHandle = <Key extends keyof ApiEventMap>(
     key: Key,
-    handler: (...args: ApiEventMap[Key]['args']) => Promise<ApiEventMap[Key]['return']>,
+    handler: (...args: ApiEventMap[Key]['args']) => Promise<ApiEventMap[Key]['return']>
 ) => {
     helpers.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
         await validateEventFrame(event.senderFrame)
@@ -25,7 +25,7 @@ export const ipcAsyncHandle = <Key extends keyof ApiEventMap>(
 export const ipcWebContentsSend = <Key extends keyof ApiEventMap>(
     key: Key,
     webContents: helpers.WebContentsAux,
-    payload: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return'],
+    payload: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return']
 ) => {
     webContents.send(key, payload)
 }
