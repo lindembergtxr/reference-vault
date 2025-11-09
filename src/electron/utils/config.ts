@@ -6,12 +6,7 @@ export const isDev = (): boolean => {
     return process.env.NODE_ENV === 'development'
 }
 
-export const getConfigPath = () => {
-    return path.join(
-        helpers.getUserDataPath(),
-        process.env.VITE_DATABASE_CONFIG_FILENAME || 'config.json',
-    )
-}
+export const getConfigPath = () => path.join(helpers.getUserDataPath(), 'app_config.json')
 
 export const getPreloadPath = () => {
     return path.join(

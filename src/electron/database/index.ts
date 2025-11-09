@@ -7,10 +7,7 @@ import * as helpers from '../helpers/index.js'
 
 dotenv.config()
 
-const dbPath = path.join(
-    helpers.getUserDataPath(),
-    process.env.VITE_DATABASE_FILENAME ?? 'reference_vault.db',
-)
+const dbPath = path.join(helpers.getUserDataPath(), 'reference_vault.db')
 
 fs.mkdirSync(path.dirname(dbPath), { recursive: true })
 
