@@ -7,10 +7,10 @@ import { createTag, linkImageToTag } from '../tags.js'
 import * as utils from '../../utils/index.js'
 
 export const commitImage = async (image: InternalImage) => {
-    const thumbFolder = await utils.getThumbnailFolderPath()
+    const thumbFolder = await utils.getGalleryFolderPath('thumbnails')
     const thumbnailPath = path.join(thumbFolder, image.id)
 
-    const imagesFolder = await utils.getImagesFolderPath()
+    const imagesFolder = await utils.getGalleryFolderPath('images')
     const imagePath = path.join(imagesFolder, image.id)
 
     const transaction = db.transaction(() => {

@@ -1,6 +1,6 @@
 @layer components {
     .bg-surface {
-        @apply bg-tetsu-50 dark:bg-tetsu-800;
+        @apply bg-tetsu-100 dark:bg-tetsu-800;
     }
 
     .bg-elevated {
