@@ -1,25 +1,9 @@
 @layer components {
     .bg-surface {
-        @apply bg-white dark:bg-aoi-950;
+        @apply bg-tetsu-50 dark:bg-tetsu-800;
     }
 
     .bg-elevated {
-        @apply bg-aoi-100 dark:bg-black;
-    }
-
-    .header-container {
-        @apply w-full bg-elevated shadow-md border border-aoi-100/75 dark:border-black/75 relative z-50;
-    }
-
-    .header-inner {
-        @apply max-w-6xl mx-auto grid grid-cols-12 items-center gap-4 px-4;
-    }
-
-    .content-container {
-        @apply w-full min-h-full bg-surface;
-    }
-
-    .content-inner {
-        @apply max-w-6xl mx-auto grid grid-cols-12 min-h-full;
+        @apply bg-tetsu-200 dark:bg-tetsu-900;
     }
 }

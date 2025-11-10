@@ -7,7 +7,7 @@ import './styles/index.css'
 import './errorLogging.js'
 import { Home, Import } from './pages'
 import { ConfigProvider } from './components/ConfigProvider.js'
-import { Layout } from './components/Layout.js'
+import { Layout } from './components/layout/Layout.js'
 
 const main = async () => {
     const root = createRoot(document.getElementById('root')!)
