@@ -21,7 +21,13 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
         window.api.setTheme(next).then((res) => setConfig(res))
     }
 
+    const setDestinationFolder = () => {
+        return window.api.setDestinationFolder().then((res) => setConfig(res))
+    }
+
     return (
-        <ConfigContext.Provider value={{ config, toggleTheme }}>{children}</ConfigContext.Provider>
+        <ConfigContext.Provider value={{ config, toggleTheme, setDestinationFolder }}>
+            {children}
+        </ConfigContext.Provider>
     )
 }

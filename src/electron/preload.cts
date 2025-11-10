@@ -20,6 +20,7 @@ electron.contextBridge.exposeInMainWorld('api', {
     getAllTags: () => ipcInvoke('getAllTags'),
     getConfig: () => ipcInvoke('getConfig'),
     setTheme: (theme: ConfigDataTheme) => ipcInvoke('setTheme', theme),
+    setDestinationFolder: () => ipcInvoke('setDestinationFolder'),
     importFiles: () => ipcInvoke('importFiles'),
     getStagedFiles: () => ipcInvoke('getStagedFiles'),
     logError: (args) => ipcInvoke('logError', args),

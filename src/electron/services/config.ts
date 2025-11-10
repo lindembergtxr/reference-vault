@@ -4,8 +4,6 @@ import * as utils from '../utils/index.js'
 const defaultConfig: ConfigData = {
     theme: 'dark',
     outputDir: null,
-    thumbnailOutputDir: null,
-    lastOpenedFolder: null,
 }
 
 export let localConfig: ConfigData | null = null
@@ -63,4 +61,14 @@ export const getConfig = async (): Promise<ConfigData> => {
 
 export const setTheme = async (theme: ConfigData['theme']) => {
     return await writeConfig({ theme })
+}
+
+export const setDestinationFolder = async () => {
+    const folderPath = await utils.selectFolder()
+
+    const config = await getConfig()
+
+    if (!folderPath) return config
+
+    return await writeConfig({ outputDir: folderPath })
 }
