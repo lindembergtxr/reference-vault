@@ -1,7 +1,9 @@
 import path from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import * as utils from '../../utils/index.js'
-import { createThumbnailFromImage } from '../images/thumbnail.js'
+
+import { createThumbnailFromImage } from './thumbnail.js'
 
 describe('addThumbnail', () => {
     const fakeSrc = '/fake/path/image.jpg'
