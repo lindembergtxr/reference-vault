@@ -33,6 +33,6 @@ export const copyImagesToFolder = async ({ urls, destinationPath }: CopyImagesTo
 }
 
 export const copyImagesToTempFolder = async (urls: string[]) => {
-    const destinationPath = await utils.getGalleryFolderPath('tempImages')
+    const destinationPath = await utils.getTemporaryFolderPath('images')
     return await copyImagesToFolder({ urls, destinationPath })
 }

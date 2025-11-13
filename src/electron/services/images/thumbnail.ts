@@ -7,7 +7,7 @@ export const createThumbnailFromImage = async (src: string) => {
     try {
         const fileName = path.basename(src)
 
-        const outputDir = utils.getGalleryFolderPath('tempThumbnails')
+        const outputDir = utils.getTemporaryFolderPath('thumbnails')
         const outputPath = path.join(outputDir, fileName)
 
         // makes sure the folder exists
@@ -33,7 +33,7 @@ export const batchCreateThumbnails = async (data: BatchCreateThumbnailsData) => 
     const concurrency = Number(process.env.VITE_CONCURRENCY_LIMIT) || 5
     const limit = pLimit(concurrency)
 
-    const destinationPath = await utils.getGalleryFolderPath('tempThumbnails')
+    const destinationPath = await utils.getTemporaryFolderPath('thumbnails')
 
     const promises = data.map(({ url, filename }) =>
         limit(async () => {

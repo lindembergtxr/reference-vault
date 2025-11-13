@@ -1,2 +1,2 @@
 export * from './config.js'
-export * from './files/getStagedFiles.js'
+export * from './images/read.js'

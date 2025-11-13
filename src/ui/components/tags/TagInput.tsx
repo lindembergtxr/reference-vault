@@ -80,7 +80,7 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
     }, [currentTags, onTagsChange])
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             <div className="flex flex-row gap-1 h-6 items-center paragraph-md font-semibold">
                 <Label htmlFor="tag-input">Tags</Label>
 
@@ -89,11 +89,11 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
                 />
             </div>
 
-            <div className="flex flex-wrap gap-2 w-full border p-2">
+            <div className="flex flex-wrap gap-2 w-full border p-2 rounded-sm bg-white">
                 {currentTags.map((tag) => (
                     <div
                         key={tag.id}
-                        className={`flex flex-wrap items-center px-2 py-1 gap-1 rounded ${tag.isNew ? 'bg-green-200' : 'bg-gray-200'}`}
+                        className={`flex items-center px-2 py-1 gap-1 rounded ${tag.isNew ? 'bg-green-200' : 'bg-gray-200'}`}
                     >
                         <span className="caption flex text-nowrap">{`${tag.franchise ? `${tag.franchise}:` : ''}${tag.name}`}</span>
 
@@ -107,7 +107,7 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    className="flex-1 outline-none paragraph-sm h-6"
+                    className="flex-grow min-w-2 outline-none paragraph-sm h-6 w-auto"
                     placeholder={
                         input.length === 0 && currentTags.length === 0
                             ? 'Type a tag and press ENTER to add.'

@@ -15,7 +15,7 @@ export const Layout = () => {
     const theme = config?.theme ?? null
 
     return (
-        <div className="min-h-screen grid grid-cols-[max(15rem,_20vw)_1fr] grid-rows-[3rem_1fr_3rem] bg-black relative">
+        <div className="min-h-screen h-screen grid grid-cols-[max(15rem,_20vw)_1fr] grid-rows-[3rem_minmax(0,_1fr)_3rem] bg-black relative overflow-hidden">
             <div className={cn('col-start-1 col-span-1 row-start-1 row-span-1', elevatedCell)}>
                 <LayoutTitle />
             </div>
@@ -24,7 +24,12 @@ export const Layout = () => {
                 <LayoutNavigation />
             </aside>
 
-            <main className={cn('col-span-1 col-start-2 row-span-1 row-start-2', surfaceCell)}>
+            <main
+                className={cn(
+                    'col-span-1 col-start-2 row-span-1 row-start-2 overflow-scroll',
+                    surfaceCell
+                )}
+            >
                 <Outlet />
             </main>
 

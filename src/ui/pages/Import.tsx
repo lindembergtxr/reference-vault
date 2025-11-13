@@ -30,7 +30,7 @@ export const Import = () => {
                     Import
                 </Button>
             </div>
-            <div className="flex px-4 py-6 w-full">
+            <div className="flex flex-col px-4 py-6 w-full">
                 {images.length > 0 ? (
                     images.map((image) => (
                         <ImportImage key={image.id} image={image} onCommit={refreshData} />

@@ -5,12 +5,13 @@ import { db } from '../../database/index.js'
 import { upsertImage } from './database.js'
 import { createTag, linkImageToTag } from '../tags.js'
 import * as utils from '../../utils/index.js'
+import * as services from '../index.js'
 
 export const commitImage = async (image: InternalImage) => {
-    const thumbFolder = await utils.getGalleryFolderPath('thumbnails')
+    const thumbFolder = await services.getDestinationFolder('thumbnails')
     const thumbnailPath = path.join(thumbFolder, image.id)
 
-    const imagesFolder = await utils.getGalleryFolderPath('images')
+    const imagesFolder = await services.getDestinationFolder('images')
     const imagePath = path.join(imagesFolder, image.id)
 
     const transaction = db.transaction(() => {

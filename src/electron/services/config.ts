@@ -72,3 +72,13 @@ export const setDestinationFolder = async () => {
 
     return await writeConfig({ outputDir: folderPath })
 }
+
+export const getDestinationFolder = async (folder: 'images' | 'thumbnails') => {
+    const config = await getConfig()
+
+    if (!config.outputDir) return ''
+
+    if (folder === 'images') return config.outputDir
+
+    return `${config.outputDir}/.thumbnails`
+}

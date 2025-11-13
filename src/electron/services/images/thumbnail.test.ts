@@ -16,7 +16,7 @@ describe('addThumbnail', () => {
     })
 
     it('creates thumbnail successfully', async () => {
-        vi.spyOn(utils, 'getGalleryFolderPath').mockReturnValue(fakeFolder)
+        vi.spyOn(utils, 'getTemporaryFolderPath').mockReturnValue(fakeFolder)
 
         const mkdirMock = vi.spyOn(utils, 'createFolder').mockResolvedValue()
 
@@ -32,7 +32,7 @@ describe('addThumbnail', () => {
     it('throws and logs error if createThumbOnFolder fails', async () => {
         const error = utils.generateError('ThumbnailCreationFailed', fakeSrc)
 
-        vi.spyOn(utils, 'getGalleryFolderPath').mockReturnValue(fakeFolder)
+        vi.spyOn(utils, 'getTemporaryFolderPath').mockReturnValue(fakeFolder)
 
         const mkdirMock = vi.spyOn(utils, 'createFolder').mockReturnThis()
 

@@ -30,7 +30,7 @@ export type ImageCardProps = {
 export const ImageCard = (props: ImageCardProps) => {
     const { url, imageId, size, mode = 'disabled', isSelected, onOpen, onSelect } = props
 
-    const onClick = (evt: MouseEvent<HTMLAnchorElement>) => {
+    const onClick = (evt: MouseEvent<HTMLButtonElement>) => {
         if (mode === 'disabled') {
             evt.preventDefault()
             return
@@ -41,9 +41,8 @@ export const ImageCard = (props: ImageCardProps) => {
 
     return (
         <div className={`flex items-center justify-center ${cardSizeMap[size]}`}>
-            <a
+            <button
                 data-testid="image-link"
-                href=""
                 className={clsx(`relative inline-block rounded-md overflow-hidden shadow-md`, {
                     // cursor
                     'cursor-default': mode === 'disabled',
@@ -65,7 +64,7 @@ export const ImageCard = (props: ImageCardProps) => {
                         />
                     </div>
                 )}
-            </a>
+            </button>
         </div>
     )
 }

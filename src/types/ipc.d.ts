@@ -5,6 +5,7 @@ type ApiEventMap = {
     setDestinationFolder: { args: []; return: ConfigData }
     importFiles: { args: []; return: void }
     getStagedFiles: { args: []; return: InternalImage[] }
+    getImageFiles: { args: []; return: InternalImage[] }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
         args: [InternalImage]

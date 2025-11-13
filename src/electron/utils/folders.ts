@@ -4,12 +4,10 @@ import * as helpers from '../helpers/index.js'
 import * as utils from './index.js'
 
 const folderNames = {
-    tempImages: 'temp_images',
-    tempThumbnails: 'temp_thumbnails',
-    images: 'images',
-    thumbnails: 'thumbnails',
+    images: 'temp_images',
+    thumbnails: 'temp_thumbnails',
 }
-export const getGalleryFolderPath = (folder: keyof typeof folderNames) => {
+export const getTemporaryFolderPath = (folder: keyof typeof folderNames) => {
     return path.join(helpers.getUserDataPath(), 'gallery', folderNames[folder])
 }
 
