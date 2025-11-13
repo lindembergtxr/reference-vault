@@ -10,7 +10,16 @@ export const LayoutFolder = () => {
 
     const buttonRef = useRef<HTMLButtonElement>(null)
 
-    const outputDir = config?.outputDir
+    const outputDir = config?.outputDir ?? ''
+
+    const formatFolder = (folder: string) => {
+        const elements = folder.split('/')
+
+        if (elements.length === 0) return null
+        if (elements.length === 1) return folder
+
+        return `.../${elements.slice(-2).join('/')}`
+    }
 
     const selectFolder = () => {
         buttonRef.current?.setAttribute('isDisabled', 'true')
@@ -51,7 +60,7 @@ export const LayoutFolder = () => {
             {!!outputDir && (
                 <div className="flex flex-row gap-4 items-center justify-between w-full">
                     <p className="paragraph-md dark:text-tetsu-300 overflow-hidden text-ellipsis">
-                        {outputDir}
+                        {formatFolder(outputDir)}
                     </p>
 
                     <Button
