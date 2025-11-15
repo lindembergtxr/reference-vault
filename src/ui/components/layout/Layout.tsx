@@ -3,7 +3,8 @@ import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 import { cn } from '../../utils/classname'
 import { useConfig } from '../../utils/configProvider'
-import { LayoutNavigation } from './LayoutNavigation'
+import { LayoutMenu } from './layoutMenu'
+import { LayoutSidebar } from './layoutSidebar'
 import { LayoutTitle } from './LayoutTitle'
 
 const surfaceCell = 'bg-surface border-[1px] border-tetsu-500/30'
@@ -21,8 +22,12 @@ export const Layout = () => {
             </div>
 
             <aside className={cn('col-span-1 col-start-1 row-span-1 row-start-2', elevatedCell)}>
-                <LayoutNavigation />
+                <LayoutSidebar />
             </aside>
+
+            <div className={cn('col-span-1 row-span-1 col-start-2 row-start-1 z-10', elevatedCell)}>
+                <LayoutMenu />
+            </div>
 
             <main
                 className={cn(
@@ -41,8 +46,6 @@ export const Layout = () => {
                     </div>
                 </button>
             </div>
-
-            <div className={cn('col-span-1 row-span-1 col-start-2 row-start-1', elevatedCell)} />
 
             <div className={cn('col-span-1 row-span-1 col-start-2 row-start-3', elevatedCell)} />
         </div>

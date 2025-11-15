@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ImageCard } from '../components/images/ImageCard'
 import { ImagePreview } from '../components/images/ImagePreview'
+import { parseTag } from '../utils/tags'
 
 export const Home = () => {
     const hasLoaded = useRef(false)
@@ -35,7 +36,7 @@ export const Home = () => {
                         <ImagePreview image={preview} closePreview={closePreview} />
                     </div>
                     <div className="col-span-1 row-span-1">
-                        {JSON.stringify(preview.tags.map((tag) => tag.name))}
+                        {preview.tags.map((tag) => parseTag(tag)).join(', ')}
                     </div>
                 </div>
             ) : (

@@ -68,7 +68,8 @@ export const LayoutFolder = () => {
                         className={cn(
                             'flex items-center gap-2 w-fit py-1 px-2',
                             'border-[1px] border-tetsu-700 rounded-md',
-                            'dark:text-tetsu-300 hover:bg-tetsu-300 dark:hover:text-tetsu-700'
+                            'dark:text-tetsu-300 hover:bg-tetsu-300 dark:hover:text-tetsu-700',
+                            'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                         )}
                         aria-label="Copy folder to clipboard"
                         name="Copy folder path to clipboard"
