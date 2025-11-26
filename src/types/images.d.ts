@@ -1,9 +1,20 @@
 type ImageSituation = 'pending' | 'committed'
 
+type ExpandedImage = ImageDB & {
+    width: number
+    height: number
+    aspectRatio: number
+}
+
 type InternalImage = {
     id: string
-    thumbnailPath: string | null
     imagePath: string | null
+    thumbnail: {
+        path: string | null
+        width?: number
+        height?: number
+        aspectRatio?: number
+    }
     artistId: string | null
     groupId: string | null
     tags: InternalTag[]

@@ -2,7 +2,7 @@ import { adaptInternalTabToDB } from '../adapters/tags.js'
 import { db } from '../database/index.js'
 
 export const getAllTags = () => {
-    return db.prepare('SELECT * FROM tags').all() as InternalTag[]
+    return db.prepare('SELECT * FROM tags ORDER BY id ASC').all() as InternalTag[]
 }
 
 export const createTag = (tag: InternalTag, context = db) => {

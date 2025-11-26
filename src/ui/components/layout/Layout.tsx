@@ -31,7 +31,7 @@ export const Layout = () => {
 
             <main
                 className={cn(
-                    'col-span-1 col-start-2 row-span-1 row-start-2 overflow-scroll',
+                    'col-span-1 col-start-2 row-span-1 row-start-2 overflow-hidden',
                     surfaceCell
                 )}
             >

@@ -28,7 +28,7 @@ export const importFromFolder = async () => {
         .map((result) => {
             return {
                 id: result.filename,
-                thumbnailPath: result.thumbnail,
+                thumbnail: { path: result.thumbnail },
                 imagePath: result.image,
                 artistId: null,
                 groupId: null,

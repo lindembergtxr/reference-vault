@@ -1,9 +1,12 @@
-import { ImageDB } from '../types/database.js'
-
-export const adaptDBImageToInternal = (image: ImageDB): InternalImage => ({
+export const adaptDBImageToInternal = (image: ExpandedImage): InternalImage => ({
     id: image.id,
     imagePath: image.image_path,
-    thumbnailPath: image.thumbnail_path,
+    thumbnail: {
+        path: image.thumbnail_path,
+        width: image.width,
+        height: image.height,
+        aspectRatio: image.aspectRatio,
+    },
     artistId: image.artist_id,
     groupId: image.group_id,
     situation: image.situation,

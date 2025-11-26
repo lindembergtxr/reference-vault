@@ -15,7 +15,12 @@ export const commitImage = async (image: InternalImage) => {
     const imagePath = path.join(imagesFolder, image.id)
 
     const transaction = db.transaction(() => {
-        upsertImage({ ...image, imagePath, thumbnailPath, situation: 'committed' })
+        upsertImage({
+            ...image,
+            imagePath,
+            thumbnail: { ...image.thumbnail, path: thumbnailPath },
+            situation: 'committed',
+        })
 
         for (const tag of image.tags) {
             createTag(tag, db)
@@ -29,7 +34,7 @@ export const commitImage = async (image: InternalImage) => {
         fs.mkdirSync(thumbFolder, { recursive: true })
 
         if (image.imagePath) fs.renameSync(image.imagePath, imagePath)
-        if (image.thumbnailPath) fs.renameSync(image.thumbnailPath, thumbnailPath)
+        if (image.thumbnail.path) fs.renameSync(image.thumbnail.path, thumbnailPath)
 
         return { success: true, data: { imageId: image.id } }
     } catch (error) {

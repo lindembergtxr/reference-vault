@@ -121,7 +121,7 @@ export const SearchInput = () => {
                         id="tag-search-input"
                         ref={inputRef}
                         className="w-full paragraph-md h-8 px-2 rounded-md outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400"
-                        placeholder="Search for tags"
+                        placeholder="Add tags to search"
                         value={search}
                         onFocus={onInputFocus}
                         onChange={onInputChange}
