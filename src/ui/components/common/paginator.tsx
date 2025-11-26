@@ -23,9 +23,12 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
     }
 
     return (
-        <div className="flex items-center gap-2 p-2 mt-4">
+        <div className="flex items-center gap-2 p-2">
             <button
-                className="px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700 hover:bg-gray-400 hover:cursor-pointer disabled:opacity-50"
+                className={cn(
+                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
+                )}
                 onClick={() => goToPage(1)}
                 disabled={currentPage === 1}
             >
@@ -33,7 +36,10 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             </button>
 
             <button
-                className="px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700 hover:bg-gray-400 hover:cursor-pointer disabled:opacity-50"
+                className={cn(
+                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
+                )}
                 onClick={() => goToPage(currentPage - 1)}
                 disabled={currentPage === 1}
             >
@@ -41,11 +47,14 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             </button>
 
             <span className="label mx-4">
-                Page {currentPage} of {totalPages}
+                {currentPage} / {totalPages}
             </span>
 
             <button
-                className="px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700 hover:bg-gray-400 hover:cursor-pointer disabled:opacity-50"
+                className={cn(
+                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
+                )}
                 onClick={() => goToPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
             >
@@ -53,7 +62,10 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             </button>
 
             <button
-                className="px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700 hover:bg-gray-400 hover:cursor-pointer disabled:opacity-50"
+                className={cn(
+                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
+                )}
                 onClick={() => goToPage(totalPages)}
                 disabled={currentPage === totalPages}
             >
@@ -67,16 +79,19 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                     max={totalPages}
                     value={inputPage}
                     onChange={(e) => setInputPage(Number(e.target.value))}
+                    disabled={totalPages === 1}
                     className={cn(
-                        'w-16 px-2 h-8 border-[1px] caption border-gray-700/50 hover:bg-gray-100 rounded-md',
+                        'w-16 px-2 h-8 border-[1px] caption border-gray-700/50 :not(:disabled)hover:bg-gray-100 rounded-md',
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                     )}
                 />
                 <button
                     className={cn(
                         'px-2 h-8 bg-aoi-800 rounded-md text-white hover:bg-aoi-900',
-                        'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
+                        'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400',
+                        'disabled:bg-gray-400 disabled:text-gray-800'
                     )}
+                    disabled={totalPages === 1}
                     onClick={() => goToPage(inputPage)}
                 >
                     GO

@@ -147,7 +147,7 @@ export const SearchInput = () => {
                         tabIndex={0}
                         onKeyDown={onListKeyDown}
                         className={cn(
-                            'absolute top-0 left-0 flex flex-col gap-1 px-2 py-2 h-full w-full rounded-md overflow-scroll',
+                            'absolute top-0 left-0 flex flex-col px-2 py-2 h-full w-full rounded-md overflow-scroll',
                             'outline-none focus:ring-2 focus:ring-aoi-400'
                         )}
                     >
@@ -156,7 +156,7 @@ export const SearchInput = () => {
                                 id={`tag_id_${parseTag(tag)}`}
                                 key={parseTag(tag)}
                                 className={cn(
-                                    'hover:bg-tetsu-300/80 hover:cursor-pointer paragraph-sm px-2',
+                                    'hover:bg-tetsu-300/80 hover:cursor-pointer label leading-6 font-normal px-2',
                                     highlight === index ? 'bg-tetsu-300/80' : ''
                                 )}
                                 onMouseDown={() => selectItem(index)}

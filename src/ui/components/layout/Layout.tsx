@@ -6,6 +6,7 @@ import { useConfig } from '../../utils/configProvider'
 import { LayoutMenu } from './layoutMenu'
 import { LayoutSidebar } from './layoutSidebar'
 import { LayoutTitle } from './LayoutTitle'
+import { LayoutPaginator } from './LayoutPaginator'
 
 const surfaceCell = 'bg-surface border-[1px] border-tetsu-500/30'
 const elevatedCell = 'bg-elevated border-[1px] border-tetsu-500/30'
@@ -25,13 +26,18 @@ export const Layout = () => {
                 <LayoutSidebar />
             </aside>
 
-            <div className={cn('col-span-1 row-span-1 col-start-2 row-start-1 z-10', elevatedCell)}>
+            <div
+                className={cn(
+                    'col-span-1 row-span-1 col-start-2 row-start-1 z-10 min-w-0',
+                    elevatedCell
+                )}
+            >
                 <LayoutMenu />
             </div>
 
             <main
                 className={cn(
-                    'col-span-1 col-start-2 row-span-1 row-start-2 overflow-hidden',
+                    'col-span-1 col-start-2 row-span-1 row-start-2 w-full min-w-0 overflow-hidden',
                     surfaceCell
                 )}
             >
@@ -47,7 +53,14 @@ export const Layout = () => {
                 </button>
             </div>
 
-            <div className={cn('col-span-1 row-span-1 col-start-2 row-start-3', elevatedCell)} />
+            <div
+                className={cn(
+                    'col-span-1 row-span-1 col-start-2 row-start-3 flex w-full min-w-0 justify-center',
+                    elevatedCell
+                )}
+            >
+                <LayoutPaginator />
+            </div>
         </div>
     )
 }

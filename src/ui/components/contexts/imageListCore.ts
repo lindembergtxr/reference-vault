@@ -2,16 +2,17 @@ import { createContext, useContext, type Dispatch, type SetStateAction } from 'r
 
 export type ImportContextType = {
     images: InternalImage[]
-    selected: InternalImage[]
     setImages: Dispatch<SetStateAction<InternalImage[]>>
-    setSelected: Dispatch<SetStateAction<InternalImage[]>>
-    openImage: (id: string) => void
+    page: number
+    setPage: Dispatch<SetStateAction<number>>
+    totalPages: number
+    paginatedImages: InternalImage[]
 }
 
-export const ImageListContext = createContext<ImportContextType | undefined>(undefined)
+export const Context = createContext<ImportContextType | undefined>(undefined)
 
 export const useImageListContext = () => {
-    const context = useContext(ImageListContext)
+    const context = useContext(Context)
 
     if (!context) throw new Error('useImageListContext must be used within ImageListContext')
     return context

@@ -1,17 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { cn, parseTag } from '../../utils'
-import { Pagination } from '../common/paginator'
 import { ImagePreview } from './ImagePreview'
+import { useImageListContext } from '../contexts/imageListCore'
 
-const PAGE_SIZE = 50
-
-type ImageListProps = {
-    images: InternalImage[]
-}
-export const ImageList = ({ images }: ImageListProps) => {
-    const [page, setPage] = useState(1)
+export const ImageList = () => {
     const [preview, setPreview] = useState<InternalImage | null>(null)
+
+    const { images, paginatedImages } = useImageListContext()
 
     const openImage = (id: string) => {
         const image = images.find((image) => image.id === id)
@@ -20,15 +16,6 @@ export const ImageList = ({ images }: ImageListProps) => {
     }
 
     const closePreview = () => setPreview(null)
-
-    const onPageChange = (newPage: number) => setPage(newPage)
-
-    const paginatedImages = useMemo(() => {
-        const startIndex = (page - 1) * PAGE_SIZE
-        const endIndex = startIndex + PAGE_SIZE
-
-        return images.slice(startIndex, endIndex)
-    }, [images, page])
 
     return (
         <div className="flex flex-col h-full w-full">
@@ -42,8 +29,8 @@ export const ImageList = ({ images }: ImageListProps) => {
                     </div>
                 </div>
             ) : (
-                <div className="px-4 py-10 h-full w-full overflow-scroll">
-                    <div className="grid grid-cols-5 gap-2">
+                <div className="px-4 py-10 h-full overflow-y-auto">
+                    <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                         {paginatedImages.map((image) => (
                             <button
                                 key={image.id}
@@ -57,19 +44,11 @@ export const ImageList = ({ images }: ImageListProps) => {
                                 <img
                                     src={`file://${image.thumbnail.path ?? ''}`}
                                     alt={image.id ?? ''}
-                                    className="max-h-full max-w-full shadow-md object-contain"
+                                    className="h-full w-full shadow-md object-cover"
                                     draggable={false}
                                 />
                             </button>
                         ))}
-                    </div>
-
-                    <div className="flex justify-center w-full">
-                        <Pagination
-                            currentPage={page}
-                            totalPages={Math.ceil(images.length / PAGE_SIZE)}
-                            onPageChange={onPageChange}
-                        />
                     </div>
                 </div>
             )}
