@@ -13,10 +13,12 @@ type PaginationProps = {
     onPageChange: (page: number) => void
 }
 export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
-    const [inputPage, setInputPage] = useState(currentPage < totalPages ? currentPage : totalPages)
+    const total = totalPages || 1
+
+    const [inputPage, setInputPage] = useState(currentPage < total ? currentPage : total)
 
     const goToPage = (page: number) => {
-        const newPage = Math.max(1, Math.min(totalPages, page))
+        const newPage = Math.max(1, Math.min(total, page))
 
         onPageChange(newPage)
         setInputPage(newPage)
@@ -47,7 +49,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
             </button>
 
             <span className="label mx-4">
-                {currentPage} / {totalPages}
+                {currentPage} / {total}
             </span>
 
             <button
@@ -56,7 +58,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
                 onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
+                disabled={currentPage === total}
             >
                 <MdKeyboardArrowRight className="h-5 w-5" />
             </button>
@@ -66,8 +68,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                     'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
-                onClick={() => goToPage(totalPages)}
-                disabled={currentPage === totalPages}
+                onClick={() => goToPage(total)}
+                disabled={currentPage === total}
             >
                 <MdKeyboardDoubleArrowRight className="h-5 w-5" />
             </button>
@@ -76,10 +78,10 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                 <input
                     type="number"
                     min={1}
-                    max={totalPages}
+                    max={total}
                     value={inputPage}
                     onChange={(e) => setInputPage(Number(e.target.value))}
-                    disabled={totalPages === 1}
+                    disabled={total === 1}
                     className={cn(
                         'w-16 px-2 h-8 border-[1px] caption border-gray-700/50 :not(:disabled)hover:bg-gray-100 rounded-md',
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
@@ -91,7 +93,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400',
                         'disabled:bg-gray-400 disabled:text-gray-800'
                     )}
-                    disabled={totalPages === 1}
+                    disabled={total === 1}
                     onClick={() => goToPage(inputPage)}
                 >
                     GO
