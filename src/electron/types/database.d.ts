@@ -10,6 +10,6 @@ export type ImageDB = {
 
 export type TagDB = {
     id: string
-    franchise: string | null
+    franchise: string
     category: TagCategory
 }

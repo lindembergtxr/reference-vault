@@ -2,8 +2,8 @@ import { logError } from './errors.js'
 
 const VALID_CATEGORIES = new Set(['general', 'character', 'artist', 'copyright', 'meta'])
 
-export const normalizeIdentifier = (input: string | null): string | null => {
-    if (!input) return null
+export const normalizeIdentifier = (input: string): string => {
+    if (!input) return ''
 
     return input
         .trim()

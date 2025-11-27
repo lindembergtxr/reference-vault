@@ -10,6 +10,7 @@ import { HomePage, ImportPage, TagsPage } from './pages'
 import { ConfigProvider } from './components/ConfigProvider.js'
 import { Layout } from './components/layout/Layout.js'
 import { ImageListContext } from './components/contexts/imageListContext.js'
+import { TagsContext } from './components/contexts/tagsContext.js'
 
 const main = async () => {
     const root = createRoot(document.getElementById('root')!)
@@ -19,13 +20,15 @@ const main = async () => {
             <ConfigProvider>
                 <HashRouter>
                     <ImageListContext>
-                        <Routes>
-                            <Route element={<Layout />}>
-                                <Route path="" element={<HomePage />} />
-                                <Route path="import" element={<ImportPage />} />
-                                <Route path="tags" element={<TagsPage />} />
-                            </Route>
-                        </Routes>
+                        <TagsContext>
+                            <Routes>
+                                <Route element={<Layout />}>
+                                    <Route path="" element={<HomePage />} />
+                                    <Route path="import" element={<ImportPage />} />
+                                    <Route path="tags" element={<TagsPage />} />
+                                </Route>
+                            </Routes>
+                        </TagsContext>
                     </ImageListContext>
                 </HashRouter>
             </ConfigProvider>

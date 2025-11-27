@@ -9,6 +9,6 @@ export const adaptDBTagToInternal = (tag: TagDB): InternalTag => ({
 
 export const adaptInternalTabToDB = (tag: InternalTag): TagDB => ({
     id: normalizeIdentifier(tag.id) ?? '',
-    franchise: normalizeIdentifier(tag.franchise ?? null),
+    franchise: normalizeIdentifier(tag.franchise ?? ''),
     category: assertValidCategory(tag.category),
 })

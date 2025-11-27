@@ -6,13 +6,13 @@ import { Input, Label } from 'react-aria-components'
 const parseTagString = (input: string) => {
     input = input.trim()
 
-    let franchise: string | null = null
-    let tagName: string = ''
+    let franchise = ''
+    let tagName = ''
 
     const colonIndex = input.indexOf(':')
 
     if (colonIndex !== -1) {
-        franchise = input.slice(0, colonIndex).trim()
+        franchise = input.slice(0, colonIndex).trim() ?? ''
         tagName = input.slice(colonIndex + 1).trim()
     } else {
         tagName = input

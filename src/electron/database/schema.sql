@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS artists (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL
@@ -12,17 +14,20 @@ CREATE TABLE IF NOT EXISTS groups (
 
 CREATE TABLE IF NOT EXISTS images (
     id TEXT PRIMARY KEY,
-    title TEXT,
-    path TEXT NOT NULL,
-    artist_id TEXT,
     group_id TEXT,
-    FOREIGN KEY (artist_id) REFERENCES artists(id) ON DELETE SET NULL,
+    thumbnail_path VARCHAR(256),
+    image_path VARCHAR(256),
+    situation TEXT NOT NULL DEFAULT 'pending'
+        CHECK (situation IN ('pending', 'committed', 'completed')),
     FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS tags (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL
+    id TEXT NOT NULL,
+    franchise VARCHAR(256) NOT NULL DEFAULT '',
+    category TEXT NOT NULL DEFAULT 'general'
+        CHECK (category IN ('copyright', 'character', 'artist', 'general', 'meta')),
+    PRIMARY KEY (id, franchise, category)
 );
 
 CREATE TABLE IF NOT EXISTS image_tags (

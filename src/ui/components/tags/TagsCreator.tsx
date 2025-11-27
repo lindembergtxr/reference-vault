@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { cn } from '../../utils'
+import { useTagsContext } from '../contexts/tagsCore'
 
 type ParsedTag = InternalTag & {
     id: string
     category: TagCategory
-    franchise: string | null
+    franchise: string
     line: number
     error?: string
 }
@@ -33,7 +34,7 @@ const parseCsv = (text: string): ParsedTag[] => {
         const result: ParsedTag = {
             id: parts[0]?.trim() || '',
             category: parts[1]?.trim() as TagCategory,
-            franchise: parts[2]?.trim() || null,
+            franchise: parts[2]?.trim() || '',
             line: index + 2,
         }
 
@@ -47,6 +48,8 @@ const parseCsv = (text: string): ParsedTag[] => {
 export const TagsCreator = () => {
     const [csvText, setCsvText] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+
+    const { refreshTags } = useTagsContext()
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
@@ -70,6 +73,8 @@ export const TagsCreator = () => {
             await window.api.createTags(internalTags)
 
             setCsvText('')
+
+            refreshTags()
 
             alert('Tags saved successfully!')
         } catch (error) {

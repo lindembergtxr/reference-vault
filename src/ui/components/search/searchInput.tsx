@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Button, Input, Label } from 'react-aria-components'
 import { MdSearch } from 'react-icons/md'
 import { parseTag } from '../../utils/tags'
 import { cn } from '../../utils/classname'
+import { useTagsContext } from '../contexts/tagsCore'
 
 export const SearchInput = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const listRef = useRef<HTMLUListElement>(null)
 
+    const { tags } = useTagsContext()
+
     const [search, setSearch] = useState('')
-    const [tags, setTags] = useState<InternalTag[]>([])
     const [highlight, setHighlight] = useState(-1)
     const [erasing, setErasing] = useState(false)
 
@@ -19,10 +21,17 @@ export const SearchInput = () => {
     const filteredItems = useMemo(() => {
         if (lastWord.length < 2) return []
 
-        return tags.filter((tag) => {
-            const parsed = parseTag(tag)
-            return parsed.toLowerCase().includes(lastWord.toLowerCase())
-        })
+        const lowerWord = lastWord.toLowerCase()
+
+        return tags
+            .map((tag) => ({
+                tag,
+                parsed: parseTag(tag).toLowerCase(),
+                idScore: tag.id.toLowerCase().includes(lowerWord) ? 1 : 0,
+            }))
+            .filter((item) => item.parsed.includes(lowerWord))
+            .sort((a, b) => b.idScore - a.idScore)
+            .map((item) => item.tag)
     }, [tags, lastWord])
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,10 +117,6 @@ export const SearchInput = () => {
             inputRef.current?.focus()
         }
     }
-
-    useEffect(() => {
-        window.api.getAllTags().then(setTags)
-    }, [])
 
     return (
         <div className="flex flex-col items-center gap-2 w-full px-1 pr-2">
