@@ -5,7 +5,7 @@ import { useConfig } from '../../utils/configProvider'
 
 const navbarItems = [
     { link: '', label: 'Home' },
-    { link: 'search', label: 'Search' },
+    { link: 'tags', label: 'Tags' },
     { link: 'import', label: 'Import' },
 ]
 

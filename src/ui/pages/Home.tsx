@@ -1,5 +1,5 @@
 import { ImageList } from '../components/images/ImageList'
 
-export const Home = () => {
+export const HomePage = () => {
     return <ImageList />
 }

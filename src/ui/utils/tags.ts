@@ -1,3 +1,3 @@
 export const parseTag = (tag: InternalTag) => {
-    return `${tag.name}${tag.franchise ? `_(${tag.franchise})` : ''}`
+    return `${tag.id}${tag.franchise ? `_(${tag.franchise})` : ''}`
 }

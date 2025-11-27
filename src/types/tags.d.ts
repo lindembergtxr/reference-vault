@@ -1,5 +1,7 @@
+type TagCategory = 'copyright' | 'character' | 'artist' | 'general' | 'meta'
+
 type InternalTag = {
     id: string
-    name: string
     franchise: string | null
+    category: TagCategory
 }

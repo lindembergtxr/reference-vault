@@ -38,7 +38,7 @@ export const getTemporaryFiles = () => {
     const query = `
         SELECT i.*,
             COALESCE(
-                json_group_array(json_object('id', t.id, 'name', t.name)) FILTER (WHERE t.id IS NOT NULL), json('[]')
+                json_group_array(json_object('id', t.id)) FILTER (WHERE t.id IS NOT NULL), json('[]')
             ) AS tags 
         FROM images i
         LEFT JOIN image_tags it ON i.id = it.image_id
@@ -54,7 +54,7 @@ export const getCommitedFiles = () => {
     const query = `
         SELECT i.*,
             COALESCE(
-                json_group_array(json_object('id', t.id, 'name', t.name)) FILTER (WHERE t.id IS NOT NULL), json('[]')
+                json_group_array(json_object('id', t.id)) FILTER (WHERE t.id IS NOT NULL), json('[]')
             ) AS tags 
         FROM images i
         LEFT JOIN image_tags it ON i.id = it.image_id

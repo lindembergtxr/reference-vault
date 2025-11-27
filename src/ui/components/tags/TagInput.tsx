@@ -20,7 +20,7 @@ const parseTagString = (input: string) => {
 
     tagName = tagName.replace(/_+/g, ' ').trim().toLowerCase().replace(/\s+/g, '_')
 
-    return { franchise, name: tagName }
+    return { franchise, id: tagName }
 }
 
 export type Tag = InternalTag & {
@@ -37,16 +37,16 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && input.trim() !== '') {
-            const { name, franchise } = parseTagString(input)
+            const { id, franchise } = parseTagString(input)
 
-            const searched = currentTags.find((tag) => name === tag.id)
-            const isNew = !tags.some((tag) => name === tag.id)
+            const searched = currentTags.find((tag) => id === tag.id)
+            const isNew = !tags.some((tag) => id === tag.id)
 
             if (searched) {
                 setInput('')
                 setMessage('This element has already been added.')
             } else {
-                setCurrentTags((prev) => [...prev, { id: name, name, franchise, isNew }])
+                setCurrentTags((prev) => [...prev, { id, franchise, isNew, category: 'general' }])
                 setInput('')
                 setMessage('')
             }
@@ -95,7 +95,7 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
                         key={tag.id}
                         className={`flex items-center px-2 py-1 gap-1 rounded ${tag.isNew ? 'bg-green-200' : 'bg-gray-200'}`}
                     >
-                        <span className="caption flex text-nowrap">{`${tag.franchise ? `${tag.franchise}:` : ''}${tag.name}`}</span>
+                        <span className="caption flex text-nowrap">{`${tag.franchise ? `${tag.franchise}:` : ''}${tag.id}`}</span>
 
                         <button onClick={() => removeTag(tag.id)}>
                             <MdClose />

@@ -4,7 +4,7 @@ import { MdImportExport } from 'react-icons/md'
 import { ImportImage } from '../components/import/ImportImage'
 import { Button } from 'react-aria-components'
 
-export const Import = () => {
+export const ImportPage = () => {
     const [images, setImages] = useState<InternalImage[]>([])
 
     const importData = () => {

@@ -3,7 +3,7 @@ import path from 'path'
 
 import { db } from '../../database/index.js'
 import { upsertImage } from './database.js'
-import { createTag, linkImageToTag } from '../tags.js'
+import { createTag, linkImageToTag } from '../tags/database.js'
 import * as utils from '../../utils/index.js'
 import * as services from '../index.js'
 

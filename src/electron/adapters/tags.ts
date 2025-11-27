@@ -1,13 +1,14 @@
 import { TagDB } from '../types/database.js'
+import { assertValidCategory, normalizeIdentifier } from '../utils/index.js'
 
 export const adaptDBTagToInternal = (tag: TagDB): InternalTag => ({
     id: tag.id,
-    name: tag.name,
     franchise: tag.franchise,
+    category: tag.category,
 })
 
 export const adaptInternalTabToDB = (tag: InternalTag): TagDB => ({
-    id: tag.id,
-    name: tag.name,
-    franchise: tag.franchise ?? null,
+    id: normalizeIdentifier(tag.id) ?? '',
+    franchise: normalizeIdentifier(tag.franchise ?? null),
+    category: assertValidCategory(tag.category),
 })
