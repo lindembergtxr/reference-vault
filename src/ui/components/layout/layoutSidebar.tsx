@@ -11,10 +11,6 @@ export const LayoutSidebar = () => {
             <div className="row-start-2 col-start-1 h-full">
                 <SearchInput />
             </div>
-
-            <div className="row-start-3 col-start-1 h-full">
-                <p>Tags</p>
-            </div>
         </div>
     )
 }

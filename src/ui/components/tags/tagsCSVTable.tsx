@@ -9,10 +9,10 @@ export const TagsCSVTable = ({ tags }: TagsCSVTableProps) => {
             <table className="table-fixed w-full text-sm border-collapse">
                 <thead className="sticky top-0 bg-tetsu-100 border-b border-gray-600">
                     <tr className="text-left">
-                        <th className="w-12 truncate px-2">#</th>
-                        <th className="w-32 truncate px-2">Name</th>
-                        <th className="w-32 truncate px-2">Category</th>
-                        <th className="w-32 truncate px-2">Franchise</th>
+                        <th className="w-12 h-9 truncate px-2">#</th>
+                        <th className="w-32 h-9 truncate px-2">Name</th>
+                        <th className="w-32 h-9 truncate px-2">Category</th>
+                        <th className="w-32 h-9 truncate px-2">Franchise</th>
                     </tr>
                 </thead>
                 <tbody className="overflow-scroll">

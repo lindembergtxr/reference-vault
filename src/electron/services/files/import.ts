@@ -39,7 +39,7 @@ export async function importFromFolder() {
 
             await upsertImage({
                 id: filename,
-                thumbnail: { path: thumbnailPath },
+                thumbnailPath,
                 imagePath: destination,
                 groupId: null,
                 situation: 'pending',

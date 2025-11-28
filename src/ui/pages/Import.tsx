@@ -39,20 +39,21 @@ export const ImportPage = () => {
 
     return (
         <div className="col-span-12 col-start-1 flex flex-col w-full h-full gap-4 pt-6">
-            <div className="flex align-center gap-4 w-full px-4">
-                <Button
-                    className={cn(
-                        'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md label font-medium',
-                        'bg-aoi-500 text-aoi-100 dark:bg-aoi-300 dark:text-aoi-900',
-                        'disabled:bg-gray-200 disabled:text-gray-500'
-                    )}
-                    isDisabled={images.length > 0}
-                    onClick={importData}
-                >
-                    <MdImportExport />
-                    Import
-                </Button>
-            </div>
+            {images.length === 0 && (
+                <div className="flex align-center gap-4 w-full px-4">
+                    <Button
+                        className={cn(
+                            'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md label font-medium',
+                            'bg-aoi-500 text-aoi-100 dark:bg-aoi-300 dark:text-aoi-900',
+                            'disabled:bg-gray-200 disabled:text-gray-500'
+                        )}
+                        onClick={importData}
+                    >
+                        <MdImportExport />
+                        Import
+                    </Button>
+                </div>
+            )}
             <div className="flex flex-col px-4 py-6 h-full w-full overflow-hidden">
                 <div className="h-full">
                     {images.length === 0 && <p>Import something to begin.</p>}

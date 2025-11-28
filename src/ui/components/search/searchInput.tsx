@@ -145,7 +145,7 @@ export const SearchInput = () => {
                 </Button>
             </div>
 
-            <div className="relative flex w-full h-[15vh] border-[1px] border-tetsu-300/80 rounded-md">
+            <div className="relative flex w-full h-[30vh] border-[1px] border-tetsu-300/80 rounded-md">
                 {!erasing && filteredItems.length > 0 && (
                     <ul
                         ref={listRef}

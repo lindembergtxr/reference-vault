@@ -2,7 +2,7 @@ import pLimit from 'p-limit'
 import { db } from '../../database/index.js'
 
 export const upsertImage = (image: Omit<InternalImage, 'tags'>) => {
-    const { id, thumbnail, imagePath, groupId, situation } = image
+    const { id, thumbnailPath, imagePath, groupId, situation } = image
 
     const prepare = db.prepare(`
         INSERT INTO images (id, thumbnail_path, image_path, group_id, situation)
@@ -13,7 +13,7 @@ export const upsertImage = (image: Omit<InternalImage, 'tags'>) => {
             group_id = excluded.group_id,
             situation = excluded.situation
     `)
-    prepare.run({ id, imagePath, groupId, situation, thumbnailPath: thumbnail.path })
+    prepare.run({ id, imagePath, groupId, situation, thumbnailPath })
 }
 
 export const deleteImage = (id: string) => {
@@ -37,8 +37,16 @@ export const getTemporaryFiles = () => {
     const query = `
         SELECT i.*,
             COALESCE(
-                json_group_array(json_object('id', t.id)) FILTER (WHERE t.id IS NOT NULL), json('[]')
-            ) AS tags 
+                json_group_array(
+                    json_object(
+                        'id', t.id,
+                        'name', t.name,
+                        'category', t.category,
+                        'franchise', t.franchise
+                    )
+                ) FILTER (WHERE t.id IS NOT NULL),
+                json('[]')
+            ) AS tags
         FROM images i
         LEFT JOIN image_tags it ON i.id = it.image_id
         LEFT JOIN tags t ON t.id = it.tag_id
@@ -53,8 +61,16 @@ export const getCommitedFiles = () => {
     const query = `
         SELECT i.*,
             COALESCE(
-                json_group_array(json_object('id', t.id)) FILTER (WHERE t.id IS NOT NULL), json('[]')
-            ) AS tags 
+           json_group_array(
+               json_object(
+                   'id', t.id,
+                   'name', t.name,
+                   'category', t.category,
+                   'franchise', t.franchise
+               )
+           ) FILTER (WHERE t.id IS NOT NULL),
+           json('[]')
+       ) AS tags
         FROM images i
         LEFT JOIN image_tags it ON i.id = it.image_id
         LEFT JOIN tags t ON t.id = it.tag_id

@@ -1,20 +1,9 @@
 type ImageSituation = 'pending' | 'committed'
 
-type ExpandedImage = ImageDB & {
-    width: number
-    height: number
-    aspectRatio: number
-}
-
 type InternalImage<T = InternalTag> = {
     id: string
     imagePath: string | null
-    thumbnail: {
-        path: string | null
-        width?: number
-        height?: number
-        aspectRatio?: number
-    }
+    thumbnailPath: string | null
     groupId: string | null
     tags: T[]
     situation: ImageSituation

@@ -21,12 +21,7 @@ export async function commitImage(image: InternalImage<InternalTagNew>) {
 
         db.prepare('BEGIN').run()
 
-        upsertImage({
-            ...image,
-            imagePath,
-            thumbnail: { ...image.thumbnail, path: thumbnailPath },
-            situation: 'committed',
-        })
+        upsertImage({ ...image, imagePath, thumbnailPath, situation: 'committed' })
 
         for (const tag of image.tags) {
             const tagId = await createTag(adaptInternalTabToDB(tag), db)
@@ -34,7 +29,7 @@ export async function commitImage(image: InternalImage<InternalTagNew>) {
         }
 
         if (image.imagePath) fs.renameSync(image.imagePath, imagePath)
-        if (image.thumbnail.path) fs.renameSync(image.thumbnail.path, thumbnailPath)
+        if (image.thumbnailPath) fs.renameSync(image.thumbnailPath, thumbnailPath)
 
         db.prepare('COMMIT').run()
 

@@ -31,7 +31,7 @@ export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
             <div className="flex flex-row items-start gap-4 w-full h-full">
                 <div className="flex flex-col gap-4 justify-center w-80">
                     <img
-                        src={`file://${image.thumbnail.path ?? ''}`}
+                        src={`file://${image.thumbnailPath ?? ''}`}
                         alt={image.id ?? ''}
                         className="w-full h-auto shadow-md object-contain"
                         draggable={false}

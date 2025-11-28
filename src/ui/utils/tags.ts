@@ -1,3 +1,4 @@
 export const parseTag = (tag: InternalTagNew) => {
-    return `${tag.name}${tag.franchise ? `_(${tag.franchise})` : ''}`
+    if (!tag?.name) return ''
+    return `${tag.name.replaceAll('_', ' ')}${tag.franchise ? ` (${tag.franchise.replaceAll('_', ' ')})` : ''}`
 }

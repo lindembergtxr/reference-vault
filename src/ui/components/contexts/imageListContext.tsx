@@ -12,7 +12,7 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
     const refreshData = () => {
         window.api
             .getImageFiles()
-            .then((res) => setImages(res.filter((images) => images?.thumbnail.path)))
+            .then((res) => setImages(res.filter((images) => images?.thumbnailPath)))
     }
 
     const paginatedImages = useMemo(() => {
