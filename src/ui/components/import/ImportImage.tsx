@@ -29,7 +29,7 @@ export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
                     isSelected={false}
                     mode={mode}
                     imageId={image.id}
-                    url={image.thumbnailPath!}
+                    url={image.thumbnail.path!}
                 />
             </div>
 

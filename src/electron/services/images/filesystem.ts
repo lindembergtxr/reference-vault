@@ -10,6 +10,16 @@ export type ImageTransaction = {
     origin: string
 }
 
+export const copyImageToFolder = async (url: string, destination: string) => {
+    const extension = path.extname(url)
+    const filename = `${utils.generateId()}${extension}`
+    const destinationPath = path.join(destination, filename)
+
+    await copyFileToFolder(url, destinationPath)
+
+    return { filename, destination: destinationPath, origin: url }
+}
+
 type CopyImagesToFolder = {
     urls: string[]
     destinationPath: string

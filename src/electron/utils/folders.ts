@@ -36,3 +36,21 @@ export const getFolderImages = async (src: string): Promise<string[]> => {
 
     return fileURLs
 }
+
+export const safeDelete = async (path: string) => {
+    try {
+        await fs.unlink(path)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            const code = (error as NodeJS.ErrnoException).code
+
+            if (code === 'ENOENT') return
+
+            utils.logError({ message: `[safeDelete] Falha ao deletar: ${path}`, error })
+            console.warn(`[safeDelete] Falha ao deletar: ${path}`, error)
+        } else {
+            utils.logError({ message: `[safeDelete] Erro desconhecido ao deletar: ${path}`, error })
+            console.warn(`[safeDelete] Erro desconhecido ao deletar: ${path}`, error)
+        }
+    }
+}

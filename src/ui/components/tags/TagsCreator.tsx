@@ -3,15 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 import { cn } from '../../utils'
 import { useTagsContext } from '../contexts/tagsCore'
 
-type ParsedTag = InternalTag & {
-    id: string
+type ParsedTag = Omit<InternalTagNew, 'id'> & {
     category: TagCategory
     franchise: string
     line: number
     error?: string
 }
 
-const defaultCSVText = 'id,category,franchise'
+const defaultCSVText = 'name,category,franchise'
 
 const CATEGORY_SHORTCUTS: Record<number, TagCategory> = {
     1: 'general',
@@ -32,13 +31,13 @@ const parseCsv = (text: string): ParsedTag[] => {
         const parts = line.split(',')
 
         const result: ParsedTag = {
-            id: parts[0]?.trim() || '',
+            name: parts[0]?.trim() || '',
             category: parts[1]?.trim() as TagCategory,
             franchise: parts[2]?.trim() || '',
             line: index + 2,
         }
 
-        if (!result.id) result.error = 'id required'
+        if (!result.name) result.error = 'name required'
         else if (!VALID_CATEGORIES.includes(result.category)) result.error = 'invalid category'
 
         return result
@@ -62,8 +61,9 @@ export const TagsCreator = () => {
 
     const submitTags = async () => {
         try {
-            const internalTags = parseCsv(csvText).map<InternalTag>((tag) => ({
-                id: tag.id,
+            const internalTags = parseCsv(csvText).map<InternalTagNew>((tag) => ({
+                id: null,
+                name: tag.name,
                 category: tag.category,
                 franchise: tag.franchise,
             }))
@@ -169,7 +169,7 @@ export const TagsCreator = () => {
                         <thead className="sticky top-0 bg-tetsu-100 border-b border-gray-600">
                             <tr className="text-left">
                                 <th className="w-12 truncate px-2">#</th>
-                                <th className="w-32 truncate px-2">ID</th>
+                                <th className="w-32 truncate px-2">Name</th>
                                 <th className="w-32 truncate px-2">Category</th>
                                 <th className="w-32 truncate px-2">Franchise</th>
                             </tr>
@@ -181,7 +181,7 @@ export const TagsCreator = () => {
                                     className={tag.error ? 'bg-red-900/30' : 'bg-green-900/20'}
                                 >
                                     <td className="truncate px-2">{tag.line - 1}</td>
-                                    <td className="truncate px-2">{tag.id}</td>
+                                    <td className="truncate px-2">{tag.name}</td>
                                     <td className="truncate px-2">{tag.category}</td>
                                     <td className="truncate px-2">{tag.franchise}</td>
                                 </tr>

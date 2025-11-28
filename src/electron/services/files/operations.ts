@@ -37,10 +37,10 @@ const fileToFolderHandler = async ({ src, destination, mode }: FileToFolderHandl
     }
 }
 
-export const moveFileToFolder = (src: string, destination: string) => {
-    fileToFolderHandler({ src, destination, mode: 'move' })
+export const moveFileToFolder = async (src: string, destination: string) => {
+    await fileToFolderHandler({ src, destination, mode: 'move' })
 }
 
-export const copyFileToFolder = (src: string, destination: string) => {
-    fileToFolderHandler({ src, destination, mode: 'copy' })
+export const copyFileToFolder = async (src: string, destination: string) => {
+    await fileToFolderHandler({ src, destination, mode: 'copy' })
 }

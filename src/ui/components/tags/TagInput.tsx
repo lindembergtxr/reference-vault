@@ -20,14 +20,14 @@ const parseTagString = (input: string) => {
 
     tagName = tagName.replace(/_+/g, ' ').trim().toLowerCase().replace(/\s+/g, '_')
 
-    return { franchise, id: tagName }
+    return { franchise, name: tagName }
 }
 
-export type Tag = InternalTag & {
+export type Tag = InternalTagNew & {
     isNew: boolean
 }
 type TagsInputProps = {
-    onTagsChange: (tags: InternalTag[]) => void
+    onTagsChange: (tags: InternalTagNew[]) => void
 }
 export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
     const [message, setMessage] = useState('')
@@ -37,16 +37,21 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && input.trim() !== '') {
-            const { id, franchise } = parseTagString(input)
+            const { name, franchise } = parseTagString(input)
 
-            const searched = currentTags.find((tag) => id === tag.id)
-            const isNew = !tags.some((tag) => id === tag.id)
+            const searched = currentTags.find((tag) => {
+                return name === tag.name && franchise === tag.franchise
+            })
+            const isNew = !tags.some((tag) => searched?.id === tag.id)
 
             if (searched) {
                 setInput('')
                 setMessage('This element has already been added.')
             } else {
-                setCurrentTags((prev) => [...prev, { id, franchise, isNew, category: 'general' }])
+                setCurrentTags((prev) => [
+                    ...prev,
+                    { id: null, name, franchise, isNew, category: 'general' },
+                ])
                 setInput('')
                 setMessage('')
             }
@@ -63,7 +68,7 @@ export const TagsInput = ({ onTagsChange }: TagsInputProps) => {
         }
     }
 
-    const removeTag = (id: string) => {
+    const removeTag = (id: string | null) => {
         setCurrentTags((prev) => {
             const temp = prev.filter((tag) => tag.id !== id)
             return [...temp]

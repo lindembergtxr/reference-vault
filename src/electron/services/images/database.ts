@@ -2,19 +2,18 @@ import pLimit from 'p-limit'
 import { db } from '../../database/index.js'
 
 export const upsertImage = (image: InternalImage) => {
-    const { id, thumbnail, imagePath, artistId, groupId, situation } = image
+    const { id, thumbnail, imagePath, groupId, situation } = image
 
     const prepare = db.prepare(`
-        INSERT INTO images (id, thumbnail_path, image_path, artist_id, group_id, situation)
-        VALUES (@id, @thumbnailPath, @imagePath, @artistId, @groupId, @situation)
+        INSERT INTO images (id, thumbnail_path, image_path, group_id, situation)
+        VALUES (@id, @thumbnailPath, @imagePath, @groupId, @situation)
         ON CONFLICT(id) DO UPDATE SET
             thumbnail_path = excluded.thumbnail_path,
             image_path = excluded.image_path,
-            artist_id = excluded.artist_id,
             group_id = excluded.group_id,
             situation = excluded.situation
     `)
-    prepare.run({ id, imagePath, artistId, groupId, situation, thumbnail: thumbnail.path })
+    prepare.run({ id, imagePath, groupId, situation, thumbnailPath: thumbnail.path })
 }
 
 export const deleteImage = (id: string) => {

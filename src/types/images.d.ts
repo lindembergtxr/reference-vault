@@ -15,7 +15,6 @@ type InternalImage = {
         height?: number
         aspectRatio?: number
     }
-    artistId: string | null
     groupId: string | null
     tags: InternalTag[]
     situation: ImageSituation

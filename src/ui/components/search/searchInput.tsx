@@ -27,7 +27,7 @@ export const SearchInput = () => {
             .map((tag) => ({
                 tag,
                 parsed: parseTag(tag).toLowerCase(),
-                idScore: tag.id.toLowerCase().includes(lowerWord) ? 1 : 0,
+                idScore: tag.name.toLowerCase().includes(lowerWord) ? 1 : 0,
             }))
             .filter((item) => item.parsed.includes(lowerWord))
             .sort((a, b) => b.idScore - a.idScore)

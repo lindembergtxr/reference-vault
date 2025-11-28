@@ -6,7 +6,7 @@ type ApiEventMap = {
     importFiles: { args: []; return: void }
     getStagedFiles: { args: []; return: InternalImage[] }
     getImageFiles: { args: []; return: InternalImage[] }
-    createTags: { args: [InternalTag[]]; return: void }
+    createTags: { args: [InternalTagNew[]]; return: void }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
         args: [InternalImage]

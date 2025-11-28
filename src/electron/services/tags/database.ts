@@ -27,12 +27,12 @@ export const linkImageToTag = (imageId: string, tagId: string, context = db) => 
     return statement.run({ imageId, tagId })
 }
 
-export const batchCreateTags = (tags: InternalTag[]) => {
-    const insertTags = db.transaction((tags: InternalTag[]) => {
+export const batchCreateTags = (tags: InternalTagNew[]) => {
+    const insertTags = db.transaction((tags: InternalTagNew[]) => {
         const statement = db.prepare(`
-            INSERT INTO tags (id, franchise, category)
-            VALUES (@id, @franchise, @category)
-            ON CONFLICT(id, franchise, category) DO NOTHING;
+            INSERT INTO tags (id, name, franchise, category)
+            VALUES (@id, @name, @franchise, @category)
+            ON CONFLICT(name, franchise, category) DO NOTHING;
         `)
         const inserted: string[] = []
 

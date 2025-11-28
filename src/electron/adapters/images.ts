@@ -7,7 +7,6 @@ export const adaptDBImageToInternal = (image: ExpandedImage): InternalImage => (
         height: image.height,
         aspectRatio: image.aspectRatio,
     },
-    artistId: image.artist_id,
     groupId: image.group_id,
     situation: image.situation,
     tags: JSON.parse(image.tags),

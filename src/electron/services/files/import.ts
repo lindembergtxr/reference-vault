@@ -1,46 +1,62 @@
 import * as utils from '../../utils/index.js'
-import { batchAddImages } from '../images/database.js'
-import { batchCreateThumbnails } from '../images/thumbnail.js'
-import { copyImagesToTempFolder } from '../images/filesystem.js'
+import { upsertImage } from '../images/database.js'
+import { createThumbnailFromImage } from '../images/thumbnail.js'
+import { copyImageToFolder } from '../images/filesystem.js'
 
-export const importFromFolder = async () => {
+async function rollback(undoStack: Array<() => Promise<void>>) {
+    for (let i = undoStack.length - 1; i >= 0; i--) {
+        try {
+            await undoStack[i]()
+        } catch (error) {
+            utils.logError({ message: 'Rollback failed step:', error })
+        }
+    }
+}
+
+export async function importFromFolder() {
     const folderPath = await utils.selectFolder()
 
     if (!folderPath) return
 
     const fileURLs = await utils.getFolderImages(folderPath)
-    const failures = []
+    const failures: string[] = []
 
-    const moveImagesResults = await copyImagesToTempFolder(fileURLs)
+    let success = 0
 
-    failures.push(...utils.getRejected(moveImagesResults, 'copyImagesToTempFolder'))
+    for (const url of fileURLs) {
+        const undoStack: (() => Promise<void>)[] = []
 
-    const successfulImages = utils
-        .getFulfilled(moveImagesResults)
-        .map((result) => ({ url: result.destination, filename: result.filename }))
+        try {
+            const path = await utils.getTemporaryFolderPath('images')
 
-    const createThumbnailsResults = await batchCreateThumbnails(successfulImages)
+            const { filename, destination } = await copyImageToFolder(url, path)
 
-    failures.push(...utils.getRejected(createThumbnailsResults, 'batchCreateThumbnails'))
+            undoStack.push(() => utils.safeDelete(destination))
 
-    const successfulThumbnails: InternalImage[] = utils
-        .getFulfilled(createThumbnailsResults)
-        .map((result) => {
-            return {
-                id: result.filename,
-                thumbnail: { path: result.thumbnail },
-                imagePath: result.image,
-                artistId: null,
+            const thumbnailPath = await createThumbnailFromImage(destination)
+
+            undoStack.push(() => utils.safeDelete(thumbnailPath))
+
+            await upsertImage({
+                id: filename,
+                thumbnail: { path: thumbnailPath },
+                imagePath: destination,
                 groupId: null,
                 tags: [],
                 situation: 'pending',
-            }
-        })
+            })
 
-    const addImagesResults = await batchAddImages(successfulThumbnails)
+            success++
+        } catch (error) {
+            await rollback(undoStack)
+            failures.push(url)
+            utils.logError({ message: `Failed to create image ${url}`, error })
+        }
+    }
 
-    failures.push(...utils.getRejected(addImagesResults, 'batchAddImages'))
-
-    if (failures.length > 0) console.log(failures, 'FAILURES!!!!')
-    console.log(`SUCCESS! Imported ${addImagesResults.length} files.`)
+    if (failures.length > 0) {
+        utils.logError({ message: `${failures.length} files failed`, error: failures })
+        console.warn(failures, 'FAILURES!')
+    }
+    console.log(`SUCCESS! Imported ${success} files.`)
 }
