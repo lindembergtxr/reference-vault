@@ -1,7 +1,7 @@
 import pLimit from 'p-limit'
 import { db } from '../../database/index.js'
 
-export const upsertImage = (image: InternalImage) => {
+export const upsertImage = (image: Omit<InternalImage, 'tags'>) => {
     const { id, thumbnail, imagePath, groupId, situation } = image
 
     const prepare = db.prepare(`

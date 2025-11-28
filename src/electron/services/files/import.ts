@@ -42,7 +42,6 @@ export async function importFromFolder() {
                 thumbnail: { path: thumbnailPath },
                 imagePath: destination,
                 groupId: null,
-                tags: [],
                 situation: 'pending',
             })
 

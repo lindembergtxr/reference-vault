@@ -1,3 +1,3 @@
-export const parseTag = (tag: InternalTag) => {
+export const parseTag = (tag: InternalTagNew) => {
     return `${tag.name}${tag.franchise ? `_(${tag.franchise})` : ''}`
 }

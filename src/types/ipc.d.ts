@@ -9,7 +9,7 @@ type ApiEventMap = {
     createTags: { args: [InternalTagNew[]]; return: void }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
-        args: [InternalImage]
+        args: [InternalImage<InternalTagNew>]
         return: { success: boolean; data?: { imageId: string }; error?: unknown }
     }
 }

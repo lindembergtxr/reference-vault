@@ -1,62 +1,65 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
+import { Button } from 'react-aria-components'
 
-import { ImageCard, ImageCardProps } from '../images/ImageCard'
-import { TagsInput } from '../tags/TagInput'
-import { Button, Input, Label } from 'react-aria-components'
+import { TagsInputController } from '../tags/tagsInputController'
+import { CSVTag } from '../tags/tags.type'
+import { cn } from '../../utils'
+import { CSVTagToInternalTag } from '../tags/tags.utils'
 
 type ImportImageProps = {
     image: InternalImage
-    onCommit: () => void
+    onCommit: (image: InternalImage<InternalTagNew>) => void
 }
 export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
-    const [mode] = useState<ImageCardProps['mode']>(undefined)
+    const [tags, setTags] = useState<CSVTag[]>([])
 
-    const [tags, setTags] = useState<InternalTag[]>([])
+    const isDirty = tags.some((tag) => tag.error)
 
-    const commitImage = () => {
-        window.api.commitImage({ ...image, tags }).then((res) => {
-            console.log(res)
-            onCommit()
-        })
+    const commit = () => {
+        onCommit({ ...image, tags: tags.map(CSVTagToInternalTag) })
     }
 
+    const onTagsChange = useCallback((tagList: CSVTag[]) => {
+        setTags((prev) => {
+            if (JSON.stringify(prev) === JSON.stringify(tagList)) return prev
+            return tagList
+        })
+    }, [])
+
     return (
-        <div className="flex flex-row gap-4 border-[1px] px-8 py-4 w-full rounded-md">
-            <div className="flex items-center justify-center w-64 h-64">
-                <ImageCard
-                    key={image.id}
-                    size="xl"
-                    isSelected={false}
-                    mode={mode}
-                    imageId={image.id}
-                    url={image.thumbnail.path!}
-                />
-            </div>
-
-            <div className="bg-gray-300 w-[2px]" />
-
-            <div className="flex flex-col gap-2 w-full">
-                <Button
-                    className="py-1 px-2 bg-green-300 rounded-md text-green-900 label ml-auto"
-                    onClick={commitImage}
-                >
-                    Commit
-                </Button>
-
-                <Label
-                    htmlFor={`${image.id}-image-title`}
-                    className="flex flex-col items-start paragraph-md font-semibold"
-                >
-                    Title
-                    <Input
-                        id={`${image.id}-image-title`}
-                        className="paragraph-sm px-2 py-2 w-full border-[1px] border-gray-200 rounded-sm"
-                        disabled
-                        value={image.id}
+        <div className="flex flex-col items-start gap-4 border-[1px] px-8 py-10 w-full h-full rounded-md shadow-md">
+            <div className="flex flex-row items-start gap-4 w-full h-full">
+                <div className="flex flex-col gap-4 justify-center w-80">
+                    <img
+                        src={`file://${image.thumbnail.path ?? ''}`}
+                        alt={image.id ?? ''}
+                        className="w-full h-auto shadow-md object-contain"
+                        draggable={false}
                     />
-                </Label>
 
-                <TagsInput onTagsChange={(tagList) => setTags(tagList)} />
+                    <p className="flex items-center gap-2 paragraph-sm px-2 py-2 w-full border-[1px] border-gray-200 rounded-sm">
+                        <strong>Name:</strong>
+                        {image.id}
+                    </p>
+                </div>
+
+                <div className="bg-gray-300 w-[2px]" />
+
+                <div className="flex flex-col gap-2 w-full h-full">
+                    <TagsInputController onTagsChange={onTagsChange} />
+                </div>
+            </div>
+            <div className="flex w-full justify-end">
+                <Button
+                    className={cn(
+                        'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded-md font-semibold cursor-pointer',
+                        'hover:bg-aoi-700 disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-default'
+                    )}
+                    isDisabled={isDirty}
+                    onClick={commit}
+                >
+                    SAVE AND COMMIT
+                </Button>
             </div>
         </div>
     )

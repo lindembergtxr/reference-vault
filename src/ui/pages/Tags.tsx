@@ -1,4 +1,4 @@
-import { TagsCreator } from '../components/tags/TagsCreator'
+import { TagsCreator } from '../components/tags/tagsCreator'
 
 export const TagsPage = () => {
     return (

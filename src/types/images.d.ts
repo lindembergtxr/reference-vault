@@ -6,7 +6,7 @@ type ExpandedImage = ImageDB & {
     aspectRatio: number
 }
 
-type InternalImage = {
+type InternalImage<T = InternalTag> = {
     id: string
     imagePath: string | null
     thumbnail: {
@@ -16,6 +16,6 @@ type InternalImage = {
         aspectRatio?: number
     }
     groupId: string | null
-    tags: InternalTag[]
+    tags: T[]
     situation: ImageSituation
 }
