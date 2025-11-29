@@ -1,4 +1,4 @@
-import { getAllTags } from '../services/tags/database.js'
+import { getAllTags } from '../features/tags/tags.services.js'
 import { ipcAsyncHandle } from '../utils/index.js'
 
 export const registerDatabaseIpc = () => {

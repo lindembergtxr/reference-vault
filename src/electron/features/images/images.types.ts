@@ -6,10 +6,3 @@ export type ImageDB = {
     tags: string
     situation: ImageSituation
 }
-
-export type TagDB = {
-    id: string
-    name: string
-    franchise: string
-    category: TagCategory
-}

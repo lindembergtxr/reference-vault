@@ -1,16 +1,11 @@
 import path from 'path'
 import pLimit from 'p-limit'
 
-import { copyFileToFolder } from '../files/operations.js'
+import { copyFileToFolder } from '../filesystem/operations.js'
 import * as utils from '../../utils/index.js'
+import { getTemporaryFolderPath } from '../filesystem/index.js'
 
-export type ImageTransaction = {
-    filename: string
-    destination: string
-    origin: string
-}
-
-export const copyImageToFolder = async (url: string, destination: string) => {
+export async function copyImageToFolder(url: string, destination: string) {
     const extension = path.extname(url)
     const filename = `${utils.generateId()}${extension}`
     const destinationPath = path.join(destination, filename)
@@ -24,7 +19,7 @@ type CopyImagesToFolder = {
     urls: string[]
     destinationPath: string
 }
-export const copyImagesToFolder = async ({ urls, destinationPath }: CopyImagesToFolder) => {
+export async function copyImagesToFolder({ urls, destinationPath }: CopyImagesToFolder) {
     const concurrency = Number(process.env.VITE_CONCURRENCY_LIMIT) || 5
     const limit = pLimit(concurrency)
 
@@ -34,7 +29,7 @@ export const copyImagesToFolder = async ({ urls, destinationPath }: CopyImagesTo
             const filename = `${utils.generateId()}${extension}`
             const destination = path.join(destinationPath, filename)
 
-            copyFileToFolder(url, destination)
+            await copyFileToFolder(url, destination)
 
             return { filename, destination, origin: url }
         })
@@ -42,7 +37,8 @@ export const copyImagesToFolder = async ({ urls, destinationPath }: CopyImagesTo
     return Promise.allSettled(promises)
 }
 
-export const copyImagesToTempFolder = async (urls: string[]) => {
-    const destinationPath = await utils.getTemporaryFolderPath('images')
+export async function copyImagesToTempFolder(urls: string[]) {
+    const destinationPath = await getTemporaryFolderPath('images')
+
     return await copyImagesToFolder({ urls, destinationPath })
 }

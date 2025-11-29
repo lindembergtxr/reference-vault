@@ -1,6 +1,6 @@
-type ImageSituation = 'pending' | 'committed'
+type ImageSituation = 'pending' | 'committed' | 'completed'
 
-type InternalImage<T = InternalTag> = {
+interface InternalImage<T = InternalTag> {
     id: string
     imagePath: string | null
     thumbnailPath: string | null

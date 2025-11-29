@@ -1,0 +1,40 @@
+import { db } from '../../database/index.js'
+
+type GetImageFilesArgs = {
+    situation: InternalImage['situation']
+}
+export function getImages({ situation }: GetImageFilesArgs) {
+    const query = `
+        SELECT i.*,
+            COALESCE(
+                JSON_GROUP_ARRAY(
+                    JSON_OBJECT('id', t.id, 'name', t.name, 'category', t.category, 'franchise', t.franchise)
+                ) FILTER (WHERE t.id IS NOT NULL),
+                json('[]')
+            ) AS tags
+        FROM images i
+        LEFT JOIN image_tags it ON i.id = it.image_id
+        LEFT JOIN tags t ON t.id = it.tag_id
+        WHERE i.situation = ?
+        GROUP BY i.id
+        ORDER BY i.id;
+    `
+    return db.prepare(query).all(situation)
+}
+
+export function upsertImage(image: Omit<InternalImage, 'tags'>) {
+    const query = `
+        INSERT INTO images (id, thumbnail_path, image_path, group_id, situation)
+        VALUES (@id, @thumbnailPath, @imagePath, @groupId, @situation)
+        ON CONFLICT(id) DO UPDATE SET
+            thumbnail_path = excluded.thumbnail_path,
+            image_path = excluded.image_path,
+            group_id = excluded.group_id,
+            situation = excluded.situation
+    `
+    return db.prepare(query).run(image)
+}
+
+export function deleteImage(id: string) {
+    db.prepare('DELETE FROM images WHERE id = ?').run(id)
+}

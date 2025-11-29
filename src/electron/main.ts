@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import * as helpers from './helpers/electron.js'
+import * as helpers from './utils/electron.js'
 
 dotenv.config()
 
@@ -7,7 +7,7 @@ import './database/index.js'
 
 import { runSqlMigrations } from './database/migration.js'
 import { registerAllIpcs } from './ipc/index.js'
-import { setupConfig } from './services/config.js'
+import { setupConfig } from './config/index.js'
 import { getPreloadPath, getUIPath, isDev } from './utils/index.js'
 
 helpers.whenElectronAppReady().then(async () => {

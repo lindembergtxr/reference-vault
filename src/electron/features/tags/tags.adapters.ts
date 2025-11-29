@@ -1,5 +1,6 @@
-import { TagDB } from '../types/database.js'
-import { assertValidCategory, generateId, normalizeIdentifier } from '../utils/index.js'
+import { generateId } from '../../utils/id.js'
+import { type TagDB } from './tags.types.js'
+import { assertValidCategory, normalizeIdentifier } from './tags.utils.js'
 
 export const adaptDBTagToInternal = (tag: TagDB): InternalTag => ({
     id: tag.id,

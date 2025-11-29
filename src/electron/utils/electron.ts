@@ -12,11 +12,7 @@ export const getAppPathHelper = () => app.getAppPath()
 
 export const getUserDataPath = () => app.getPath('userData')
 
-export const showOpenDialog = () => {
-    return dialog.showOpenDialog({
-        properties: ['openDirectory'],
-    })
-}
+export const showOpenDialog = () => dialog.showOpenDialog({ properties: ['openDirectory'] })
 
 export const createBrowserWindow = (options: Electron.BrowserWindowConstructorOptions) => {
     return new BrowserWindow(options)

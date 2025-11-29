@@ -1,13 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import * as helpers from '../helpers/index.js'
 import * as utils from '../utils/index.js'
 import { db } from './index.js'
 
 const relativeDir = '/src/electron/database/migrations'
 
-const migrationsDir = path.join(helpers.getAppPathHelper(), relativeDir)
+const migrationsDir = path.join(utils.getAppPathHelper(), relativeDir)
 
 export const runSqlMigrations = (): void => {
     const files = fs

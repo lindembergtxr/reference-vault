@@ -1,4 +1,4 @@
-import { ImageDB } from '../types/database.js'
+import { ImageDB } from './images.types.js'
 
 export const adaptDBImageToInternal = (image: ImageDB): InternalImage => ({
     id: image.id,

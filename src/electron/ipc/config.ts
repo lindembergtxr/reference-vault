@@ -1,4 +1,4 @@
-import { getConfig, setDestinationFolder, setTheme } from '../services/config.js'
+import { getConfig, setDestinationFolder, setTheme } from '../config/index.js'
 import { ipcAsyncHandle } from '../utils/index.js'
 
 export const registerConfigIpc = () => {

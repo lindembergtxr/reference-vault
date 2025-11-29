@@ -1,4 +1,4 @@
-import { addTags } from '../services/tags/create.js'
+import { addTags } from '../features/tags/create.js'
 import { ipcAsyncHandle } from '../utils/index.js'
 
 export const registerTagsIpc = () => {

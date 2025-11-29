@@ -2,14 +2,12 @@ import fs from 'fs/promises'
 import path from 'path'
 import * as utils from '../../utils/index.js'
 
-type Mode = 'move' | 'copy'
-
 type FileToFolderHandler = {
     src: string
     destination: string
-    mode: Mode
+    mode: 'move' | 'copy'
 }
-const fileToFolderHandler = async ({ src, destination, mode }: FileToFolderHandler) => {
+async function fileToFolderHandler({ src, destination, mode }: FileToFolderHandler) {
     const dirname = path.dirname(destination)
 
     await fs.mkdir(dirname, { recursive: true })
@@ -37,10 +35,10 @@ const fileToFolderHandler = async ({ src, destination, mode }: FileToFolderHandl
     }
 }
 
-export const moveFileToFolder = async (src: string, destination: string) => {
+export async function moveFileToFolder(src: string, destination: string) {
     await fileToFolderHandler({ src, destination, mode: 'move' })
 }
 
-export const copyFileToFolder = async (src: string, destination: string) => {
+export async function copyFileToFolder(src: string, destination: string) {
     await fileToFolderHandler({ src, destination, mode: 'copy' })
 }

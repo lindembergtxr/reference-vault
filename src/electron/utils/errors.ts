@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import fs from 'fs'
 import path from 'path'
 
-import * as helpers from '../helpers/index.js'
+import { getUserDataPath } from './electron.js'
 
 type ErrorMessageMap = {
     MissingConfig: () => string
@@ -47,9 +47,8 @@ export type LogError = {
 export const logError = async (args: LogError) => {
     const { message, error } = args || { message: 'Invalid properties' }
 
-    const errorLogFolderPath = path.join(helpers.getUserDataPath(), 'error_log')
+    const errorLogFolderPath = path.join(getUserDataPath(), 'error_log')
 
-    // makes sure the folder exists first
     await fs.promises.mkdir(errorLogFolderPath, { recursive: true })
 
     const now = new Date()
@@ -58,16 +57,10 @@ export const logError = async (args: LogError) => {
 
     const logFile = path.join(errorLogFolderPath, fileName)
 
-    // generate timestring in the format yyyy-MM-dd HH:mm:ss
     const timestamp = format(now, 'yyyy-MM-dd HH:mm:ss')
 
-    let errorMsg = ''
+    const errorMsg = error instanceof Error ? error.stack || error.message : String(error)
 
-    if (error instanceof Error) {
-        errorMsg = error.stack || error.message
-    } else if (error) {
-        errorMsg = String(error)
-    }
     const logLine = `[${timestamp}] ${message}${error ? ': ' + errorMsg : ''}\n`
 
     await fs.promises.appendFile(logFile, logLine)

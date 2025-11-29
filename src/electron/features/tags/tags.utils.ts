@@ -1,4 +1,4 @@
-import { logError } from './errors.js'
+import { logError } from '../../utils/errors.js'
 
 const VALID_CATEGORIES = new Set(['general', 'character', 'artist', 'copyright', 'meta'])
 

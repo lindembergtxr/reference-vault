@@ -1,6 +1,6 @@
-import { adaptInternalTabToDB } from '../../adapters/tags.js'
 import { db } from '../../database/index.js'
-import { TagDB } from '../../types/database.js'
+import { adaptInternalTabToDB } from './tags.adapters.js'
+import { type TagDB } from './tags.types.js'
 
 export async function getAllTags() {
     return db.prepare('SELECT * FROM tags ORDER BY id ASC').all() as InternalTag[]
@@ -21,36 +21,39 @@ export async function createTag(tag: TagDB, context = db) {
 }
 
 export async function linkImageToTag(imageId: string, tagId: string, context = db) {
-    const statement = context.prepare(`
+    const query = `
         INSERT INTO image_tags (image_id, tag_id)
         VALUES (@imageId, @tagId)
         ON CONFLICT(image_id, tag_id) DO NOTHING;
-    `)
-    return statement.run({ imageId, tagId })
+    `
+    return context.prepare(query).run({ imageId, tagId })
 }
 
-export async function batchCreateTags(tags: InternalTagNew[]) {
+export async function createTags(tags: InternalTagNew[]) {
+    const query = `
+        INSERT INTO tags (id, name, franchise, category)
+        VALUES (@id, @name, @franchise, @category)
+        ON CONFLICT(name, franchise, category)
+            DO UPDATE SET id = id
+            RETURNING id;
+    `
     const insertTags = db.transaction((tags: InternalTagNew[]) => {
-        const statement = db.prepare(`
-            INSERT INTO tags (id, name, franchise, category)
-            VALUES (@id, @name, @franchise, @category)
-            ON CONFLICT(name, franchise, category) DO NOTHING;
-        `)
-        const inserted: string[] = []
+        const statement = db.prepare(query)
+        const ids: string[] = []
 
         for (const tag of tags) {
             const dbTag = adaptInternalTabToDB(tag)
-            const result = statement.run(dbTag)
-
-            if (result.changes > 0) inserted.push(dbTag.id)
+            const row = statement.get(dbTag) as { id: string }
+            ids.push(row.id)
         }
-        return inserted
+
+        return ids
     })
 
     return insertTags(tags)
 }
 
-export async function batchLinkImageToTags(image: InternalImage) {
+export async function attachTagsToImage(image: InternalImage) {
     const insert = db.prepare(`
         INSERT INTO image_tags (image_id, tag_id)
         VALUES (@imageId, @tagId)
@@ -58,7 +61,7 @@ export async function batchLinkImageToTags(image: InternalImage) {
     `)
 
     const transaction = db.transaction(() => {
-        for (const tag of image.tags) insert.run(image.id, tag.id)
+        for (const tag of image.tags) insert.run({ imageId: image.id, tagId: tag.id })
     })
 
     transaction()
@@ -66,8 +69,8 @@ export async function batchLinkImageToTags(image: InternalImage) {
 
 export async function updateImageTags(image: InternalImage) {
     const transaction = db.transaction(() => {
-        batchCreateTags(image.tags)
-        batchLinkImageToTags(image)
+        createTags(image.tags)
+        attachTagsToImage(image)
     })
     transaction()
 }

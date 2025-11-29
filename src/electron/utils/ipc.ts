@@ -1,6 +1,6 @@
 import { pathToFileURL } from 'url'
 import * as utils from './index.js'
-import * as helpers from '../helpers/electron.js'
+import * as helpers from './electron.js'
 
 export const ipcHandle = <Key extends keyof ApiEventMap>(
     key: Key,
