@@ -7,6 +7,7 @@ export type ImportContextType = {
     setPage: Dispatch<SetStateAction<number>>
     totalPages: number
     paginatedImages: InternalImage[]
+    refreshImages: () => void
 }
 
 export const Context = createContext<ImportContextType | undefined>(undefined)

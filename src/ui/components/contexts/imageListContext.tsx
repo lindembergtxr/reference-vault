@@ -9,7 +9,7 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
     const [images, setImages] = useState<InternalImage[]>([])
     const [page, setPage] = useState<number>(1)
 
-    const refreshData = () => {
+    const refreshImages = () => {
         window.api
             .getImageFiles()
             .then((res) => setImages(res.filter((images) => images?.thumbnailPath)))
@@ -26,13 +26,15 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         if (hasLoaded.current === false) {
-            refreshData()
+            refreshImages()
             hasLoaded.current = true
         }
     }, [])
 
     return (
-        <Context value={{ images, page, totalPages, paginatedImages, setImages, setPage }}>
+        <Context
+            value={{ images, page, totalPages, paginatedImages, setImages, setPage, refreshImages }}
+        >
             {children}
         </Context>
     )

@@ -9,11 +9,13 @@ import { ImportImage } from '../components/import/ImportImage'
 import { Button } from 'react-aria-components'
 import { cn } from '../utils'
 import { useTagsContext } from '../components/contexts/tagsCore'
+import { useImageListContext } from '../components/contexts/imageListCore'
 
 export const ImportPage = () => {
     const [images, setImages] = useState<InternalImage[]>([])
     const [index, setIndex] = useState(0)
 
+    const { refreshImages } = useImageListContext()
     const { refreshTags } = useTagsContext()
 
     const refreshData = () => window.api.getStagedFiles().then((res) => setImages(res))
@@ -25,6 +27,7 @@ export const ImportPage = () => {
             if (res.success) {
                 refreshData()
                 refreshTags()
+                refreshImages()
             } else alert(`Commit failed! - ${res.error}`)
         })
     }
