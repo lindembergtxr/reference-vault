@@ -1,31 +1,30 @@
-import { execFile } from 'child_process'
-import { promisify } from 'util'
+import { ExiftoolProcess } from 'node-exiftool'
 
 import { logError } from '../../utils/errors.js'
 
-const execFileAsync = promisify(execFile)
+const epProcess = new ExiftoolProcess()
 
 type WriteImageMetadataArgs = {
     filepath: string
     tags: InternalTag[]
 }
 export async function writeImageMetadata({ filepath, tags }: WriteImageMetadataArgs) {
-    const organizeTags = (category: TagCategory) => {
-        return tags
-            .filter((t) => t.category === category)
-            .map((t) => t.id)
-            .join(', ')
-    }
     try {
-        await execFileAsync('exiftool', [
-            '-overwrite_original',
-            `-Keywords=${organizeTags('general')}`,
-            `-Artist=${organizeTags('artist')}`,
-            `-Character=${organizeTags('character')}`,
-            `-Copyright=${organizeTags('copyright')}`,
-            `-Meta=${organizeTags('meta')}`,
-            filepath,
-        ])
+        await epProcess.open()
+
+        const jsonData = tags
+            .map(({ name, category, franchise }) => ({ name, category, franchise }))
+            .sort((tagA, tagB) => {
+                if (tagA.category < tagB.category) return -1
+                if (tagA.category > tagB.category) return 1
+                return 0
+            })
+
+        const data = { UserComment: JSON.stringify(jsonData) }
+
+        await epProcess.writeMetadata(filepath, data, ['overwrite_original'])
+
+        await epProcess.close()
     } catch (error) {
         logError({ message: 'Failed to write image metadata', error })
         throw error

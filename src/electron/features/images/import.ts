@@ -1,5 +1,6 @@
 import * as utils from '../../utils/index.js'
 import * as filesystem from '../filesystem/index.js'
+import { db } from '../../database/index.js'
 
 import { upsertImage } from './images.services.js'
 import { createThumbnailFromImage } from './thumbnail.js'
@@ -30,13 +31,21 @@ export async function importFromFolder() {
 
             undoStack.push(() => filesystem.safeDelete(thumbnailPath))
 
-            await upsertImage({
-                id: filename,
-                thumbnailPath,
-                imagePath: destination,
-                groupId: null,
-                situation: 'pending',
-            })
+            db.prepare('BEGIN').run()
+
+            try {
+                await upsertImage({
+                    id: filename,
+                    thumbnailPath,
+                    imagePath: destination,
+                    groupId: null,
+                    situation: 'pending',
+                })
+                db.prepare('COMMIT').run()
+            } catch (error) {
+                db.prepare('ROLLBACK').run()
+                throw error
+            }
 
             success++
         } catch (error) {

@@ -4,6 +4,7 @@ import path from 'path'
 import { getDestinationFolder } from '../../config/index.js'
 import { logError } from '../../utils/errors.js'
 import { db } from '../../database/index.js'
+import * as filesystem from '../../features/filesystem/index.js'
 import { adaptInternalTabToDB, createTag, linkImageToTag } from '../../features/tags/index.js'
 
 import { upsertImage } from './images.services.js'
@@ -28,6 +29,8 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
     const imagesFolder = await getDestinationFolder('images')
     const imagePath = path.join(imagesFolder, image.id)
 
+    const undoStack: (() => Promise<void>)[] = []
+
     try {
         fs.mkdirSync(imagesFolder, { recursive: true })
         fs.mkdirSync(thumbFolder, { recursive: true })
@@ -46,8 +49,17 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
             await linkImageToTag(image.id, tagId)
         }
 
-        if (image.imagePath) fs.renameSync(image.imagePath, imagePath)
-        if (image.thumbnailPath) fs.renameSync(image.thumbnailPath, thumbnailPath)
+        if (image.imagePath) {
+            const originalPath = image.imagePath
+            fs.renameSync(originalPath, imagePath)
+            undoStack.push(async () => fs.renameSync(imagePath, originalPath))
+        }
+
+        if (image.thumbnailPath) {
+            const originalThumb = image.thumbnailPath
+            fs.renameSync(originalThumb, thumbnailPath)
+            undoStack.push(async () => fs.renameSync(thumbnailPath, originalThumb))
+        }
 
         await writeImageMetadata({ tags, filepath: imagePath })
 
@@ -56,6 +68,8 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
         return { success: true, data: { imageId: image.id } }
     } catch (error) {
         db.prepare('ROLLBACK').run()
+
+        await filesystem.rollback(undoStack)
 
         logError({ message: 'Failed to commit image!', error })
 
