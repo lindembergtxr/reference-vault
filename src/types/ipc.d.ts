@@ -4,8 +4,8 @@ type ApiEventMap = {
     setTheme: { args: [ConfigDataTheme]; return: ConfigData }
     setDestinationFolder: { args: []; return: ConfigData }
     importFiles: { args: []; return: void }
-    getStagedFiles: { args: []; return: InternalImage[] }
-    getImageFiles: { args: []; return: InternalImage[] }
+    getStagedFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
+    getImageFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
     createTags: { args: [InternalTagNew[]]; return: void }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {

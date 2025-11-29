@@ -1,53 +1,64 @@
 import { useMemo, useRef, useState } from 'react'
 import { Button, Input, Label } from 'react-aria-components'
-import { MdSearch } from 'react-icons/md'
+import { MdOutlineClose, MdSearch } from 'react-icons/md'
 import { parseTag } from '../../utils/tags'
 import { cn } from '../../utils/classname'
 import { useTagsContext } from '../contexts/tagsCore'
+import { useImageListContext } from '../contexts/imageListCore'
 
-export const SearchInput = () => {
+export const TagsSearch = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const listRef = useRef<HTMLUListElement>(null)
 
     const { tags } = useTagsContext()
+    const { setSearch } = useImageListContext()
 
-    const [search, setSearch] = useState('')
+    const [inputValue, setInputValue] = useState('')
+    const [selectedTags, setSelectedTags] = useState<InternalTag[]>([])
     const [highlight, setHighlight] = useState(-1)
-    const [erasing, setErasing] = useState(false)
-
-    const words = search.trimStart().split(/\s+/)
-    const lastWord = words.at(-1) ?? ''
 
     const filteredItems = useMemo(() => {
-        if (lastWord.length < 2) return []
+        if (!inputValue || inputValue.length < 2) return []
 
-        const lowerWord = lastWord.toLowerCase()
+        const lowerInput = inputValue.toLowerCase()
 
         return tags
-            .map((tag) => ({
-                tag,
-                parsed: parseTag(tag).toLowerCase(),
-                idScore: tag.name.toLowerCase().includes(lowerWord) ? 1 : 0,
-            }))
-            .filter((item) => item.parsed.includes(lowerWord))
-            .sort((a, b) => b.idScore - a.idScore)
-            .map((item) => item.tag)
-    }, [tags, lastWord])
+            .map((tag) => {
+                const nameScore = tag.name.toLowerCase().includes(lowerInput) ? 2 : 0
+                const franchiseScore = tag.franchise?.toLowerCase().includes(lowerInput) ? 1 : 0
+                const totalScore = nameScore + franchiseScore
 
-    const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearch(e.target.value)
-        setHighlight(-1)
+                return { tag, score: totalScore }
+            })
+            .filter((item) => item.score > 0)
+            .sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score
+                return a.tag.name.localeCompare(b.tag.name)
+            })
+            .map((item) => item.tag)
+    }, [tags, inputValue])
+
+    const removeTag = (tagId: string) => {
+        setSelectedTags((prev) => prev.filter((tag) => tag.id !== tagId))
+    }
+
+    const clearSearch = () => {
+        setSelectedTags([])
+        setSearch([])
     }
 
     const onSearch = () => {
-        console.log(search, 'search')
+        setInputValue('')
+        setSearch(selectedTags)
     }
 
     const selectItem = (index: number) => {
-        const newWords = search.trimStart().split(/\s+/)
-        newWords[newWords.length - 1] = parseTag(filteredItems[index])
+        setSelectedTags((prev) => [...prev, filteredItems[index]])
 
-        setSearch(newWords.join(' ') + ' ')
+        if (inputRef.current) {
+            inputRef.current.value = ''
+            inputRef.current.focus()
+        }
     }
 
     const onInputFocus = () => {
@@ -57,13 +68,7 @@ export const SearchInput = () => {
         })
     }
 
-    const onInputKeyUp = (e: React.KeyboardEvent) => {
-        if (e.key === 'Backspace') setErasing(false)
-    }
-
     const onInputKeyDown = (e: React.KeyboardEvent) => {
-        setErasing(e.key === 'Backspace')
-
         if (e.key === 'ArrowDown') {
             e.preventDefault()
 
@@ -111,7 +116,6 @@ export const SearchInput = () => {
                 })
             }
         }
-
         if (e.key === 'Escape') {
             setHighlight(-1)
             inputRef.current?.focus()
@@ -119,7 +123,7 @@ export const SearchInput = () => {
     }
 
     return (
-        <div className="flex flex-col items-center gap-2 w-full px-1 pr-2">
+        <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
             <div className="flex items-center w-full gap-2">
                 <Label htmlFor="tag-search-input" className="w-full">
                     <Input
@@ -127,26 +131,16 @@ export const SearchInput = () => {
                         ref={inputRef}
                         className="w-full paragraph-md h-8 px-2 rounded-md outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400"
                         placeholder="Add tags to search"
-                        value={search}
+                        value={inputValue}
+                        onChange={(evt) => setInputValue(evt.target.value)}
                         onFocus={onInputFocus}
-                        onChange={onInputChange}
                         onKeyDown={onInputKeyDown}
-                        onKeyUp={onInputKeyUp}
                     />
                 </Label>
-                <Button
-                    className={cn(
-                        'flex items-center justify-center w-12 h-8 gap-1 bg-aoi-800 text-aoi-50 paragraph-sm rounded-md',
-                        'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400'
-                    )}
-                    onClick={onSearch}
-                >
-                    <MdSearch size={16} />
-                </Button>
             </div>
 
             <div className="relative flex w-full h-[30vh] border-[1px] border-tetsu-300/80 rounded-md">
-                {!erasing && filteredItems.length > 0 && (
+                {filteredItems.length > 0 && (
                     <ul
                         ref={listRef}
                         tabIndex={0}
@@ -158,8 +152,8 @@ export const SearchInput = () => {
                     >
                         {filteredItems.map((tag, index) => (
                             <li
-                                id={`tag_id_${parseTag(tag)}`}
-                                key={parseTag(tag)}
+                                id={tag.id}
+                                key={tag.id}
                                 className={cn(
                                     'hover:bg-tetsu-300/80 hover:cursor-pointer label leading-6 font-normal px-2',
                                     highlight === index ? 'bg-tetsu-300/80' : ''
@@ -172,6 +166,46 @@ export const SearchInput = () => {
                     </ul>
                 )}
             </div>
+
+            <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border-[1px] border-tetsu-300/80 rounded-md">
+                <div className="w-full flex items-center justify-between">
+                    <p className="font-semibold text-sm">Selected tags:</p>
+                    <Button
+                        className="caption font-semibold px-3 h-6 text-gray-800 hover:bg-tetsu-300 rounded-md hover:cursor-pointer"
+                        onClick={() => clearSearch()}
+                    >
+                        CLEAR SEARCH
+                    </Button>
+                </div>
+                <ul className="min-h-0 overflow-scroll">
+                    {selectedTags.map((searchTag) => (
+                        <li
+                            key={searchTag.id}
+                            className="flex itens-center justify-between w-full gap-2"
+                        >
+                            {parseTag(searchTag)}
+                            <Button onClick={() => removeTag(searchTag.id)}>
+                                <MdOutlineClose className="w-5 h-5" />
+                            </Button>
+                        </li>
+                    ))}
+                    {selectedTags.length === 0 && (
+                        <li className="font-mono text-xs font-normal text-tetsu-300">
+                            No tag selected to search...
+                        </li>
+                    )}
+                </ul>
+            </div>
+
+            <Button
+                className={cn(
+                    'flex items-center justify-center w-full h-8 gap-1 bg-aoi-800 text-aoi-50 paragraph-sm rounded-md',
+                    'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400'
+                )}
+                onClick={onSearch}
+            >
+                <MdSearch size={16} /> Search
+            </Button>
         </div>
     )
 }

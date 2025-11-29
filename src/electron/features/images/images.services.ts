@@ -2,9 +2,10 @@ import { db } from '../../database/index.js'
 
 type GetImageFilesArgs = {
     situation: InternalImage['situation']
+    tagIds?: string[]
 }
-export function getImages({ situation }: GetImageFilesArgs) {
-    const query = `
+export function getImages({ situation, tagIds }: GetImageFilesArgs) {
+    let query = `
         SELECT i.*,
             COALESCE(
                 JSON_GROUP_ARRAY(
@@ -16,10 +17,25 @@ export function getImages({ situation }: GetImageFilesArgs) {
         LEFT JOIN image_tags it ON i.id = it.image_id
         LEFT JOIN tags t ON t.id = it.tag_id
         WHERE i.situation = ?
-        GROUP BY i.id
-        ORDER BY i.id;
     `
-    return db.prepare(query).all(situation)
+    const params: (string | number)[] = [situation]
+
+    if (tagIds && tagIds.length > 0) {
+        query += `
+            AND i.id IN (
+                SELECT image_id
+                FROM image_tags
+                WHERE tag_id IN (${tagIds.map(() => '?').join(',')})
+                GROUP BY image_id
+                HAVING COUNT(DISTINCT tag_id) = ?
+            )
+        `
+        params.push(...tagIds, tagIds.length)
+    }
+
+    query += 'GROUP BY i.id ORDER BY i.id;'
+
+    return db.prepare(query).all(...params)
 }
 
 export function upsertImage(image: Omit<InternalImage, 'tags'>) {

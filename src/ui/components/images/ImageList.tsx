@@ -17,6 +17,16 @@ export const ImageList = () => {
 
     const closePreview = () => setPreview(null)
 
+    if (images.length === 0) {
+        return (
+            <div className="flex h-full w-full justify-center p-10">
+                <p className="caption font-mono text-sm text-tetsu-400">
+                    Select tags to show results...
+                </p>
+            </div>
+        )
+    }
+
     return (
         <div className="flex flex-col h-full w-full">
             {preview ? (

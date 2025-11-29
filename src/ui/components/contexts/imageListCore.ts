@@ -6,6 +6,8 @@ export type ImportContextType = {
     page: number
     setPage: Dispatch<SetStateAction<number>>
     totalPages: number
+    search: InternalTag[]
+    setSearch: Dispatch<SetStateAction<InternalTag[]>>
     paginatedImages: InternalImage[]
     refreshImages: () => void
 }

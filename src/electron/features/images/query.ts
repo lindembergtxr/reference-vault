@@ -2,19 +2,23 @@ import { adaptDBImageToInternal } from './images.adapters.js'
 import { getImages as getImagesService } from './images.services.js'
 import { ImageDB } from './images.types.js'
 
-type GetImagesArgs = {
+type GetImagesResponse = Promise<InternalImage[]>
+export type GetImagesSearchArgs = {
+    tagIds?: string[]
+}
+type GetImagesArgs = GetImagesSearchArgs & {
     situation: InternalImage['situation']
 }
-export async function getImages({ situation }: GetImagesArgs): Promise<InternalImage[]> {
-    const dbFiles = (await getImagesService({ situation })) as ImageDB[]
+export async function getImages({ situation, tagIds }: GetImagesArgs): GetImagesResponse {
+    const dbFiles = (await getImagesService({ situation, tagIds })) as ImageDB[]
 
     return dbFiles.map(adaptDBImageToInternal)
 }
 
-export async function getStagedImages(): Promise<InternalImage[]> {
-    return await getImages({ situation: 'pending' })
+export async function getStagedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
+    return await getImages({ tagIds, situation: 'pending' })
 }
 
-export async function getCommittedImages(): Promise<InternalImage[]> {
-    return await getImages({ situation: 'committed' })
+export async function getCommittedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
+    return await getImages({ tagIds, situation: 'committed' })
 }
