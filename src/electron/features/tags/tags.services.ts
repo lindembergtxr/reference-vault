@@ -1,4 +1,5 @@
 import { db } from '../../database/index.js'
+import { linkTagsToImage } from '../images/images.services.js'
 
 import { adaptInternalTabToDB } from './tags.adapters.js'
 import { type TagDB } from './tags.types.js'
@@ -21,16 +22,7 @@ export async function createTag(tag: TagDB, context = db) {
     return (row as { id: string }).id
 }
 
-export async function linkImageToTag(imageId: string, tagId: string, context = db) {
-    const query = `
-        INSERT INTO image_tags (image_id, tag_id)
-        VALUES (@imageId, @tagId)
-        ON CONFLICT(image_id, tag_id) DO NOTHING;
-    `
-    return context.prepare(query).run({ imageId, tagId })
-}
-
-export async function createTags(tags: InternalTagNew[]) {
+export async function createTags(tags: InternalTagNew[]): Promise<void> {
     const query = `
         INSERT INTO tags (id, name, franchise, category)
         VALUES (@id, @name, @franchise, @category)
@@ -47,31 +39,15 @@ export async function createTags(tags: InternalTagNew[]) {
             const row = statement.get(dbTag) as { id: string }
             ids.push(row.id)
         }
-
-        return ids
     })
 
-    return insertTags(tags)
+    insertTags(tags)
 }
 
-export async function attachTagsToImage(image: InternalImage) {
-    const insert = db.prepare(`
-        INSERT INTO image_tags (image_id, tag_id)
-        VALUES (@imageId, @tagId)
-        ON CONFLICT(image_id, tag_id) DO NOTHING;
-    `)
-
+export async function updateImageTags({ id, tags }: InternalImage) {
     const transaction = db.transaction(() => {
-        for (const tag of image.tags) insert.run({ imageId: image.id, tagId: tag.id })
-    })
-
-    transaction()
-}
-
-export async function updateImageTags(image: InternalImage) {
-    const transaction = db.transaction(() => {
-        createTags(image.tags)
-        attachTagsToImage(image)
+        createTags(tags)
+        linkTagsToImage({ imageId: id, tags: tags })
     })
     transaction()
 }

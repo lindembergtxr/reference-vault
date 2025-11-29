@@ -3,7 +3,13 @@ import sharp from 'sharp'
 
 import { getDestinationFolder } from '../../config/index.js'
 
-export const createThumbOnFolder = async (src: string, outputPath: string) => {
+export async function getImagePath(imageId: string) {
+    const folder = await getDestinationFolder('images')
+
+    return path.join(folder, imageId)
+}
+
+export async function createThumbOnFolder(src: string, outputPath: string) {
     await sharp(src).resize(256, 256, { fit: 'inside' }).toFile(outputPath)
 }
 

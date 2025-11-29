@@ -27,4 +27,6 @@ electron.contextBridge.exposeInMainWorld('api', {
     createTags: (tags: InternalTagNew[]) => ipcInvoke('createTags', tags),
     logError: (args) => ipcInvoke('logError', args),
     commitImage: (args) => ipcInvoke('commitImage', args),
+    addTagsToImage: (args) => ipcInvoke('addTagsToImage', args),
+    removeTagsFromImage: (args) => ipcInvoke('removeTagsFromImage', args),
 } satisfies Window['api'])

@@ -8,3 +8,8 @@ interface InternalImage<T = InternalTag> {
     tags: T[]
     situation: ImageSituation
 }
+
+type ImageTagsChangeArgs = {
+    imageId: string
+    tags: InternalTagNew[]
+}

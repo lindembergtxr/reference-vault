@@ -51,6 +51,49 @@ export function upsertImage(image: Omit<InternalImage, 'tags'>) {
     return db.prepare(query).run(image)
 }
 
+export function getTagsForImage(imageId: string) {
+    const query = `
+        SELECT t.id, t.name, t.category, t.franchise
+        FROM image_tags it
+        JOIN tags t ON t.id = it.tag_id
+        WHERE it.image_id = ?;
+    `
+    return db.prepare(query).all(imageId) as InternalTag[]
+}
+
 export function deleteImage(id: string) {
     db.prepare('DELETE FROM images WHERE id = ?').run(id)
+}
+
+type LinkTagsToImageArgs = {
+    imageId: string
+    tags: InternalTagNew[]
+}
+export async function linkTagsToImage({ imageId, tags }: LinkTagsToImageArgs) {
+    const insert = db.prepare(`
+        INSERT INTO image_tags (image_id, tag_id)
+        VALUES (@imageId, @tagId)
+        ON CONFLICT(image_id, tag_id) DO NOTHING;
+    `)
+    const transaction = db.transaction(() => {
+        for (const tag of tags) insert.run({ imageId, tagId: tag.id })
+    })
+
+    transaction()
+}
+
+type UnlinkTagsFromImageArgs = {
+    imageId: string
+    tags: InternalTagNew[]
+}
+export async function unlinkTagsFromImage({ imageId, tags }: UnlinkTagsFromImageArgs) {
+    const insert = db.prepare(`
+        DELETE FROM image_tags
+        WHERE image_id = @imageId AND tag_id = @tagId
+    `)
+    const transaction = db.transaction(() => {
+        for (const tag of tags) insert.run({ imageId, tagId: tag.id })
+    })
+
+    transaction()
 }

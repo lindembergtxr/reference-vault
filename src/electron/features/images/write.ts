@@ -5,10 +5,15 @@ import { getDestinationFolder } from '../../config/index.js'
 import { logError } from '../../utils/errors.js'
 import { db } from '../../database/index.js'
 import * as filesystem from '../../features/filesystem/index.js'
-import { adaptInternalTabToDB, createTag, linkImageToTag } from '../../features/tags/index.js'
+import { adaptInternalTabToDB, createTag } from '../../features/tags/index.js'
 
-import { upsertImage } from './images.services.js'
-import { writeImageMetadata } from './metadata.js'
+import {
+    getTagsForImage,
+    linkTagsToImage,
+    unlinkTagsFromImage,
+    upsertImage,
+} from './images.services.js'
+import { syncImageMetadata } from './metadata.js'
 
 export async function commitImage(image: InternalImage<InternalTagNew>) {
     return writeImage({ image, situation: 'committed' })
@@ -46,7 +51,7 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
 
             tags.push({ ...tag, id: tagId })
 
-            await linkImageToTag(image.id, tagId)
+            await linkTagsToImage({ imageId: image.id, tags: [tag] })
         }
 
         if (image.imagePath) {
@@ -61,7 +66,7 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
             undoStack.push(async () => fs.renameSync(thumbnailPath, originalThumb))
         }
 
-        await writeImageMetadata({ tags, filepath: imagePath })
+        await syncImageMetadata(image.id)
 
         db.prepare('COMMIT').run()
 
@@ -72,6 +77,60 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
         await filesystem.rollback(undoStack)
 
         logError({ message: 'Failed to commit image!', error })
+
+        return { success: false, error }
+    }
+}
+
+export async function addTagsToImage({ imageId, tags }: ImageTagsChangeArgs) {
+    try {
+        db.prepare('BEGIN').run()
+
+        const internalTags: InternalTag[] = []
+
+        for (const tag of tags) {
+            const tagId = await createTag(adaptInternalTabToDB(tag), db)
+
+            const newTag: InternalTag = { ...tag, id: tagId }
+
+            internalTags.push(newTag)
+
+            await linkTagsToImage({ imageId, tags: [newTag] })
+        }
+
+        await syncImageMetadata(imageId)
+
+        const newTags = await getTagsForImage(imageId)
+
+        db.prepare('COMMIT').run()
+
+        return { success: true, data: { imageId, tags: newTags } }
+    } catch (error) {
+        db.prepare('ROLLBACK').run()
+
+        logError({ message: `Failed to add tags to image ID=${imageId}`, error })
+
+        return { success: false, error }
+    }
+}
+
+export async function removeTagsFromImage({ imageId, tags }: ImageTagsChangeArgs) {
+    try {
+        db.prepare('BEGIN').run()
+
+        await unlinkTagsFromImage({ imageId, tags: tags })
+
+        await syncImageMetadata(imageId)
+
+        const newTags = await getTagsForImage(imageId)
+
+        db.prepare('COMMIT').run()
+
+        return { success: true, data: { imageId, tags: newTags } }
+    } catch (error) {
+        db.prepare('ROLLBACK').run()
+
+        logError({ message: `Failed to add tags from image ID=${imageId}`, error })
 
         return { success: false, error }
     }

@@ -7,6 +7,22 @@ type ApiEventMap = {
     getStagedFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
     getImageFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
     createTags: { args: [InternalTagNew[]]; return: void }
+    addTagsToImage: {
+        args: [ImageTagsChangeArgs]
+        return: {
+            success: boolean
+            data?: { imageId: string; tags: InternalTag[] }
+            error?: unknown
+        }
+    }
+    removeTagsFromImage: {
+        args: [ImageTagsChangeArgs]
+        return: {
+            success: boolean
+            data?: { imageId: string; tags: InternalTag[] }
+            error?: unknown
+        }
+    }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
         args: [InternalImage<InternalTagNew>]
