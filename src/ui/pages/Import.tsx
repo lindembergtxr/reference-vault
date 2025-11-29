@@ -18,7 +18,7 @@ export const ImportPage = () => {
     const { refreshImages } = useImageListContext()
     const { refreshTags } = useTagsContext()
 
-    const refreshData = () => window.api.getStagedFiles().then((res) => setImages(res))
+    const refreshData = () => window.api.getStagedFiles({}).then((res) => setImages(res))
 
     const importData = () => window.api.importFiles()
 
