@@ -1,8 +1,9 @@
 import * as utils from '../../utils/index.js'
+import * as filesystem from '../filesystem/index.js'
+
 import { upsertImage } from './images.services.js'
 import { createThumbnailFromImage } from './thumbnail.js'
 import { copyImageToFolder } from './storage.js'
-import * as filesystem from '../filesystem/index.js'
 
 export async function importFromFolder() {
     const folderPath = await filesystem.selectFolder()

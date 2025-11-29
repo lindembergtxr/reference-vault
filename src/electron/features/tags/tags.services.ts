@@ -1,4 +1,5 @@
 import { db } from '../../database/index.js'
+
 import { adaptInternalTabToDB } from './tags.adapters.js'
 import { type TagDB } from './tags.types.js'
 

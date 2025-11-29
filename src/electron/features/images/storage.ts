@@ -1,9 +1,8 @@
 import path from 'path'
 import pLimit from 'p-limit'
 
-import { copyFileToFolder } from '../filesystem/operations.js'
 import * as utils from '../../utils/index.js'
-import { getTemporaryFolderPath } from '../filesystem/index.js'
+import { getTemporaryFolderPath, copyFileToFolder } from '../filesystem/index.js'
 
 export async function copyImageToFolder(url: string, destination: string) {
     const extension = path.extname(url)

@@ -4,10 +4,10 @@ import path from 'path'
 import { getDestinationFolder } from '../../config/index.js'
 import { logError } from '../../utils/errors.js'
 import { db } from '../../database/index.js'
-import { adaptInternalTabToDB } from '../tags/tags.adapters.js'
-import { createTag, linkImageToTag } from '../tags/tags.services.js'
+import { adaptInternalTabToDB, createTag, linkImageToTag } from '../../features/tags/index.js'
+
 import { upsertImage } from './images.services.js'
-import { writeImageMetadata } from './index.js'
+import { writeImageMetadata } from './metadata.js'
 
 export async function commitImage(image: InternalImage<InternalTagNew>) {
     return writeImage({ image, situation: 'committed' })

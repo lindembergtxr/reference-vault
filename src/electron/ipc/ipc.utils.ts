@@ -1,12 +1,12 @@
 import { pathToFileURL } from 'url'
-import * as utils from './index.js'
-import * as helpers from './electron.js'
+
+import * as utils from '../utils/index.js'
 
 export const ipcHandle = <Key extends keyof ApiEventMap>(
     key: Key,
     handler: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return']
 ) => {
-    helpers.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
+    utils.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
         await validateEventFrame(event.senderFrame)
         return handler(...args)
     })
@@ -16,7 +16,7 @@ export const ipcAsyncHandle = <Key extends keyof ApiEventMap>(
     key: Key,
     handler: (...args: ApiEventMap[Key]['args']) => Promise<ApiEventMap[Key]['return']>
 ) => {
-    helpers.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
+    utils.handleWrapper(key, async (event, ...args: ApiEventMap[Key]['args']) => {
         await validateEventFrame(event.senderFrame)
         return handler(...args)
     })
@@ -24,13 +24,13 @@ export const ipcAsyncHandle = <Key extends keyof ApiEventMap>(
 
 export const ipcWebContentsSend = <Key extends keyof ApiEventMap>(
     key: Key,
-    webContents: helpers.WebContentsAux,
+    webContents: utils.WebContentsAux,
     payload: (...args: ApiEventMap[Key]['args']) => ApiEventMap[Key]['return']
 ) => {
     webContents.send(key, payload)
 }
 
-export const validateEventFrame = async (frame: helpers.WebFrame) => {
+export const validateEventFrame = async (frame: utils.WebFrame) => {
     if (!frame) {
         await utils.logError({ message: utils.errorMessages['NoSenderFrame']() })
         throw utils.generateError('NoSenderFrame')

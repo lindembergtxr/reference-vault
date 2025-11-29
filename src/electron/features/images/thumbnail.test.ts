@@ -2,7 +2,7 @@ import path from 'path'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import * as utils from '../../utils/index.js'
-import * as filesystem from '../filesystem/index.js'
+import * as filesystem from '../../features/filesystem/index.js'
 
 import { createThumbnailFromImage } from './thumbnail.js'
 

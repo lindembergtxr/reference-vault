@@ -1,6 +1,9 @@
-import { addTags } from '../features/tags/create.js'
-import { ipcAsyncHandle } from '../utils/index.js'
+import { getAllTags, addTags } from '../features/tags/index.js'
+
+import { ipcAsyncHandle } from './ipc.utils.js'
 
 export const registerTagsIpc = () => {
+    ipcAsyncHandle('getAllTags', getAllTags)
+
     ipcAsyncHandle('createTags', addTags)
 }

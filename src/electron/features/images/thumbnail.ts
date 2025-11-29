@@ -2,7 +2,7 @@ import path from 'path'
 import pLimit from 'p-limit'
 
 import * as utils from '../../utils/index.js'
-import * as filesystem from '../filesystem/index.js'
+import * as filesystem from '../../features/filesystem/index.js'
 
 type CreateThumbnailFromImageArgs = {
     url: string
