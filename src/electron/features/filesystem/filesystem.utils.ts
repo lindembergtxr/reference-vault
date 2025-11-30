@@ -6,6 +6,7 @@ import { getUserDataPath, logError, showOpenDialog } from '../../utils/index.js'
 const folderNames = {
     images: 'temp_images',
     thumbnails: 'temp_thumbnails',
+    temporary: 'temporary',
 }
 
 export function getTemporaryFolderPath(folder: keyof typeof folderNames) {

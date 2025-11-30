@@ -43,7 +43,7 @@ export function ImageImportDetails({
                 <div className="flex flex-col justify-center items-center gap-8 w-full h-full">
                     <div className="flex flex-col justify-center gap-3 w-fit h-1/2">
                         <img
-                            src={`file://${image.thumbnailPath ?? ''}`}
+                            src={`file://${image.imagePath ?? ''}`}
                             alt={image.id ?? ''}
                             className="h-full w-auto shadow-md object-contain"
                             draggable={false}
@@ -55,11 +55,12 @@ export function ImageImportDetails({
                     <div className="flex flex-col gap-2 w-full flex-1 overflow-auto">
                         <TagsInputController onTagsChange={onTagsChange} />
 
-                        <div className="flex w-full justify-center">
+                        <div className="flex w-full justify-center mb-2">
                             <Button
                                 className={cn(
-                                    'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded-md font-semibold cursor-pointer',
-                                    'hover:bg-aoi-700 disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-default'
+                                    'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded-md font-semibold cursor-pointer border',
+                                    'hover:bg-aoi-700 disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-default',
+                                    'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                                 )}
                                 isDisabled={isDirty}
                                 onClick={commit}

@@ -46,7 +46,7 @@ export const TagsInputController = ({ onTagsChange }: TagsInputControllerProps) 
             <TagsCSVInput {...csvInputProps} />
 
             <div className="flex flex-col flex-1 w-full mt-4 bg-tetsu-200 rounded-sm p-3 pr-0 overflow-hidden">
-                <ul className="min-h-0 w-full flex flex-col gap-1 overflow-scroll">
+                <ul className="min-h-0 w-full flex flex-col gap-1 overflow-scroll outline-none">
                     {dirtyTags.length > 0 && (
                         <p className="font-mono text-sm font-semibold text-red-700/90">Errors:</p>
                     )}

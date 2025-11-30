@@ -4,7 +4,6 @@ import { db } from '../../database/index.js'
 
 import { upsertImage } from './images.services.js'
 import { createThumbnailFromImage } from './thumbnail.js'
-import { copyImageToFolder } from './storage.js'
 
 export async function importFromFolder() {
     const folderPath = await filesystem.selectFolder()
@@ -23,7 +22,7 @@ export async function importFromFolder() {
             const path = await filesystem.getTemporaryFolderPath('images')
             const outputDir = await filesystem.getTemporaryFolderPath('thumbnails')
 
-            const { filename, destination } = await copyImageToFolder(url, path)
+            const { filename, destination } = await filesystem.copyImageWithCleanup(url, path)
 
             undoStack.push(() => filesystem.safeDelete(destination))
 
