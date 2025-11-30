@@ -65,6 +65,14 @@ export function deleteImage(id: string) {
     db.prepare('DELETE FROM images WHERE id = ?').run(id)
 }
 
+export function countCommittedImages() {
+    const row = db
+        .prepare(`SELECT COUNT(image_id) AS count FROM images WHERE situation = 'committed';`)
+        .get() as { count: number }
+
+    return row.count
+}
+
 type LinkTagsToImageArgs = {
     imageId: string
     tags: InternalTagNew[]

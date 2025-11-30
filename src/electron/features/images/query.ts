@@ -1,5 +1,6 @@
+import { logError } from '../../utils/errors.js'
 import { adaptDBImageToInternal } from './images.adapters.js'
-import { getImages as getImagesService } from './images.services.js'
+import { countCommittedImages, getImages as getImagesService } from './images.services.js'
 import { ImageDB } from './images.types.js'
 
 type GetImagesResponse = Promise<InternalImage[]>
@@ -21,4 +22,16 @@ export async function getStagedImages({ tagIds }: GetImagesSearchArgs): GetImage
 
 export async function getCommittedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
     return await getImages({ tagIds, situation: 'committed' })
+}
+
+export async function countImages() {
+    try {
+        const count = await countCommittedImages()
+
+        return { success: true, data: count }
+    } catch (error) {
+        logError({ message: 'Failed to count images', error })
+
+        return { success: false, error }
+    }
 }

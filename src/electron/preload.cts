@@ -30,4 +30,5 @@ electron.contextBridge.exposeInMainWorld('api', {
     addTagsToImage: (args) => ipcInvoke('addTagsToImage', args),
     removeTagsFromImage: (args) => ipcInvoke('removeTagsFromImage', args),
     deleteImage: (args) => ipcInvoke('deleteImage', args),
+    countImages: () => ipcInvoke('countImages'),
 } satisfies Window['api'])

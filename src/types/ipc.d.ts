@@ -32,6 +32,10 @@ type ApiEventMap = {
         args: [string]
         return: { success: boolean; data?: void; error?: unknown }
     }
+    countImages: {
+        args: []
+        return: { success: boolean; data?: number; error?: unknown }
+    }
 }
 
 interface Window {
