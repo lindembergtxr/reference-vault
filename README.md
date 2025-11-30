@@ -96,6 +96,29 @@ npm run dist:win
 - Dev mode requires webSecurity: false for local image loading.
 - Migrations are stored as .sql files and executed automatically.
 
+### Screenshots
+
+#### Homepage
+
+![Home Page light mode](./assets/homepage1.jpg)
+![Home Page dark mode](./assets/homepage-dark.jpg)
+![Home Page with search](./assets/searched.jpg)
+
+#### Import images page
+
+![Imported image page with empty tags](./assets/imported-image-empty.jpg)
+![Imported image page with tags](./assets/imported-image-tags.jpg)
+
+#### Tag controls page
+
+![Create tag page](./assets/tag-create.jpg)
+![Remove tag page](./assets/tag-remove.jpg)
+
+#### Image Details page
+
+![Image Details page](./assets/image-details.jpg)
+![Image Details page in edit mode](./assets/image-details-edit.jpg)
+
 ## License
 
 MIT
