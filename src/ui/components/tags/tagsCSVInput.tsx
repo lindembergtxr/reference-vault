@@ -30,7 +30,12 @@ export const TagsCSVInput = forwardRef<TagsCSVInputRef, TagsCSVInputProps>(
             <div className="flex flex-col gap-2 w-full">
                 <TagsCSVInputShortcuts />
                 <div className="flex flex-col h-full w-full">
-                    <div className="flex flex-col w-full px-3 py-2 font-mono h-full bg-black rounded-t border border-b-gray-700">
+                    <div
+                        className={cn(
+                            'flex flex-col w-full px-3 py-2 font-mono h-full bg-black',
+                            'rounded-t border border-gray-700'
+                        )}
+                    >
                         <span className="truncate text-green-300 text-sm">
                             name,category,franchise
                         </span>

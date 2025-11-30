@@ -49,8 +49,9 @@ export const TagsCreator = () => {
                     disabled={!canImport}
                     onClick={submitTags}
                     className={cn(
-                        'px-4 h-8 bg-aoi-900 text-aoi-200 font-semibold caption rounded-md cursor-pointer',
-                        'disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-default'
+                        'px-4 h-8 bg-aoi-900 text-aoi-200 label text-xs rounded-md cursor-pointer',
+                        'disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-default',
+                        'dark:disabled:bg-gray-500 dark:disabled:text-gray-300'
                     )}
                 >
                     Import tags

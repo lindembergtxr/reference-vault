@@ -4,13 +4,14 @@ import { Button } from 'react-aria-components'
 import { TagsInputController } from '../tags/tagsInputController'
 import { CSVTag } from '../tags/tags.type'
 import { cn } from '../../utils'
+
 import { CSVTagToInternalTag } from '../tags/tags.utils'
 
-type ImportImageProps = {
+type ImageImportProps = {
     image: InternalImage
     onCommit: (image: InternalImage<InternalTagNew>) => void
 }
-export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
+export const ImageImport = ({ image, onCommit }: ImageImportProps) => {
     const [tags, setTags] = useState<CSVTag[]>([])
 
     const isDirty = tags.some((tag) => tag.error) || tags.length === 0

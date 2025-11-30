@@ -64,7 +64,10 @@ export const LayoutMenu = () => {
                 </p>
 
                 <Button
-                    className="flex items-center gap-2 caption bg-aoi-900 text-aoi-100 py-2 px-3 rounded-md"
+                    className={cn(
+                        'flex items-center gap-2 caption bg-aoi-900 text-aoi-100 py-2 px-3 rounded-md',
+                        'dark:bg-tetsu-300 dark:text-tetsu-900 dark:font-medium'
+                    )}
                     onClick={refresh}
                 >
                     <MdOutlineRefresh className="h-4 w-4" /> Refresh data

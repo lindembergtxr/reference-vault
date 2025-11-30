@@ -5,7 +5,7 @@ import {
     MdOutlineKeyboardArrowRight,
 } from 'react-icons/md'
 
-import { ImportImage } from '../components/import/ImportImage'
+import { ImageImport } from '../components/images/imageImport'
 import { Button } from 'react-aria-components'
 import { cn } from '../utils'
 import { useTagsContext } from '../components/contexts/tagsCore'
@@ -46,13 +46,13 @@ export const ImportPage = () => {
                 <div className="flex align-center gap-4 w-full px-4">
                     <Button
                         className={cn(
-                            'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md label font-medium',
-                            'bg-aoi-800 text-aoi-100 dark:bg-aoi-300 dark:text-aoi-900 hover:bg-aoi-600',
+                            'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md caption text-sm font-medium',
+                            'bg-tetsu-800 text-tetsu-100 dark:bg-tetsu-300 dark:text-tetsu-900 hover:bg-tetsu-600',
                             'disabled:bg-gray-200 disabled:text-gray-500'
                         )}
                         onClick={importData}
                     >
-                        <MdImportExport />
+                        <MdImportExport className="h-4 w-4" />
                         Import
                     </Button>
                 </div>
@@ -78,7 +78,7 @@ export const ImportPage = () => {
                                 <MdOutlineKeyboardArrowLeft className="w-8 h-8" />
                             </button>
 
-                            <ImportImage
+                            <ImageImport
                                 key={images[index].id}
                                 image={images[index]}
                                 onCommit={onCommit}

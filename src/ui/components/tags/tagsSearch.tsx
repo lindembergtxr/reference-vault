@@ -179,6 +179,7 @@ export const TagsSearch = () => {
                         className={cn(
                             'w-full paragraph-md h-8 px-4 rounded-md font-mono text-xs bg-tetsu-200 text-tetsu-800',
                             'outline-none border border-tetsu-300',
+                            'hover:bg-tetsu-300 hover:placeholder:text-tetsu-400 dark:hover:bg-tetsu-800',
                             'dark:bg-black dark:text-green-400 dark:border-black',
                             'focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                         )}
