@@ -53,12 +53,12 @@ export const TagsSearch = () => {
     }
 
     const selectItem = (index: number) => {
-        setSelectedTags((prev) => [...prev, filteredItems[index]])
-
-        if (inputRef.current) {
-            inputRef.current.value = ''
-            inputRef.current.focus()
-        }
+        setSelectedTags((prev) => {
+            if (prev.some((el) => el.id === filteredItems[index].id)) return prev
+            return [...prev, filteredItems[index]]
+        })
+        setInputValue('')
+        inputRef.current?.focus()
     }
 
     const onInputFocus = () => {
@@ -87,7 +87,7 @@ export const TagsSearch = () => {
         if (e.key === 'ArrowDown') {
             e.preventDefault()
             setHighlight((h) => {
-                const next = Math.min(h + 1, filteredItems.length - 1)
+                const next = (h + 1) % filteredItems.length
                 listRef.current?.children[next]?.scrollIntoView({ block: 'nearest' })
                 return next
             })
@@ -96,7 +96,7 @@ export const TagsSearch = () => {
         if (e.key === 'ArrowUp') {
             e.preventDefault()
             setHighlight((h) => {
-                const next = Math.max(h - 1, 0)
+                const next = (h - 1 + filteredItems.length) % filteredItems.length
                 listRef.current?.children[next]?.scrollIntoView({ block: 'nearest' })
                 return next
             })
@@ -106,8 +106,10 @@ export const TagsSearch = () => {
             e.preventDefault()
 
             if (highlight >= 0) {
-                selectItem(highlight)
                 setHighlight(-1)
+                setInputValue('')
+
+                selectItem(highlight)
                 inputRef.current?.focus()
 
                 requestAnimationFrame(() => {
@@ -124,54 +126,15 @@ export const TagsSearch = () => {
 
     return (
         <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
-            <div className="flex items-center w-full gap-2">
-                <Label htmlFor="tag-search-input" className="w-full">
-                    <Input
-                        id="tag-search-input"
-                        ref={inputRef}
-                        className="w-full paragraph-md h-8 px-2 rounded-md outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400"
-                        placeholder="Add tags to search"
-                        value={inputValue}
-                        onChange={(evt) => setInputValue(evt.target.value)}
-                        onFocus={onInputFocus}
-                        onKeyDown={onInputKeyDown}
-                    />
-                </Label>
-            </div>
-
-            <div className="relative flex w-full h-[30vh] border-[1px] border-tetsu-300/80 rounded-md">
-                {filteredItems.length > 0 && (
-                    <ul
-                        ref={listRef}
-                        tabIndex={0}
-                        onKeyDown={onListKeyDown}
-                        className={cn(
-                            'absolute top-0 left-0 flex flex-col px-2 py-2 h-full w-full rounded-md overflow-scroll',
-                            'outline-none focus:ring-2 focus:ring-aoi-400'
-                        )}
-                    >
-                        {filteredItems.map((tag, index) => (
-                            <li
-                                id={tag.id}
-                                key={tag.id}
-                                className={cn(
-                                    'hover:bg-tetsu-300/80 hover:cursor-pointer label leading-6 font-normal px-2',
-                                    highlight === index ? 'bg-tetsu-300/80' : ''
-                                )}
-                                onMouseDown={() => selectItem(index)}
-                            >
-                                {parseTag(tag)}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
-
-            <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border-[1px] border-tetsu-300/80 rounded-md">
+            <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border-[1px] border-tetsu-300/80 dark:border-tetsu-700 rounded-md">
                 <div className="w-full flex items-center justify-between">
-                    <p className="font-semibold text-sm">Selected tags:</p>
+                    <p className="font-semibold dark:text-tetsu-300 text-sm">Selected tags:</p>
                     <Button
-                        className="caption font-semibold px-3 h-6 text-gray-800 hover:bg-tetsu-300 rounded-md hover:cursor-pointer"
+                        className={cn(
+                            'caption font-semibold px-3 h-6 text-gray-800 rounded-md',
+                            'hover:bg-tetsu-300 hover:cursor-pointer',
+                            'dark:text-tetsu-300 dark:hover:bg-tetsu-800'
+                        )}
                         onClick={() => clearSearch()}
                     >
                         CLEAR SEARCH
@@ -181,16 +144,16 @@ export const TagsSearch = () => {
                     {selectedTags.map((searchTag) => (
                         <li
                             key={searchTag.id}
-                            className="flex itens-center justify-between w-full gap-2"
+                            className="flex itens-center justify-between w-full gap-2 dark:text-tetsu-200"
                         >
-                            {parseTag(searchTag)}
+                            <span className="w-full truncate">{parseTag(searchTag)}</span>
                             <Button onClick={() => removeTag(searchTag.id)}>
                                 <MdOutlineClose className="w-5 h-5" />
                             </Button>
                         </li>
                     ))}
                     {selectedTags.length === 0 && (
-                        <li className="font-mono text-xs font-normal text-tetsu-300">
+                        <li className="font-mono text-xs font-normal text-tetsu-300 dark:text-tetsu-500">
                             No tag selected to search...
                         </li>
                     )}
@@ -200,12 +163,74 @@ export const TagsSearch = () => {
             <Button
                 className={cn(
                     'flex items-center justify-center w-full h-8 gap-1 bg-aoi-800 text-aoi-50 paragraph-sm rounded-md',
-                    'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400'
+                    'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400',
+                    'dark:bg-tetsu-400 dark:text-tetsu-900 dark:font-semibold'
                 )}
                 onClick={onSearch}
             >
-                <MdSearch size={16} /> Search
+                <MdSearch size={16} /> SEARCH
             </Button>
+
+            <div className="flex items-center w-full gap-2">
+                <Label htmlFor="tag-search-input" className="w-full">
+                    <Input
+                        id="tag-search-input"
+                        ref={inputRef}
+                        className={cn(
+                            'w-full paragraph-md h-8 px-4 rounded-md font-mono text-xs bg-tetsu-200 text-tetsu-800',
+                            'outline-none border border-tetsu-300',
+                            'dark:bg-black dark:text-green-400 dark:border-black',
+                            'focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
+                        )}
+                        placeholder="Add tags to search"
+                        value={inputValue}
+                        onChange={(evt) => setInputValue(evt.target.value)}
+                        onFocus={onInputFocus}
+                        onKeyDown={onInputKeyDown}
+                    />
+                </Label>
+            </div>
+
+            <div
+                className={cn(
+                    'flex flex-col w-full h-[30vh] overflow-hidden',
+                    'rounded-md border border-tetsu-300/80 dark:border-tetsu-700'
+                )}
+            >
+                {filteredItems.length > 0 && (
+                    <ul
+                        ref={listRef}
+                        tabIndex={-1}
+                        onKeyDown={onListKeyDown}
+                        className={cn(
+                            'flex-1 overflow-y-auto px-2 py-2',
+                            'outline-none focus:ring-2 focus:ring-aoi-400'
+                        )}
+                    >
+                        {filteredItems.map((tag, index) => (
+                            <li
+                                id={tag.id}
+                                key={tag.id}
+                                className={cn(
+                                    'hover:bg-tetsu-300/80 hover:cursor-pointer rounded-sm label leading-8 font-normal px-2 truncate',
+                                    'dark:text-tetsu-200',
+                                    highlight === index
+                                        ? 'bg-tetsu-300/80 dark:bg-tetsu-500/80'
+                                        : ''
+                                )}
+                                onMouseDown={() => selectItem(index)}
+                            >
+                                {parseTag(tag)}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                {filteredItems.length === 0 && (
+                    <li className="font-mono text-xs font-normal text-tetsu-300 dark:text-tetsu-500 pl-3 pt-3">
+                        Type something for suggestions...
+                    </li>
+                )}
+            </div>
         </div>
     )
 }

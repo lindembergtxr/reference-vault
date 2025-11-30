@@ -59,7 +59,7 @@ export const LayoutMenu = () => {
             </nav>
 
             <div className="flex items-center gap-4">
-                <p className="text-xs font-mono truncate">
+                <p className="text-xs font-mono truncate dark:text-tetsu-400">
                     Total of {count} {count === 1 ? 'image' : 'images'}
                 </p>
 
