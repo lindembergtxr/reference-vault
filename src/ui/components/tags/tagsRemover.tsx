@@ -5,7 +5,7 @@ import { useTagsContext } from '../contexts/tagsCore'
 
 import { useCSVShortcuts } from './tags.hooks'
 import { Button } from 'react-aria-components'
-import { MdOutlineClose } from 'react-icons/md'
+import { MdOutlineClose, MdOutlineDelete } from 'react-icons/md'
 
 export function TagsRemover() {
     const [inputValue, setInputValue] = useState('')
@@ -72,7 +72,7 @@ export function TagsRemover() {
                 onChange={(evt) => setInputValue(evt.target.value)}
             />
 
-            <div className="flex flex-col h-40 px-1 py-3 w-full overflow-hidden rounded border border-gray-400">
+            <div className="flex flex-col h-40 px-1 py-3 w-full overflow-hidden rounded border border-gray-400 dark:border-gray-600">
                 <ul className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll">
                     {filteredItems.map((tag) => (
                         <li
@@ -89,20 +89,23 @@ export function TagsRemover() {
                 </ul>
             </div>
 
-            <div className="flex flex-col flex-1 w-full px-4 py-4 gap-3 rounded border border-gray-400 overflow-hidden">
+            <div className="flex flex-col flex-1 w-full px-4 py-4 gap-3 rounded border border-gray-400 dark:border-gray-600 overflow-hidden">
                 <div className="flex items-center justify-between w-full">
                     <p className="label text-sm font-semibold">Selected Tags</p>
                     <Button
                         className={cn(
-                            'px-3 py-1 rounded caption text-sm bg-red-400 text-black',
-                            'disabled:bg-gray-400 disabled:text-gray-200'
+                            'flex items-center justify-center py-2 px-4 gap-1 caption font-semibold',
+                            'rounded outline-none bg-red-400 text-black',
+                            'hover:bg-red-500 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
+                            'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200',
+                            'disabled:cursor-default disabled:bg-gray-400 disabled:text-gray-100',
+                            'dark:disabled:bg-gray-500 dark:disabled:text-gray-300'
                         )}
                         isDisabled={selectedTags.length === 0}
                         onClick={submit}
                     >
-                        {selectedTags.length === 0
-                            ? 'Remove tags'
-                            : `Remove ${selectedTags.length} ${selectedTags.length === 1 ? 'tag' : 'tags'}`}
+                        <MdOutlineDelete className="w-4 h-4" />
+                        {selectedTags.length === 0 ? 'Remove' : `Remove ${selectedTags.length}`}
                     </Button>
                 </div>
 

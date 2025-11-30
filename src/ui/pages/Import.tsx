@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-    MdImportExport,
-    MdOutlineKeyboardArrowLeft,
-    MdOutlineKeyboardArrowRight,
-} from 'react-icons/md'
+import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-icons/md'
 
 import { ImageImport } from '../components/images/imageImport'
 import { Button } from 'react-aria-components'
@@ -43,24 +39,24 @@ export const ImportPage = () => {
     return (
         <div className="col-span-12 col-start-1 flex flex-col w-full h-full gap-4 pt-6">
             {images.length === 0 && (
-                <div className="flex align-center gap-4 w-full px-4">
+                <div className="flex align-center justify-center gap-4 w-full px-4 mt-10">
                     <Button
                         className={cn(
-                            'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md caption text-sm font-medium',
-                            'bg-tetsu-800 text-tetsu-100 dark:bg-tetsu-300 dark:text-tetsu-900 hover:bg-tetsu-600',
+                            'flex items-center gap-1 px-3 py-2 rounded-md caption text-xs font-medium',
+                            'bg-tetsu-800 text-tetsu-100',
+                            'dark:bg-tetsu-300 dark:text-tetsu-900 hover:bg-tetsu-600 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-100',
                             'disabled:bg-gray-200 disabled:text-gray-500'
                         )}
                         onClick={importData}
                     >
-                        <MdImportExport className="h-4 w-4" />
-                        Import
+                        Import images
                     </Button>
                 </div>
             )}
             <div className="flex flex-col px-4 py-6 h-full w-full overflow-hidden">
                 <div className="h-full">
                     {images.length === 0 && (
-                        <p className="font-mono text-sm text-tetsu-300">
+                        <p className="font-mono text-xs text-tetsu-300 w-full text-center">
                             Import something to begin.
                         </p>
                     )}

@@ -5,6 +5,7 @@ import { useTagsContext } from '../contexts/tagsCore'
 import { TagsCSVInput } from './tagsCSVInput'
 import { TagsCSVTable } from './tagsCSVTable'
 import { useTagsCSVInput } from './tags.hooks'
+import { MdOutlineTag } from 'react-icons/md'
 
 export const TagsCreator = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -49,16 +50,20 @@ export const TagsCreator = () => {
                     disabled={!canImport}
                     onClick={submitTags}
                     className={cn(
-                        'px-4 h-8 bg-aoi-900 text-aoi-200 label text-xs rounded-md cursor-pointer',
-                        'disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-default',
+                        'flex items-center justify-center py-2 px-4 gap-1 caption font-semibold',
+                        'rounded outline-none bg-tetsu-800 text-tetsu-100',
+                        'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
+                        'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200',
+                        'disabled:cursor-default disabled:bg-gray-400 disabled:text-gray-100',
                         'dark:disabled:bg-gray-500 dark:disabled:text-gray-300'
                     )}
                 >
-                    Import tags
+                    <MdOutlineTag className="h-4 w-4" />
+                    CREATE TAGS
                 </button>
             </div>
 
-            <div className="flex flex-1 flex-row gap-6 overflow-hidden">
+            <div className="flex flex-1 sm:flex-col xl:flex-row gap-6 overflow-hidden ">
                 <TagsCSVInput {...csvInputProps} />
 
                 <TagsCSVTable tags={csvInputProps.parsedTags} />

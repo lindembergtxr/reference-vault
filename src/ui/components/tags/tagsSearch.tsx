@@ -127,19 +127,8 @@ export const TagsSearch = () => {
     return (
         <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
             <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border-[1px] border-tetsu-300/80 dark:border-tetsu-700 rounded-md">
-                <div className="w-full flex items-center justify-between">
-                    <p className="font-semibold dark:text-tetsu-300 text-sm">Selected tags:</p>
-                    <Button
-                        className={cn(
-                            'caption font-semibold px-3 h-6 text-gray-800 rounded-md',
-                            'hover:bg-tetsu-300 hover:cursor-pointer',
-                            'dark:text-tetsu-300 dark:hover:bg-tetsu-800'
-                        )}
-                        onClick={() => clearSearch()}
-                    >
-                        CLEAR SEARCH
-                    </Button>
-                </div>
+                <p className="font-semibold dark:text-tetsu-300 text-sm">Selected tags</p>
+
                 <ul className="min-h-0 overflow-scroll">
                     {selectedTags.map((searchTag) => (
                         <li
@@ -160,16 +149,31 @@ export const TagsSearch = () => {
                 </ul>
             </div>
 
-            <Button
-                className={cn(
-                    'flex items-center justify-center w-full h-8 gap-1 bg-aoi-800 text-aoi-50 paragraph-sm rounded-md',
-                    'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-[1px] focus:border-aoi-400',
-                    'dark:bg-tetsu-400 dark:text-tetsu-900 dark:font-semibold'
-                )}
-                onClick={onSearch}
-            >
-                <MdSearch size={16} /> SEARCH
-            </Button>
+            <div className="flex w-full items-center gap-4">
+                <Button
+                    className={cn(
+                        'flex items-center caption font-semibold px-3 py-2 text-gray-800 whitespace-nowrap',
+                        'rounded border border-tetsu-800',
+                        'hover:bg-tetsu-700 hover:text-tetsu-100 hover:cursor-pointer',
+                        'dark:border-tetsu-300 dark:text-tetsu-200 dark:hover:bg-tetsu-200 dark:hover:text-tetsu-700'
+                    )}
+                    onClick={() => clearSearch()}
+                >
+                    CLEAR SEARCH
+                </Button>
+
+                <Button
+                    className={cn(
+                        'flex items-center justify-center py-2 w-full gap-1 caption font-semibold',
+                        'rounded outline-none bg-tetsu-800 text-tetsu-100',
+                        'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
+                        'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200'
+                    )}
+                    onClick={onSearch}
+                >
+                    <MdSearch size={16} /> SEARCH
+                </Button>
+            </div>
 
             <div className="flex items-center w-full gap-2">
                 <Label htmlFor="tag-search-input" className="w-full">
@@ -177,11 +181,10 @@ export const TagsSearch = () => {
                         id="tag-search-input"
                         ref={inputRef}
                         className={cn(
-                            'w-full paragraph-md h-8 px-4 rounded-md font-mono text-xs bg-tetsu-200 text-tetsu-800',
-                            'outline-none border border-tetsu-300',
-                            'hover:bg-tetsu-300 hover:placeholder:text-tetsu-400 dark:hover:bg-tetsu-800',
-                            'dark:bg-black dark:text-green-400 dark:border-black',
-                            'focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
+                            'w-full paragraph-md h-8 px-4 rounded-md font-mono text-xs bg-black text-green-400',
+                            'outline-none border border-black',
+                            'hover:bg-gray-900 focus:ring focus:ring-aoi-500 focus:border-aoi-500',
+                            'dark:border-black dark:hover:bg-tetsu-800'
                         )}
                         placeholder="Add tags to search"
                         value={inputValue}
