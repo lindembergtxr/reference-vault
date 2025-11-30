@@ -1,11 +1,12 @@
+import { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
-import { cn, parseTag, parseTagFull } from '../../utils'
-import { EditableTag } from './images.types'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useTagsContext } from '../contexts/tagsCore'
 import { MdOutlineClose, MdOutlineUndo } from 'react-icons/md'
+
+import { cn, parseTag, parseTagFull } from '../../utils'
 import { parseCsv } from '../tags/tags.utils'
-import { useCSVShortcuts } from '../tags/tags.hooks'
+import { useCSVShortcuts, useTagFilter } from '../tags/tags.hooks'
+
+import { EditableTag } from './images.types'
 
 type ImageListPreviewEditProps = {
     currentTags: EditableTag[]
@@ -20,38 +21,16 @@ export function ImageListPreviewEdit({
     onSubmit,
 }: ImageListPreviewEditProps) {
     const [isAdding, setIsAdding] = useState(false)
-    const [inputValue, setInputValue] = useState('')
 
     const listRef = useRef<HTMLUListElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const { tags } = useTagsContext()
+    const { filteredTags, inputValue, setInputValue } = useTagFilter()
 
     useCSVShortcuts({ ref: inputRef, text: inputValue, onChange: setInputValue })
 
     const csv = parseCsv(inputValue)
     const invalid = inputValue.length === 0 || csv.some((item) => item.error)
-
-    const filteredItems = useMemo(() => {
-        if (!inputValue || inputValue.length < 2) return []
-
-        const lowerInput = inputValue.toLowerCase()
-
-        return tags
-            .map((tag) => {
-                const nameScore = tag.name.toLowerCase().includes(lowerInput) ? 2 : 0
-                const franchiseScore = tag.franchise?.toLowerCase().includes(lowerInput) ? 1 : 0
-                const totalScore = nameScore + franchiseScore
-
-                return { tag, score: totalScore }
-            })
-            .filter((item) => item.score > 0)
-            .sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score
-                return a.tag.name.localeCompare(b.tag.name)
-            })
-            .map((item) => item.tag)
-    }, [tags, inputValue])
 
     const hasChanges = currentTags.some((tag) => tag.status !== 'original')
 
@@ -158,7 +137,7 @@ export function ImageListPreviewEdit({
 
                             <div className="flex flex-col h-16 w-full overflow-hidden rounded-md border border-gray-400">
                                 <ul className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll">
-                                    {filteredItems.map((tag) => (
+                                    {filteredTags.map((tag) => (
                                         <li
                                             key={tag.id}
                                             className="hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer"
@@ -167,7 +146,7 @@ export function ImageListPreviewEdit({
                                             {parseTag(tag)}
                                         </li>
                                     ))}
-                                    {filteredItems.length === 0 && (
+                                    {filteredTags.length === 0 && (
                                         <p className="font-mono text-xs">No sugestions</p>
                                     )}
                                 </ul>

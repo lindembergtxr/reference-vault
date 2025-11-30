@@ -1,42 +1,23 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button, Input, Label } from 'react-aria-components'
 import { MdOutlineClose, MdSearch } from 'react-icons/md'
+
 import { parseTag } from '../../utils/tags'
 import { cn } from '../../utils/classname'
-import { useTagsContext } from '../contexts/tagsCore'
 import { useImageListContext } from '../contexts/imageListCore'
+
+import { useTagFilter } from './tags.hooks'
 
 export const TagsSearch = () => {
     const inputRef = useRef<HTMLInputElement>(null)
     const listRef = useRef<HTMLUListElement>(null)
 
-    const { tags } = useTagsContext()
+    const { filteredTags, inputValue, setInputValue } = useTagFilter()
+
     const { setSearch } = useImageListContext()
 
-    const [inputValue, setInputValue] = useState('')
     const [selectedTags, setSelectedTags] = useState<InternalTag[]>([])
     const [highlight, setHighlight] = useState(-1)
-
-    const filteredItems = useMemo(() => {
-        if (!inputValue || inputValue.length < 2) return []
-
-        const lowerInput = inputValue.toLowerCase()
-
-        return tags
-            .map((tag) => {
-                const nameScore = tag.name.toLowerCase().includes(lowerInput) ? 2 : 0
-                const franchiseScore = tag.franchise?.toLowerCase().includes(lowerInput) ? 1 : 0
-                const totalScore = nameScore + franchiseScore
-
-                return { tag, score: totalScore }
-            })
-            .filter((item) => item.score > 0)
-            .sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score
-                return a.tag.name.localeCompare(b.tag.name)
-            })
-            .map((item) => item.tag)
-    }, [tags, inputValue])
 
     const removeTag = (tagId: string) => {
         setSelectedTags((prev) => prev.filter((tag) => tag.id !== tagId))
@@ -54,8 +35,8 @@ export const TagsSearch = () => {
 
     const selectItem = (index: number) => {
         setSelectedTags((prev) => {
-            if (prev.some((el) => el.id === filteredItems[index].id)) return prev
-            return [...prev, filteredItems[index]]
+            if (prev.some((el) => el.id === filteredTags[index].id)) return prev
+            return [...prev, filteredTags[index]]
         })
         setInputValue('')
         inputRef.current?.focus()
@@ -72,7 +53,7 @@ export const TagsSearch = () => {
         if (e.key === 'ArrowDown') {
             e.preventDefault()
 
-            if (filteredItems.length > 0) {
+            if (filteredTags.length > 0) {
                 setHighlight(0)
 
                 requestAnimationFrame(() => {
@@ -87,7 +68,7 @@ export const TagsSearch = () => {
         if (e.key === 'ArrowDown') {
             e.preventDefault()
             setHighlight((h) => {
-                const next = (h + 1) % filteredItems.length
+                const next = (h + 1) % filteredTags.length
                 listRef.current?.children[next]?.scrollIntoView({ block: 'nearest' })
                 return next
             })
@@ -96,7 +77,7 @@ export const TagsSearch = () => {
         if (e.key === 'ArrowUp') {
             e.preventDefault()
             setHighlight((h) => {
-                const next = (h - 1 + filteredItems.length) % filteredItems.length
+                const next = (h - 1 + filteredTags.length) % filteredTags.length
                 listRef.current?.children[next]?.scrollIntoView({ block: 'nearest' })
                 return next
             })
@@ -201,7 +182,7 @@ export const TagsSearch = () => {
                     'rounded-md border border-tetsu-300/80 dark:border-tetsu-700'
                 )}
             >
-                {filteredItems.length > 0 && (
+                {filteredTags.length > 0 && (
                     <ul
                         ref={listRef}
                         tabIndex={-1}
@@ -211,7 +192,7 @@ export const TagsSearch = () => {
                             'outline-none focus:ring-2 focus:ring-aoi-400'
                         )}
                     >
-                        {filteredItems.map((tag, index) => (
+                        {filteredTags.map((tag, index) => (
                             <li
                                 id={tag.id}
                                 key={tag.id}
@@ -229,7 +210,7 @@ export const TagsSearch = () => {
                         ))}
                     </ul>
                 )}
-                {filteredItems.length === 0 && (
+                {filteredTags.length === 0 && (
                     <li className="font-mono text-xs font-normal text-tetsu-300 dark:text-tetsu-500 pl-3 pt-3">
                         Type something for suggestions...
                     </li>

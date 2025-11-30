@@ -1,42 +1,22 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import { Button } from 'react-aria-components'
+import { MdOutlineClose, MdOutlineDelete } from 'react-icons/md'
 
 import { cn, parseTagFull } from '../../utils'
 import { useTagsContext } from '../contexts/tagsCore'
 
-import { useCSVShortcuts } from './tags.hooks'
-import { Button } from 'react-aria-components'
-import { MdOutlineClose, MdOutlineDelete } from 'react-icons/md'
+import { useCSVShortcuts, useTagFilter } from './tags.hooks'
 
 export function TagsRemover() {
-    const [inputValue, setInputValue] = useState('')
     const [selectedTags, setSelectedTags] = useState<InternalTag[]>([])
 
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const { tags, refreshTags } = useTagsContext()
+    const { refreshTags } = useTagsContext()
+
+    const { filteredTags, inputValue, setInputValue } = useTagFilter()
 
     useCSVShortcuts({ ref: inputRef, text: inputValue, onChange: setInputValue })
-
-    const filteredItems = useMemo(() => {
-        if (!inputValue || inputValue.length < 2) return []
-
-        const lowerInput = inputValue.toLowerCase()
-
-        return tags
-            .map((tag) => {
-                const nameScore = tag.name.toLowerCase().includes(lowerInput) ? 2 : 0
-                const franchiseScore = tag.franchise?.toLowerCase().includes(lowerInput) ? 1 : 0
-                const totalScore = nameScore + franchiseScore
-
-                return { tag, score: totalScore }
-            })
-            .filter((item) => item.score > 0)
-            .sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score
-                return a.tag.name.localeCompare(b.tag.name)
-            })
-            .map((item) => item.tag)
-    }, [tags, inputValue])
 
     const selectTag = (tag: InternalTag) => {
         setInputValue('')
@@ -74,7 +54,7 @@ export function TagsRemover() {
 
             <div className="flex flex-col h-40 px-1 py-3 w-full overflow-hidden rounded border border-gray-400 dark:border-gray-600">
                 <ul className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll">
-                    {filteredItems.map((tag) => (
+                    {filteredTags.map((tag) => (
                         <li
                             key={tag.id}
                             className="hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer"
@@ -83,7 +63,7 @@ export function TagsRemover() {
                             {parseTagFull(tag)}
                         </li>
                     ))}
-                    {filteredItems.length === 0 && (
+                    {filteredTags.length === 0 && (
                         <p className="font-mono text-xs">No sugestions</p>
                     )}
                 </ul>

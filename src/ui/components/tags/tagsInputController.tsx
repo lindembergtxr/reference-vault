@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from 'react'
 
 import { useTagsContext } from '../contexts/tagsCore'
-import { parseTag } from '../../utils'
 import { TagsCSVInput } from './tagsCSVInput'
-import { parseCsv, parseTagToCSVString } from './tags.utils'
+import { filterTagFunction, parseCsv, parseTagToCSVString } from './tags.utils'
 import { CSVTag } from './tags.type'
 import { useTagsCSVInput } from './tags.hooks'
 
@@ -22,21 +21,11 @@ export const TagsInputController = ({ onTagsChange }: TagsInputControllerProps) 
     const { tags } = useTagsContext()
 
     const filteredTags = useMemo(() => {
-        const currentTag = parseCsv(csvInputProps.csvText).at(-1)
+        const csvTag = parseCsv(csvInputProps.csvText).at(-1)
 
-        if (!currentTag || currentTag.name.length <= 1) return []
+        if (!csvTag || csvTag.name.length <= 1) return []
 
-        return tags
-            .map((tag) => ({
-                tag,
-                parsed: parseTag(tag).toLowerCase(),
-                idScore: tag.name.toLowerCase().includes(currentTag.name.toLowerCase()) ? 1 : 0,
-            }))
-            .filter((item) =>
-                item.parsed.includes(currentTag.name.replaceAll(' ', '_').toLowerCase())
-            )
-            .sort((a, b) => b.idScore - a.idScore)
-            .map((item) => item.tag)
+        return filterTagFunction(tags)(csvTag.name)
     }, [tags, csvInputProps.csvText])
 
     const addTag = (tag: InternalTag) => {

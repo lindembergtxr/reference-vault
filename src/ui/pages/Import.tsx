@@ -16,7 +16,7 @@ export const ImportPage = () => {
 
     const refreshData = () => window.api.getStagedFiles({}).then((res) => setImages(res))
 
-    const importData = () => window.api.importFiles()
+    const importData = () => window.api.importFiles().then(() => refreshData())
 
     const onCommit = (image: InternalImage<InternalTagNew>) => {
         window.api.commitImage(image).then((res) => {

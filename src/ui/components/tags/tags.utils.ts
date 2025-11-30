@@ -1,3 +1,4 @@
+import { normalize } from '../../utils'
 import { type CSVTag } from './tags.type'
 
 export const CATEGORY_SHORTCUTS: Record<number, TagCategory> = {
@@ -10,7 +11,7 @@ export const CATEGORY_SHORTCUTS: Record<number, TagCategory> = {
 
 export const VALID_CATEGORIES = Object.values(CATEGORY_SHORTCUTS)
 
-export const parseCsv = (text: string): CSVTag[] => {
+export function parseCsv(text: string): CSVTag[] {
     if (!text) return []
 
     const lines = text.split('\n')
@@ -29,25 +30,29 @@ export const parseCsv = (text: string): CSVTag[] => {
             result.error = 'name required'
         } else if (!VALID_CATEGORIES.includes(result.category)) {
             result.error = 'invalid category'
+        } else if (parts.length > 3) {
+            result.error = 'invalid format'
         }
         return result
     })
 }
 
-export const CSVTagToInternalTag = (tag: CSVTag): InternalTagNew => ({
-    id: null,
-    name: tag.name,
-    category: tag.category,
-    franchise: tag.franchise,
-})
+export function CSVTagToInternalTag(tag: CSVTag): InternalTagNew {
+    return {
+        id: null,
+        name: tag.name,
+        category: tag.category,
+        franchise: tag.franchise,
+    }
+}
 
-export const parseTagToCSVString = (tag: InternalTag | CSVTag): string => {
+export function parseTagToCSVString(tag: InternalTag | CSVTag): string {
     if (!tag) return ''
 
     return `${tag.name.replaceAll('_', ' ')}, ${tag.category}${tag.franchise ? `, ${tag.franchise}` : ''}`
 }
 
-export const parseTagString = (input: string) => {
+export function parseTagString(input: string) {
     input = input.trim()
 
     let franchise = ''
@@ -67,8 +72,31 @@ export const parseTagString = (input: string) => {
     return { franchise, name: tagName }
 }
 
-export const validateTagsCSV = (text: string): boolean => {
+export function validateTagsCSV(text: string): boolean {
     const parsedList = parseCsv(text)
 
     return parsedList.some((item) => item.error)
+}
+
+export function filterTagFunction(tags: InternalTag[]) {
+    return (inputValue: string) => {
+        if (!inputValue || inputValue.length < 2) return []
+
+        const lowerInput = normalize(inputValue)
+
+        return tags
+            .map((tag) => {
+                const nameScore = normalize(tag.name).includes(lowerInput) ? 2 : 0
+                const franchiseScore = normalize(tag.franchise).includes(lowerInput) ? 1 : 0
+                const totalScore = nameScore + franchiseScore
+
+                return { tag, score: totalScore }
+            })
+            .filter((item) => item.score > 0)
+            .sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score
+                return a.tag.name.localeCompare(b.tag.name)
+            })
+            .map((item) => item.tag)
+    }
 }

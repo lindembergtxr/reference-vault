@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { TagsCSVInputRef } from './tagsCSVInput'
-import { CATEGORY_SHORTCUTS, parseCsv } from './tags.utils'
+import { CATEGORY_SHORTCUTS, filterTagFunction, parseCsv } from './tags.utils'
+import { useTagsContext } from '../contexts/tagsCore'
 
 export const useTagsCSVInput = () => {
     const [csvText, setCsvText] = useState('')
@@ -48,15 +49,18 @@ export function useCSVShortcuts({ ref, text, onChange }: UseCSVShortcutsArgs) {
 
             evt.preventDefault()
 
-            const insert = ', ' + shortcut
             const start = el.selectionStart ?? 0
             const end = el.selectionEnd ?? 0
 
-            const updated = text.slice(0, start) + insert + text.slice(end)
+            const before = text.slice(0, start).replace(/,\s*$/, '')
+
+            const updated = before + ', ' + shortcut + text.slice(end)
+
             onChange(updated)
 
             requestAnimationFrame(() => {
-                el.setSelectionRange(start + insert.length, start + insert.length)
+                const pos = before.length + 2 + shortcut.length
+                el.setSelectionRange(pos, pos)
             })
         }
 
@@ -64,4 +68,14 @@ export function useCSVShortcuts({ ref, text, onChange }: UseCSVShortcutsArgs) {
 
         return () => el.removeEventListener('keydown', handler)
     }, [ref, text, onChange])
+}
+
+export function useTagFilter() {
+    const [inputValue, setInputValue] = useState('')
+
+    const { tags } = useTagsContext()
+
+    const filteredTags = useMemo(() => filterTagFunction(tags)(inputValue), [tags, inputValue])
+
+    return { tags, filteredTags, inputValue, setInputValue }
 }
