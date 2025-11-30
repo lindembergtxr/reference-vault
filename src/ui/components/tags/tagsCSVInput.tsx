@@ -1,8 +1,8 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
 import { cn } from '../../utils'
-import { CATEGORY_SHORTCUTS } from './tags.utils'
 import { TagsCSVInputShortcuts } from './tagsCSVInputShortcuts'
+import { useCSVShortcuts } from './tags.hooks'
 
 type TagsCSVInputProps = {
     csvText: string
@@ -15,36 +15,7 @@ export const TagsCSVInput = forwardRef<TagsCSVInputRef, TagsCSVInputProps>(
     ({ csvText, onChange }, ref) => {
         const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-        useEffect(() => {
-            const el = textareaRef.current
-
-            if (!el) return
-
-            const handler = (e: KeyboardEvent) => {
-                if (!e.metaKey) return
-
-                const key = Number(e.key)
-
-                if (!CATEGORY_SHORTCUTS[key]) return
-
-                e.preventDefault()
-
-                const insert = ', ' + CATEGORY_SHORTCUTS[key]
-                const start = el.selectionStart
-                const end = el.selectionEnd
-                const updated = csvText.slice(0, start) + insert + csvText.slice(end)
-
-                onChange(updated)
-
-                requestAnimationFrame(() => {
-                    el.setSelectionRange(start + insert.length, start + insert.length)
-                })
-            }
-
-            el.addEventListener('keydown', handler)
-
-            return () => el.removeEventListener('keydown', handler)
-        }, [csvText, onChange])
+        useCSVShortcuts({ ref: textareaRef, text: csvText, onChange })
 
         useImperativeHandle(ref, () => ({
             focus: () => {
