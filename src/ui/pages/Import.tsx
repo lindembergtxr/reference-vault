@@ -28,7 +28,7 @@ export const ImportPage = () => {
                 refreshData()
                 refreshTags()
                 refreshImages()
-            } else alert(`Commit failed! - ${res.error}`)
+            } else alert(`Commit failed! - ${JSON.stringify(res.error)}`)
         })
     }
 
@@ -47,7 +47,7 @@ export const ImportPage = () => {
                     <Button
                         className={cn(
                             'flex items-center gap-1 pl-3 pr-4 py-2 rounded-md label font-medium',
-                            'bg-aoi-500 text-aoi-100 dark:bg-aoi-300 dark:text-aoi-900',
+                            'bg-aoi-800 text-aoi-100 dark:bg-aoi-300 dark:text-aoi-900 hover:bg-aoi-600',
                             'disabled:bg-gray-200 disabled:text-gray-500'
                         )}
                         onClick={importData}
@@ -59,7 +59,11 @@ export const ImportPage = () => {
             )}
             <div className="flex flex-col px-4 py-6 h-full w-full overflow-hidden">
                 <div className="h-full">
-                    {images.length === 0 && <p>Import something to begin.</p>}
+                    {images.length === 0 && (
+                        <p className="font-mono text-sm text-tetsu-300">
+                            Import something to begin.
+                        </p>
+                    )}
 
                     {images[index] && (
                         <div className="flex gap-3 items-center w-full h-full">

@@ -28,6 +28,10 @@ type ApiEventMap = {
         args: [InternalImage<InternalTagNew>]
         return: { success: boolean; data?: { imageId: string }; error?: unknown }
     }
+    deleteImage: {
+        args: [string]
+        return: { success: boolean; data?: void; error?: unknown }
+    }
 }
 
 interface Window {

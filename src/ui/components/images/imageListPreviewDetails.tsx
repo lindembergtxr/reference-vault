@@ -5,6 +5,7 @@ import { ImageListPreviewEdit } from './imageListPreviewEdit'
 import { EditableTag } from './images.types'
 import { useImageListContext } from '../contexts/imageListCore'
 import { useTagsContext } from '../contexts/tagsCore'
+import { MdOutlineDelete } from 'react-icons/md'
 
 type ImageListPreviewDetailsProps = {
     image: InternalImage
@@ -16,11 +17,18 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
     const [tags, setTags] = useState<EditableTag[]>([])
 
     const { refreshTags } = useTagsContext()
-    const { setImages } = useImageListContext()
+    const { setImages, refreshImages } = useImageListContext()
 
     const discardChanges = () => {
         setIsEdit(false)
         setTags(image.tags.map((tag) => ({ ...tag, status: 'original' })))
+    }
+
+    const deleteImage = () => {
+        window.api.deleteImage(image.id).then((res) => {
+            if (res.success) refreshImages()
+            else alert(`Failed to delete image - ${res.error}`)
+        })
     }
 
     const saveChanges = async () => {
@@ -127,6 +135,17 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
                     onClick={() => setIsEdit(true)}
                 >
                     Edit image
+                </Button>
+
+                <Button
+                    className={cn(
+                        'flex items-center gap-1 caption text-xs bg-transparent text-aoi-800 rounded-md w-fit px-3 py-2',
+                        'outline-none border border-aoi-800',
+                        'hover:bg-red-400 hover:border-red-400 hover:text-red-50 hover:cursor-pointer'
+                    )}
+                    onClick={deleteImage}
+                >
+                    <MdOutlineDelete className="h-3 w-3" /> Delete image
                 </Button>
             </div>
         </div>

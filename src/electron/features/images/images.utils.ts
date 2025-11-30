@@ -9,6 +9,12 @@ export async function getImagePath(imageId: string) {
     return path.join(folder, imageId)
 }
 
+export async function getThumbnailPath(imageId: string) {
+    const folder = await getDestinationFolder('thumbnails')
+
+    return path.join(folder, imageId)
+}
+
 export async function createThumbOnFolder(src: string, outputPath: string) {
     await sharp(src).resize(256, 256, { fit: 'inside' }).toFile(outputPath)
 }

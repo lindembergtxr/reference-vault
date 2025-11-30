@@ -9,13 +9,18 @@ export async function getAllTags() {
 }
 
 export async function createTag(tag: TagDB, context = db) {
-    const statement = context.prepare(`
-        INSERT INTO tags (id, name, franchise, category)
-        VALUES (@id, @name, @franchise, @category)
-        ON CONFLICT(name, franchise, category) DO UPDATE SET id = id
-        RETURNING id;
-    `)
-    const row = statement.get(tag)
+    const createQuery = `
+        INSERT OR IGNORE INTO tags (id, name, franchise, category)
+        VALUES (@id, @name, @franchise, @category);
+    `
+    context.prepare(createQuery).run(tag)
+
+    const readQuery = `
+        SELECT id FROM tags
+        WHERE name = @name AND franchise = @franchise AND category = @category
+        LIMIT 1;
+    `
+    const row = context.prepare(readQuery).get(tag)
 
     if (!row) throw new Error('Failed to insert or retrieve tag')
 

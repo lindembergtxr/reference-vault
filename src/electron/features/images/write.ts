@@ -8,12 +8,14 @@ import * as filesystem from '../../features/filesystem/index.js'
 import { adaptInternalTabToDB, createTag } from '../../features/tags/index.js'
 
 import {
+    deleteImage,
     getTagsForImage,
     linkTagsToImage,
     unlinkTagsFromImage,
     upsertImage,
 } from './images.services.js'
 import { syncImageMetadata } from './metadata.js'
+import { getImagePath, getThumbnailPath } from './images.utils.js'
 
 export async function commitImage(image: InternalImage<InternalTagNew>) {
     return writeImage({ image, situation: 'committed' })
@@ -49,9 +51,11 @@ export async function writeImage({ image, situation }: WriteImageArgs) {
         for (const tag of image.tags) {
             const tagId = await createTag(adaptInternalTabToDB(tag), db)
 
-            tags.push({ ...tag, id: tagId })
+            const newTag = { ...tag, id: tagId }
 
-            await linkTagsToImage({ imageId: image.id, tags: [tag] })
+            tags.push(newTag)
+
+            await linkTagsToImage({ imageId: image.id, tags: [newTag] })
         }
 
         if (image.imagePath) {
@@ -131,6 +135,51 @@ export async function removeTagsFromImage({ imageId, tags }: ImageTagsChangeArgs
         db.prepare('ROLLBACK').run()
 
         logError({ message: `Failed to add tags from image ID=${imageId}`, error })
+
+        return { success: false, error }
+    }
+}
+
+export async function removeImage(imageId: string) {
+    const undoStack: (() => Promise<void>)[] = []
+
+    try {
+        db.prepare('BEGIN').run()
+
+        await deleteImage(imageId)
+
+        const imagePath = await getImagePath(imageId)
+        const thumbnailPath = await getThumbnailPath(imageId)
+
+        if (imagePath && fs.existsSync(imagePath)) {
+            const backup = imagePath + '.bak'
+
+            fs.renameSync(imagePath, backup)
+            undoStack.push(async () => fs.renameSync(backup, imagePath))
+        }
+
+        if (thumbnailPath && fs.existsSync(thumbnailPath)) {
+            const backup = thumbnailPath + '.bak'
+
+            fs.renameSync(thumbnailPath, backup)
+            undoStack.push(async () => fs.renameSync(backup, thumbnailPath))
+        }
+
+        db.prepare('COMMIT').run()
+
+        if (imagePath && fs.existsSync(imagePath + '.bak')) {
+            fs.unlinkSync(imagePath + '.bak')
+        }
+        if (thumbnailPath && fs.existsSync(thumbnailPath + '.bak')) {
+            fs.unlinkSync(thumbnailPath + '.bak')
+        }
+        return { success: true }
+    } catch (error) {
+        db.prepare('ROLLBACK').run()
+
+        await filesystem.rollback(undoStack)
+
+        logError({ message: `Failed to delete image ID=${imageId}`, error })
 
         return { success: false, error }
     }

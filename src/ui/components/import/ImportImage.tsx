@@ -13,7 +13,7 @@ type ImportImageProps = {
 export const ImportImage = ({ image, onCommit }: ImportImageProps) => {
     const [tags, setTags] = useState<CSVTag[]>([])
 
-    const isDirty = tags.some((tag) => tag.error)
+    const isDirty = tags.some((tag) => tag.error) || tags.length === 0
 
     const commit = () => {
         onCommit({ ...image, tags: tags.map(CSVTagToInternalTag) })

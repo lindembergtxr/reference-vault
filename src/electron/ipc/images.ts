@@ -5,6 +5,7 @@ import {
     commitImage,
     addTagsToImage,
     removeTagsFromImage,
+    removeImage,
 } from '../features/images/index.js'
 
 import { ipcAsyncHandle } from './ipc.utils.js'
@@ -21,4 +22,6 @@ export const registerImageIpc = () => {
     ipcAsyncHandle('addTagsToImage', addTagsToImage)
 
     ipcAsyncHandle('removeTagsFromImage', removeTagsFromImage)
+
+    ipcAsyncHandle('deleteImage', removeImage)
 }
