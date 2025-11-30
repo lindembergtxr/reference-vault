@@ -6,7 +6,6 @@ import { Button } from 'react-aria-components'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { useImageListContext } from '../contexts/imageListCore'
 import { useTagsContext } from '../contexts/tagsCore'
-import { useCallback, useEffect, useState } from 'react'
 
 const navbarItems = [
     { link: '', label: 'Home' },
@@ -17,29 +16,13 @@ const navbarItems = [
 export const LayoutMenu = () => {
     const { config } = useConfig()
 
-    const [count, setCount] = useState(0)
-
     const { refreshTags } = useTagsContext()
-    const { refreshImages } = useImageListContext()
-
-    const updateCount = useCallback(() => {
-        window.api.countImages().then((res) => {
-            if (res.success && res.data && typeof res.data === 'number') {
-                setCount(res.data ?? 0)
-                refreshImages()
-            }
-        })
-    }, [refreshImages])
+    const { refreshImages, committedImagesCount } = useImageListContext()
 
     const refresh = () => {
         refreshImages()
         refreshTags()
-        updateCount()
     }
-
-    useEffect(() => {
-        updateCount()
-    }, [updateCount])
 
     return (
         <div className="flex h-full w-full items-center justify-between pr-4">
@@ -68,7 +51,8 @@ export const LayoutMenu = () => {
 
             <div className="flex items-center gap-4">
                 <p className="text-xs font-mono truncate dark:text-tetsu-400">
-                    Total of {count} {count === 1 ? 'image' : 'images'}
+                    Total of {committedImagesCount}{' '}
+                    {committedImagesCount === 1 ? 'image' : 'images'}
                 </p>
 
                 <Button

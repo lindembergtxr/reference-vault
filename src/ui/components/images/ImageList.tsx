@@ -2,12 +2,16 @@ import { cn } from '../../utils'
 
 type ImageListProps = {
     images: InternalImage[]
+    totalCount: number
     openImage: (imageId: string) => void
 }
-export const ImageList = ({ images, openImage }: ImageListProps) => {
+export const ImageList = ({ images, totalCount, openImage }: ImageListProps) => {
     return (
         <div className="flex flex-col h-full w-full">
             <div className="px-4 py-10 h-full overflow-y-auto">
+                <p className="font-mono text-sm text-tetsu-300 dark:text-tetsu-100 mb-3">
+                    {totalCount} {totalCount === 1 ? 'image' : 'images'}
+                </p>
                 <div className="grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
                     {images.map((image) => (
                         <button

@@ -24,5 +24,5 @@ export const HomePage = () => {
         )
     }
 
-    return <ImageList images={paginatedImages} openImage={openImage} />
+    return <ImageList images={paginatedImages} totalCount={images.length} openImage={openImage} />
 }

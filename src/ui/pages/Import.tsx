@@ -51,5 +51,5 @@ export const ImportPage = () => {
             />
         )
 
-    return <ImageList images={images} openImage={openImage} />
+    return <ImageList images={images} totalCount={images.length} openImage={openImage} />
 }
