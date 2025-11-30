@@ -106,8 +106,7 @@ npm run dist:win
 
 #### Import images page
 
-![Imported image page with empty tags](./assets/imported-image-empty.jpg)
-![Imported image page with tags](./assets/imported-image-tags.jpg)
+![Imported image page with tags](./assets/imported-image-tags.png)
 
 #### Tag controls page
 
