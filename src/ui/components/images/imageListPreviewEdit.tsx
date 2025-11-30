@@ -98,6 +98,7 @@ export function ImageListPreviewEdit({
         }
         setIsAdding(false)
     }
+
     const clearTag = () => {
         setIsAdding(false)
         setInputValue('')

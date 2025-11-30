@@ -56,3 +56,11 @@ export async function updateImageTags({ id, tags }: InternalImage) {
     })
     transaction()
 }
+
+export function deleteTagsAndCascadeRelations(tagIds: string[]) {
+    const query = `
+        DELETE FROM tags
+        WHERE id IN (${tagIds.map(() => '?').join(',')});
+    `
+    return db.prepare(query).run(...tagIds)
+}

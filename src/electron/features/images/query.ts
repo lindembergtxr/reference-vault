@@ -1,6 +1,10 @@
 import { logError } from '../../utils/errors.js'
 import { adaptDBImageToInternal } from './images.adapters.js'
-import { countCommittedImages, getImages as getImagesService } from './images.services.js'
+import {
+    countCommittedImages,
+    getImages as getImagesService,
+    getImagesIdsByTagIds as getImagesIdsByTagIdsService,
+} from './images.services.js'
 import { ImageDB } from './images.types.js'
 
 type GetImagesResponse = Promise<InternalImage[]>
@@ -22,6 +26,10 @@ export async function getStagedImages({ tagIds }: GetImagesSearchArgs): GetImage
 
 export async function getCommittedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
     return await getImages({ tagIds, situation: 'committed' })
+}
+
+export async function getImagesIdsByTagIds(tagIds: string[]): Promise<string[]> {
+    return await getImagesIdsByTagIdsService(tagIds).map(({ id }) => id)
 }
 
 export async function countImages() {

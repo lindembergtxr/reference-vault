@@ -1,3 +1,3 @@
-export * from './Home'
-export * from './Import'
-export * from './Tags'
+export * from './home'
+export * from './import'
+export * from './tags'

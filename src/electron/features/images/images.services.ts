@@ -67,7 +67,7 @@ export function deleteImage(id: string) {
 
 export function countCommittedImages() {
     const row = db
-        .prepare(`SELECT COUNT(image_id) AS count FROM images WHERE situation = 'committed';`)
+        .prepare(`SELECT COUNT(id) AS count FROM images WHERE situation = 'committed';`)
         .get() as { count: number }
 
     return row.count
@@ -104,4 +104,14 @@ export async function unlinkTagsFromImage({ imageId, tags }: UnlinkTagsFromImage
     })
 
     transaction()
+}
+
+export function getImagesIdsByTagIds(tagIds: string[]): { id: string }[] {
+    const query = `
+        SELECT DISTINCT i.id
+        FROM images i
+        INNER JOIN image_tags it ON it.image_id = i.id
+        WHERE it.tag_id IN (${tagIds.map(() => '?').join(',')});
+    `
+    return db.prepare(query).all(...tagIds) as { id: string }[]
 }

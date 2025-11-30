@@ -13,3 +13,7 @@ type InternalTagNew = {
     franchise: string
     category: TagCategory
 }
+
+type RemoveTagsPayload = {
+    tagIds: string[]
+}

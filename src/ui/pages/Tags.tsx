@@ -1,9 +1,45 @@
+import { SelectionIndicator, Tab, TabList, TabPanel, Tabs } from 'react-aria-components'
+
 import { TagsCreator } from '../components/tags/tagsCreator'
+import { cn } from '../utils'
+import { TagsRemover } from '../components/tags/tagsRemover'
 
 export const TagsPage = () => {
     return (
-        <div className="flex flex-col gap-3 px-4 py-5 h-full">
-            <TagsCreator />
-        </div>
+        <Tabs defaultSelectedKey="tag-tab-create" className="flex flex-col w-full h-full gap-3">
+            <TabList
+                className="flex items-center w-full bg-tetsu-200 border-b border-tetsu-300"
+                aria-label="Tags-tabs"
+            >
+                <Tab
+                    id="tag-tab-create"
+                    className={cn(
+                        'px-4 py-2 cursor-pointer label text-sm hover:bg-tetsu-200',
+                        'data-[selected]:border-b-2 data-[selected]:border-tetsu-500'
+                    )}
+                >
+                    <span>Create</span>
+                    <SelectionIndicator />
+                </Tab>
+                <Tab
+                    id="tag-tab-remove"
+                    className={cn(
+                        'px-4 py-2 cursor-pointer label text-sm hover:bg-tetsu-200',
+                        'data-[selected]:border-b-2 data-[selected]:border-tetsu-500'
+                    )}
+                >
+                    <span>Remove</span>
+                    <SelectionIndicator />
+                </Tab>
+            </TabList>
+
+            <TabPanel id="tag-tab-create" className="flex w-full flex-1 px-4 py-2 pb-5">
+                <TagsCreator />
+            </TabPanel>
+
+            <TabPanel id="tag-tab-remove" className="flex w-full flex-1 px-4 py-2 pb-5">
+                <TagsRemover />
+            </TabPanel>
+        </Tabs>
     )
 }

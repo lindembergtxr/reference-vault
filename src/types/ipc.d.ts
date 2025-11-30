@@ -23,6 +23,10 @@ type ApiEventMap = {
             error?: unknown
         }
     }
+    removeTags: {
+        args: [RemoveTagsPayload]
+        return: { success: boolean; error?: unknown }
+    }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
         args: [InternalImage<InternalTagNew>]
