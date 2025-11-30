@@ -6,7 +6,7 @@ import { Button } from 'react-aria-components'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { useImageListContext } from '../contexts/imageListCore'
 import { useTagsContext } from '../contexts/tagsCore'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 const navbarItems = [
     { link: '', label: 'Home' },
@@ -22,16 +22,24 @@ export const LayoutMenu = () => {
     const { refreshTags } = useTagsContext()
     const { refreshImages } = useImageListContext()
 
+    const updateCount = useCallback(() => {
+        window.api.countImages().then((res) => {
+            if (res.success && res.data && typeof res.data === 'number') {
+                setCount(res.data ?? 0)
+                refreshImages()
+            }
+        })
+    }, [refreshImages])
+
     const refresh = () => {
         refreshImages()
         refreshTags()
+        updateCount()
     }
 
     useEffect(() => {
-        window.api.countImages().then((res) => {
-            if (res.success && res.data && typeof res.data === 'number') setCount(res.data ?? 0)
-        })
-    }, [])
+        updateCount()
+    }, [updateCount])
 
     return (
         <div className="flex h-full w-full items-center justify-between pr-4">
@@ -66,7 +74,7 @@ export const LayoutMenu = () => {
                 <Button
                     className={cn(
                         'flex items-center justify-center py-2 px-4 gap-1 caption font-semibold',
-                        'rounded outline-none bg-tetsu-800 text-tetsu-100',
+                        'rounded outline-none bg-tetsu-800 text-tetsu-100 border',
                         'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
                         'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200'
                     )}
