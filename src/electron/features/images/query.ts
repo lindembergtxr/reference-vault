@@ -7,36 +7,33 @@ import {
 } from './images.services.js'
 import { ImageDB } from './images.types.js'
 
-type GetImagesResponse = Promise<InternalImage[]>
 export type GetImagesSearchArgs = {
     tagIds?: string[]
 }
 type GetImagesArgs = GetImagesSearchArgs & {
     situation: InternalImage['situation']
 }
-export async function getImages({ situation, tagIds }: GetImagesArgs): GetImagesResponse {
-    const dbFiles = (await getImagesService({ situation, tagIds })) as ImageDB[]
+export function getImages({ situation, tagIds }: GetImagesArgs): InternalImage[] {
+    const dbFiles = getImagesService({ situation, tagIds }) as ImageDB[]
 
     return dbFiles.map(adaptDBImageToInternal)
 }
 
-export async function getStagedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
-    return await getImages({ tagIds, situation: 'pending' })
+export function getStagedImages({ tagIds }: GetImagesSearchArgs): InternalImage[] {
+    return getImages({ tagIds, situation: 'pending' })
 }
 
-export async function getCommittedImages({ tagIds }: GetImagesSearchArgs): GetImagesResponse {
-    return await getImages({ tagIds, situation: 'committed' })
+export function getCommittedImages({ tagIds }: GetImagesSearchArgs): InternalImage[] {
+    return getImages({ tagIds, situation: 'committed' })
 }
 
-export async function getImagesIdsByTagIds(tagIds: string[]): Promise<string[]> {
-    return await getImagesIdsByTagIdsService(tagIds).map(({ id }) => id)
+export function getImagesIdsByTagIds(tagIds: string[]): string[] {
+    return getImagesIdsByTagIdsService(tagIds).map(({ id }) => id)
 }
 
-export async function countImages() {
+export function countImages() {
     try {
-        const count = await countCommittedImages()
-
-        return { success: true, data: count }
+        return { success: true, data: countCommittedImages() }
     } catch (error) {
         logError({ message: 'Failed to count images', error })
 

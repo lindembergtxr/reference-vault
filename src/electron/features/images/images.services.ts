@@ -1,6 +1,5 @@
 import { db } from '../../database/index.js'
 import * as fs from 'fs'
-import * as fsAsync from 'fs/promises'
 import { ImageDB } from './images.types.js'
 import { getDestinationFolder } from '../../config/index.js'
 import path from 'path'
@@ -88,7 +87,7 @@ type LinkTagsToImageArgs = {
     imageId: string
     tags: InternalTagNew[]
 }
-export async function linkTagsToImage({ imageId, tags }: LinkTagsToImageArgs) {
+export function linkTagsToImage({ imageId, tags }: LinkTagsToImageArgs) {
     const insert = db.prepare(`
         INSERT INTO image_tags (image_id, tag_id)
         VALUES (@imageId, @tagId)
@@ -105,7 +104,7 @@ type UnlinkTagsFromImageArgs = {
     imageId: string
     tags: InternalTagNew[]
 }
-export async function unlinkTagsFromImage({ imageId, tags }: UnlinkTagsFromImageArgs) {
+export function unlinkTagsFromImage({ imageId, tags }: UnlinkTagsFromImageArgs) {
     const insert = db.prepare(`
         DELETE FROM image_tags
         WHERE image_id = @imageId AND tag_id = @tagId
@@ -127,7 +126,7 @@ export function getImagesIdsByTagIds(tagIds: string[]): { id: string }[] {
     return db.prepare(query).all(...tagIds) as { id: string }[]
 }
 
-export async function generateImageDBReport() {
+export function generateImageDBReport() {
     const query = `
         SELECT id, image_path, thumbnail_path
         FROM images;
@@ -147,10 +146,10 @@ export async function generateImageDBReport() {
     return broken
 }
 
-export async function generateImageFileReport(folder: 'images' | 'thumbnails') {
-    const folderPath = await getDestinationFolder(folder)
+export function generateImageFileReport(folder: 'images' | 'thumbnails') {
+    const folderPath = getDestinationFolder(folder)
 
-    const imageFiles = await fsAsync.readdir(folderPath)
+    const imageFiles = fs.readdirSync(folderPath)
 
     const broken: string[] = []
 

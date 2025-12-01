@@ -1,5 +1,4 @@
-import fs from 'fs/promises'
-import fsSync from 'fs'
+import fs from 'fs'
 import path from 'path'
 import sharp from 'sharp'
 
@@ -12,40 +11,43 @@ type FileToFolderHandler = {
     destination: string
     mode: 'move' | 'copy'
 }
-async function fileToFolderHandler({ src, destination, mode }: FileToFolderHandler) {
+function fileToFolderHandler({ src, destination, mode }: FileToFolderHandler) {
     const dirname = path.dirname(destination)
 
-    await fs.mkdir(dirname, { recursive: true })
+    fs.mkdirSync(dirname, { recursive: true })
 
     try {
-        if (mode === 'move') await fs.rename(src, destination)
-        else await fs.copyFile(src, destination)
+        if (mode === 'move') fs.renameSync(src, destination)
+        else fs.copyFileSync(src, destination)
     } catch (error: unknown) {
         if (error instanceof Error) {
             const e = error as NodeJS.ErrnoException
 
             if (e.code === 'EXDEV') {
-                await fs.copyFile(src, destination)
+                fs.copyFileSync(src, destination)
 
-                if (mode === 'move') await fs.unlink(src)
+                if (mode === 'move') fs.unlinkSync(src)
             } else {
-                await utils.logError({ message: utils.errorMessages['FailedToMoveFile'](), error })
+                utils.logError({ message: utils.errorMessages['FailedToMoveFile'](), error })
+
                 throw utils.generateError('FailedToMoveFile')
             }
         } else {
             const message = utils.errorMessages['UnknownErrorWhenMovingFile']()
-            await utils.logError({ message, error })
+
+            utils.logError({ message, error })
+
             throw utils.generateError('UnknownErrorWhenMovingFile')
         }
     }
 }
 
-export async function moveFileToFolder(src: string, destination: string) {
-    await fileToFolderHandler({ src, destination, mode: 'move' })
+export function moveFileToFolder(src: string, destination: string) {
+    return fileToFolderHandler({ src, destination, mode: 'move' })
 }
 
-export async function copyFileToFolder(src: string, destination: string) {
-    await fileToFolderHandler({ src, destination, mode: 'copy' })
+export function copyFileToFolder(src: string, destination: string) {
+    return fileToFolderHandler({ src, destination, mode: 'copy' })
 }
 
 export async function copyImageWithCleanup(src: string, destination: string) {
@@ -57,7 +59,7 @@ export async function copyImageWithCleanup(src: string, destination: string) {
     let result: { filename: string; destination: string }
 
     try {
-        await fs.mkdir(tempFolder, { recursive: true })
+        fs.mkdirSync(tempFolder, { recursive: true })
 
         if (['.png', '.jpeg', '.jpg'].includes(ext)) {
             const tempFile = path.join(tempFolder, `${utils.generateId()}.jpg`)
@@ -75,11 +77,9 @@ export async function copyImageWithCleanup(src: string, destination: string) {
             fileToCopy = tempFile
         }
 
-        result = await copyImageToFolder(fileToCopy, destination)
+        result = copyImageToFolder(fileToCopy, destination)
     } finally {
-        if (fileToCopy !== src && fsSync.existsSync(fileToCopy)) {
-            await fs.unlink(fileToCopy)
-        }
+        if (fileToCopy !== src && fs.existsSync(fileToCopy)) fs.unlinkSync(fileToCopy)
     }
     return result
 }

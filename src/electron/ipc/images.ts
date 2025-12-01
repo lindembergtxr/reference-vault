@@ -9,14 +9,14 @@ import {
     countImages,
 } from '../features/images/index.js'
 
-import { ipcAsyncHandle } from './ipc.utils.js'
+import { ipcAsyncHandle, ipcHandle } from './ipc.utils.js'
 
 export const registerImageIpc = () => {
     ipcAsyncHandle('importFiles', importFromFolder)
 
-    ipcAsyncHandle('getStagedFiles', getStagedImages)
+    ipcHandle('getStagedFiles', getStagedImages)
 
-    ipcAsyncHandle('getImageFiles', getCommittedImages)
+    ipcHandle('getImageFiles', getCommittedImages)
 
     ipcAsyncHandle('commitImage', commitImage)
 
@@ -26,5 +26,5 @@ export const registerImageIpc = () => {
 
     ipcAsyncHandle('deleteImage', removeImage)
 
-    ipcAsyncHandle('countImages', countImages)
+    ipcHandle('countImages', countImages)
 }

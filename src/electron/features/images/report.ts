@@ -9,13 +9,12 @@ import {
 export async function generateHealthReport() {
     try {
         return withUnlockedFilesystem(async () => {
-            const totalImages = countAllImages()
-            const database = await generateImageDBReport()
-            const imagesFolder = await generateImageFileReport('images')
-            const thumbnailFolder = await generateImageFileReport('thumbnails')
-
-            const report: HealthReport = { database, imagesFolder, thumbnailFolder, totalImages }
-
+            const report: HealthReport = {
+                totalImages: countAllImages(),
+                database: generateImageDBReport(),
+                imagesFolder: generateImageFileReport('images'),
+                thumbnailFolder: generateImageFileReport('thumbnails'),
+            }
             return { success: true, data: report }
         })
     } catch (error) {

@@ -1,6 +1,6 @@
 import { db } from '../../database/index.js'
 import { logError } from '../../utils/errors.js'
-import { getImagesIdsByTagIds, syncImageMetadata } from '../images/index.js'
+import { adaptInternalTabToDB } from './tags.adapters.js'
 
 import { alterTagValues, deleteTagsAndCascadeRelations } from './tags.services.js'
 
@@ -10,19 +10,10 @@ export async function removeTags({ tagIds }: RemoveTagsPayload) {
     try {
         db.prepare('BEGIN').run()
 
-        const imageIds = await getImagesIdsByTagIds(tagIds)
-
         deleteTagsAndCascadeRelations(tagIds)
 
         db.prepare('COMMIT').run()
 
-        for (const imageId of imageIds) {
-            try {
-                await syncImageMetadata(imageId)
-            } catch (error) {
-                logError({ message: `Failed to sync image ${imageId}`, error })
-            }
-        }
         return { success: true }
     } catch (error) {
         db.prepare('ROLLBACK').run()
@@ -35,10 +26,18 @@ export async function removeTags({ tagIds }: RemoveTagsPayload) {
 
 export async function updateTag(tag: InternalTag) {
     try {
-        await alterTagValues(tag)
+        db.prepare('BEGIN').run()
+
+        alterTagValues(adaptInternalTabToDB(tag))
+
+        db.prepare('COMMIT').run()
+
         return { success: true }
     } catch (error) {
+        db.prepare('ROLLBACK').run()
+
         logError({ message: `Failed to update tag ID=${tag.id}`, error })
+
         return { success: false }
     }
 }

@@ -1,4 +1,4 @@
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 
 import { getUserDataPath, logError, showOpenDialog } from '../../utils/index.js'
@@ -23,14 +23,14 @@ export async function selectFolder() {
     return result.filePaths[0]
 }
 
-export async function createFolder(directory: string) {
-    await fs.mkdir(directory, { recursive: true })
+export function createFolder(directory: string) {
+    fs.mkdirSync(directory, { recursive: true })
 }
 
-export async function getFolderImages(src: string): Promise<string[]> {
+export function getFolderImages(src: string): string[] {
     const imageRegex = /\.(jpe?g|png|gif|webp|bmp|tiff)$/i
 
-    const files = await fs.readdir(src)
+    const files = fs.readdirSync(src)
 
     const fileURLs = files
         .filter((file) => imageRegex.test(file))
@@ -41,7 +41,7 @@ export async function getFolderImages(src: string): Promise<string[]> {
 
 export async function safeDelete(path: string) {
     try {
-        await fs.unlink(path)
+        await fs.promises.unlink(path)
     } catch (error: unknown) {
         if (error instanceof Error) {
             const code = (error as NodeJS.ErrnoException).code

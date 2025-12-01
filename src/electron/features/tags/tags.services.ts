@@ -4,11 +4,11 @@ import { linkTagsToImage } from '../images/images.services.js'
 import { adaptInternalTabToDB } from './tags.adapters.js'
 import { type TagDB } from './tags.types.js'
 
-export async function getAllTags() {
+export function getAllTags() {
     return db.prepare('SELECT * FROM tags ORDER BY id ASC').all() as InternalTag[]
 }
 
-export async function createTag(tag: TagDB, context = db) {
+export function createTag(tag: TagDB, context = db) {
     const createQuery = `
         INSERT OR IGNORE INTO tags (id, name, franchise, category)
         VALUES (@id, @name, @franchise, @category);
@@ -27,7 +27,7 @@ export async function createTag(tag: TagDB, context = db) {
     return (row as { id: string }).id
 }
 
-export async function createTags(tags: InternalTagNew[]): Promise<void> {
+export function createTags(tags: InternalTagNew[]): void {
     const query = `
         INSERT INTO tags (id, name, franchise, category)
         VALUES (@id, @name, @franchise, @category)
@@ -49,7 +49,7 @@ export async function createTags(tags: InternalTagNew[]): Promise<void> {
     insertTags(tags)
 }
 
-export async function updateImageTags({ id, tags }: InternalImage) {
+export function updateImageTags({ id, tags }: InternalImage) {
     const transaction = db.transaction(() => {
         createTags(tags)
         linkTagsToImage({ imageId: id, tags: tags })
@@ -65,7 +65,7 @@ export function deleteTagsAndCascadeRelations(tagIds: string[]) {
     return db.prepare(query).run(...tagIds)
 }
 
-export async function alterTagValues(tag: InternalTag) {
+export function alterTagValues(tag: TagDB) {
     const query = `
         UPDATE tags
         SET name = @name, category = @category, franchise = @franchise

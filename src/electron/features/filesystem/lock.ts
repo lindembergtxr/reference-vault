@@ -4,6 +4,8 @@ import fs from 'fs'
 import { exec } from 'child_process'
 import { getDestinationFolder } from '../../config/index.js'
 import { logError } from '../../utils/errors.js'
+import { db } from '../../database/index.js'
+import { rollback } from './filesystem.utils.js'
 
 let fsBusy = false
 
@@ -58,4 +60,27 @@ export async function withUnlockedFilesystem<T = void>(callback: () => Promise<T
         }
         fsBusy = false
     }
+}
+
+type TransactionalCallback<T> = (undoStack: (() => Promise<void>)[]) => Promise<T>
+
+export async function transactionalFileAndDB<T>(callback: TransactionalCallback<T>): Promise<T> {
+    const undoStack: (() => Promise<void>)[] = []
+
+    return withUnlockedFilesystem(async () => {
+        db.prepare('BEGIN').run()
+        try {
+            const result = await callback(undoStack)
+
+            db.prepare('COMMIT').run()
+
+            return result
+        } catch (error) {
+            db.prepare('ROLLBACK').run()
+
+            await rollback(undoStack)
+
+            throw error
+        }
+    })
 }

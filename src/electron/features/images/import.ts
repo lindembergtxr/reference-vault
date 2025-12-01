@@ -1,55 +1,47 @@
 import * as utils from '../../utils/index.js'
 import * as filesystem from '../filesystem/index.js'
-import { db } from '../../database/index.js'
 
 import { upsertImage } from './images.services.js'
 import { createThumbnailFromImage } from './thumbnail.js'
+import { transactionalFileAndDB } from '../filesystem/lock.js'
 
 export async function importFromFolder() {
     const folderPath = await filesystem.selectFolder()
 
     if (!folderPath) return
 
-    const fileURLs = await filesystem.getFolderImages(folderPath)
+    const fileURLs = filesystem.getFolderImages(folderPath)
     const failures: string[] = []
 
     let success = 0
 
     for (const url of fileURLs) {
-        const undoStack: (() => Promise<void>)[] = []
-
         try {
-            const path = await filesystem.getTemporaryFolderPath('images')
-            const outputDir = await filesystem.getTemporaryFolderPath('thumbnails')
+            await transactionalFileAndDB(async (undoStack) => {
+                const path = filesystem.getTemporaryFolderPath('images')
+                const outputDir = filesystem.getTemporaryFolderPath('thumbnails')
 
-            const { filename, destination } = await filesystem.copyImageWithCleanup(url, path)
+                const { filename, destination } = await filesystem.copyImageWithCleanup(url, path)
 
-            undoStack.push(() => filesystem.safeDelete(destination))
+                undoStack.push(() => filesystem.safeDelete(destination))
 
-            const thumbnailPath = await createThumbnailFromImage({ url: destination, outputDir })
+                const thumbnailPath = createThumbnailFromImage({
+                    url: destination,
+                    outputDir,
+                })
+                undoStack.push(() => filesystem.safeDelete(thumbnailPath))
 
-            undoStack.push(() => filesystem.safeDelete(thumbnailPath))
-
-            db.prepare('BEGIN').run()
-
-            try {
-                await upsertImage({
+                upsertImage({
                     id: filename,
-                    thumbnailPath,
+                    thumbnailPath: outputDir,
                     imagePath: destination,
                     groupId: null,
                     situation: 'pending',
                 })
-                db.prepare('COMMIT').run()
-            } catch (error) {
-                db.prepare('ROLLBACK').run()
-                throw error
-            }
 
-            success++
+                success++
+            })
         } catch (error) {
-            await filesystem.rollback(undoStack)
-
             failures.push(url)
 
             utils.logError({ message: `Failed to create image ${url}`, error })

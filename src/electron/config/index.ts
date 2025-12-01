@@ -10,34 +10,35 @@ const defaultConfig: ConfigData = {
 
 export let localConfig: ConfigData | null = null
 
-export const writeConfig = async (newConfig: Partial<ConfigData>) => {
+export function writeConfig(newConfig: Partial<ConfigData>) {
     if (!localConfig) {
-        await utils.logError({ message: utils.errorMessages['MissingConfig']() })
+        utils.logError({ message: utils.errorMessages['MissingConfig']() })
+
         throw utils.generateError('MissingConfig')
     }
     localConfig = { ...localConfig, ...newConfig }
 
-    await fs.writeFileSync(utils.getConfigPath(), JSON.stringify(localConfig, null, 2))
+    fs.writeFileSync(utils.getConfigPath(), JSON.stringify(localConfig, null, 2))
 
     return localConfig
 }
 
-export const setupConfig = async () => {
+export function setupConfig() {
     const configPath = utils.getConfigPath()
 
     try {
-        await fs.promises.access(configPath)
+        fs.accessSync(configPath)
     } catch {
         const data = JSON.stringify(defaultConfig, null, 2)
 
-        await fs.promises.writeFile(configPath, data, 'utf8')
+        fs.writeFileSync(configPath, data, 'utf8')
     }
-    const raw = await fs.promises.readFile(configPath, 'utf8')
+    const raw = fs.readFileSync(configPath, 'utf8')
 
     localConfig = JSON.parse(raw) as ConfigData
 }
 
-export const getConfig = async (): Promise<ConfigData> => {
+export function getConfig(): ConfigData {
     if (localConfig) return localConfig
 
     let temp: ConfigData
@@ -45,7 +46,7 @@ export const getConfig = async (): Promise<ConfigData> => {
     const configPath = utils.getConfigPath()
 
     try {
-        const data = await fs.promises.readFile(configPath, 'utf8')
+        const data = fs.readFileSync(configPath, 'utf8')
 
         temp = JSON.parse(data)
     } catch {
@@ -53,30 +54,29 @@ export const getConfig = async (): Promise<ConfigData> => {
 
         const data = JSON.stringify(temp, null, 2)
 
-        await fs.promises.writeFile(configPath, data, 'utf8')
+        fs.writeFileSync(configPath, data, 'utf8')
     }
-
     localConfig = temp
 
     return localConfig
 }
 
-export const setTheme = async (theme: ConfigData['theme']) => {
-    return await writeConfig({ theme })
+export function setTheme(theme: ConfigData['theme']) {
+    return writeConfig({ theme })
 }
 
-export const setDestinationFolder = async () => {
-    const folderPath = await selectFolder()
+export async function setDestinationFolder() {
+    const config = getConfig()
 
-    const config = await getConfig()
+    const folderPath = await selectFolder()
 
     if (!folderPath) return config
 
-    return await writeConfig({ outputDir: folderPath })
+    return writeConfig({ outputDir: folderPath })
 }
 
-export const getDestinationFolder = async (folder: 'images' | 'thumbnails') => {
-    const config = await getConfig()
+export function getDestinationFolder(folder: 'images' | 'thumbnails') {
+    const config = getConfig()
 
     if (!config.outputDir) return ''
 
