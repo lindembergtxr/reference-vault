@@ -41,7 +41,7 @@ export const LayoutFolder = () => {
                         ref={buttonRef}
                         className={cn(
                             'flex items-center gap-2 w-fit py-1 px-2',
-                            'border-[1px] border-tetsu-700 rounded-md',
+                            'border border-tetsu-700 rounded',
                             'dark:text-tetsu-300 hover:bg-tetsu-300 dark:hover:text-tetsu-700'
                         )}
                         aria-label="Select folder"

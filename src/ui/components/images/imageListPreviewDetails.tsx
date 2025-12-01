@@ -81,10 +81,10 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
 
     if (!isExpanded) {
         return (
-            <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded-md border border-gray-400 mb-3">
+            <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded border border-gray-400 mb-3">
                 <Button
                     className={cn(
-                        'caption text-xs bg-transparent text-aoi-800 rounded-md border border-aoi-800 w-fit px-3 py-2',
+                        'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-2',
                         'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                     )}
                     onClick={() => setIsExpanded(true)}
@@ -107,7 +107,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
     }
 
     return (
-        <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded-md border border-gray-400 mb-3">
+        <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded border border-gray-400 mb-3">
             <p className="font-mono text-sm flex items-center gap-2">
                 <strong>Title</strong>
                 {image.id}
@@ -120,7 +120,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
             <div className="flex items-center justify-center gap-3 w-full">
                 <Button
                     className={cn(
-                        'caption text-xs bg-transparent text-aoi-800 rounded-md border border-aoi-800 w-fit px-3 py-2',
+                        'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-2',
                         'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                     )}
                     onClick={() => setIsExpanded(false)}
@@ -130,7 +130,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
 
                 <Button
                     className={cn(
-                        'caption text-xs bg-aoi-800 text-aoi-100 rounded-md w-fit px-3 py-2',
+                        'caption text-xs bg-aoi-800 text-aoi-100 rounded w-fit px-3 py-2',
                         'hover:bg-aoi-700 hover:cursor-pointer'
                     )}
                     onClick={() => setIsEdit(true)}
@@ -140,7 +140,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
 
                 <Button
                     className={cn(
-                        'flex items-center gap-1 caption text-xs bg-transparent text-aoi-800 rounded-md w-fit px-3 py-2',
+                        'flex items-center gap-1 caption text-xs bg-transparent text-aoi-800 rounded w-fit px-3 py-2',
                         'outline-none border border-aoi-800',
                         'hover:bg-red-400 hover:border-red-400 hover:text-red-50 hover:cursor-pointer'
                     )}

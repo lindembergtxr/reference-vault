@@ -10,7 +10,7 @@ export const TooltipInfo = ({ text }: TooltipProps) => {
             <Button>
                 <MdInfoOutline size={12} />
             </Button>
-            <AriaTooltip offset={8} className="bg-black text-gray-50 rounded-md px-2 py-1">
+            <AriaTooltip offset={8} className="bg-black text-gray-50 rounded px-2 py-1">
                 <OverlayArrow>
                     <svg width={8} height={8} viewBox="0 0 8 8">
                         <path d="M0 0 L4 4 L8 0" />

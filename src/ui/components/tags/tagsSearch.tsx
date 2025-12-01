@@ -107,7 +107,7 @@ export const TagsSearch = () => {
 
     return (
         <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
-            <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border-[1px] border-tetsu-300/80 dark:border-tetsu-700 rounded-md">
+            <div className="flex flex-col flex-1 gap-2 w-full p-3 overflow-hidden border border-tetsu-300/80 dark:border-tetsu-700 rounded">
                 <p className="font-semibold dark:text-tetsu-300 text-sm">Selected tags</p>
 
                 <ul className="min-h-0 overflow-scroll">
@@ -162,7 +162,7 @@ export const TagsSearch = () => {
                         id="tag-search-input"
                         ref={inputRef}
                         className={cn(
-                            'w-full paragraph-md h-8 px-4 rounded-md font-mono text-xs bg-black text-green-400',
+                            'w-full paragraph-md h-8 px-4 rounded font-mono text-xs bg-black text-green-400',
                             'outline-none border border-black',
                             'hover:bg-gray-900 focus:ring focus:ring-aoi-500 focus:border-aoi-500',
                             'dark:border-black dark:hover:bg-tetsu-800'
@@ -179,7 +179,7 @@ export const TagsSearch = () => {
             <div
                 className={cn(
                     'flex flex-col w-full h-[30vh] overflow-hidden',
-                    'rounded-md border border-tetsu-300/80 dark:border-tetsu-700'
+                    'rounded border border-tetsu-300/80 dark:border-tetsu-700'
                 )}
             >
                 {filteredTags.length > 0 && (
@@ -197,7 +197,7 @@ export const TagsSearch = () => {
                                 id={tag.id}
                                 key={tag.id}
                                 className={cn(
-                                    'hover:bg-tetsu-300/80 hover:cursor-pointer rounded-sm label leading-8 font-normal px-2 truncate',
+                                    'hover:bg-tetsu-300/80 hover:cursor-pointer rounded label leading-8 font-normal px-2 truncate',
                                     'dark:text-tetsu-200',
                                     highlight === index
                                         ? 'bg-tetsu-300/80 dark:bg-tetsu-500/80'

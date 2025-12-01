@@ -58,7 +58,7 @@ export function ImageImportDetails({
                         <div className="flex w-full justify-center mb-2">
                             <Button
                                 className={cn(
-                                    'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded-md font-semibold cursor-pointer border',
+                                    'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded font-semibold cursor-pointer border',
                                     'hover:bg-aoi-700 disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-default',
                                     'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                                 )}

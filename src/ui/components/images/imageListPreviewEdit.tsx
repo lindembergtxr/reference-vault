@@ -92,17 +92,17 @@ export function ImageListPreviewEdit({
     }, [currentTags.length])
 
     return (
-        <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded-md border border-gray-400 mb-3">
+        <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded border border-gray-400 mb-3">
             <div className="flex flex-col gap-2 w-full">
                 <div className="flex items-center w-full justify-end pr-4">
                     {isAdding ? (
-                        <div className="flex flex-col justify-center items-between gap-2 text-aoi-800 rounded-md border border-aoi-800 w-full px-1 py-1">
+                        <div className="flex flex-col justify-center items-between gap-2 text-aoi-800 rounded border border-aoi-800 w-full px-1 py-1">
                             <div className="flex items-center gap-2 w-full h-full">
                                 <input
                                     ref={inputRef}
                                     type="text"
                                     className={cn(
-                                        'w-full rounded-md px-3 py-1 font-mono text-xs bg-aoi-950 text-green-400',
+                                        'w-full rounded px-3 py-1 font-mono text-xs bg-aoi-950 text-green-400',
                                         'outline-none'
                                     )}
                                     placeholder="Type something to see sugestions..."
@@ -113,7 +113,7 @@ export function ImageListPreviewEdit({
                                 <div className="flex items-center gap-1">
                                     <Button
                                         className={cn(
-                                            'caption text-xs bg-aoi-800 text-aoi-100 rounded-md w-fit px-3 py-1',
+                                            'caption text-xs bg-aoi-800 text-aoi-100 rounded w-fit px-3 py-1',
                                             'hover:bg-aoi-600 hover:text-aoi-100 hover:cursor-pointer',
                                             'disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-default'
                                         )}
@@ -125,7 +125,7 @@ export function ImageListPreviewEdit({
 
                                     <Button
                                         className={cn(
-                                            'caption text-xs bg-transparent text-aoi-800 rounded-md w-fit px-2 py-1',
+                                            'caption text-xs bg-transparent text-aoi-800 rounded w-fit px-2 py-1',
                                             'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                                         )}
                                         onClick={clearTag}
@@ -135,7 +135,7 @@ export function ImageListPreviewEdit({
                                 </div>
                             </div>
 
-                            <div className="flex flex-col h-16 w-full overflow-hidden rounded-md border border-gray-400">
+                            <div className="flex flex-col h-16 w-full overflow-hidden rounded border border-gray-400">
                                 <ul className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll">
                                     {filteredTags.map((tag) => (
                                         <li
@@ -155,7 +155,7 @@ export function ImageListPreviewEdit({
                     ) : (
                         <Button
                             className={cn(
-                                'caption text-xs bg-transparent text-aoi-800 rounded-md border border-aoi-800 w-fit px-3 py-1',
+                                'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-1',
                                 'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                             )}
                             onClick={() => setIsAdding(true)}
@@ -184,7 +184,7 @@ export function ImageListPreviewEdit({
                                 <p>{tag.status}</p>
                                 {tag.status !== 'removed' && (
                                     <Button
-                                        className="p-0.5 rounded-md hover:bg-red-300"
+                                        className="p-0.5 rounded hover:bg-red-300"
                                         onClick={() => removeTag(tag)}
                                     >
                                         <MdOutlineClose className="w-3 h-3" />
@@ -192,7 +192,7 @@ export function ImageListPreviewEdit({
                                 )}
                                 {tag.status === 'removed' && (
                                     <Button
-                                        className="p-0.5 rounded-md hover:bg-red-300"
+                                        className="p-0.5 rounded hover:bg-red-300"
                                         onClick={() => undoRemoveTag(tag)}
                                     >
                                         <MdOutlineUndo className="w-3 h-3" />
@@ -207,7 +207,7 @@ export function ImageListPreviewEdit({
             <div className="flex items-center justify-center gap-3 w-full">
                 <Button
                     className={cn(
-                        'caption text-xs bg-transparent text-aoi-800 rounded-md border border-aoi-800 w-fit px-3 py-2',
+                        'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-2',
                         'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                     )}
                     onClick={onClose}
@@ -217,7 +217,7 @@ export function ImageListPreviewEdit({
 
                 <Button
                     className={cn(
-                        'caption text-xs bg-aoi-800 text-aoi-100 rounded-md w-fit px-3 py-2',
+                        'caption text-xs bg-aoi-800 text-aoi-100 rounded w-fit px-3 py-2',
                         'hover:bg-aoi-700 hover:cursor-pointer',
                         'disabled:bg-gray-400 disabled:text-gray-100 disabled:cursor-default'
                     )}

@@ -28,7 +28,7 @@ export const ImageImport = ({ image, onCommit }: ImageImportProps) => {
     }, [])
 
     return (
-        <div className="flex flex-col items-start gap-4 border-[1px] px-8 py-10 w-full h-full rounded-md shadow-md">
+        <div className="flex flex-col items-start gap-4 border px-8 py-10 w-full h-full rounded shadow-md">
             <div className="flex flex-row items-start gap-4 w-full h-full">
                 <div className="flex flex-col gap-4 justify-center w-80">
                     <img
@@ -38,7 +38,7 @@ export const ImageImport = ({ image, onCommit }: ImageImportProps) => {
                         draggable={false}
                     />
 
-                    <p className="flex items-center gap-2 paragraph-sm px-2 py-2 w-full border-[1px] border-gray-200 rounded-sm">
+                    <p className="flex items-center gap-2 paragraph-sm px-2 py-2 w-full border border-gray-200 rounded">
                         <strong>Name:</strong>
                         {image.id}
                     </p>
@@ -53,7 +53,7 @@ export const ImageImport = ({ image, onCommit }: ImageImportProps) => {
             <div className="flex w-full justify-end">
                 <Button
                     className={cn(
-                        'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded-md font-semibold cursor-pointer',
+                        'py-2 px-3 bg-aoi-900 text-aoi-100 caption rounded font-semibold cursor-pointer',
                         'hover:bg-aoi-700 disabled:bg-gray-400 disabled:text-gray-600 disabled:cursor-default'
                     )}
                     isDisabled={isDirty}

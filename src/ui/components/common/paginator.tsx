@@ -28,7 +28,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
         <div className="flex items-center gap-2 p-2">
             <button
                 className={cn(
-                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'px-3 h-8 bg-gray-200 rounded border border-gray-700',
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
                 onClick={() => goToPage(1)}
@@ -39,7 +39,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
             <button
                 className={cn(
-                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'px-3 h-8 bg-gray-200 rounded border border-gray-700',
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
                 onClick={() => goToPage(currentPage - 1)}
@@ -54,7 +54,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
             <button
                 className={cn(
-                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'px-3 h-8 bg-gray-200 rounded border border-gray-700',
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
                 onClick={() => goToPage(currentPage + 1)}
@@ -65,7 +65,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
 
             <button
                 className={cn(
-                    'px-3 h-8 bg-gray-200 rounded-md border-[1px] border-gray-700',
+                    'px-3 h-8 bg-gray-200 rounded border border-gray-700',
                     'hover:bg-gray-400 hover:cursor-pointer disabled:opacity-30 disabled:cursor-default disabled:hover:bg-gray-200'
                 )}
                 onClick={() => goToPage(total)}
@@ -83,13 +83,13 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                     onChange={(e) => setInputPage(Number(e.target.value))}
                     disabled={total === 1}
                     className={cn(
-                        'w-16 px-2 h-8 border-[1px] caption border-gray-700/50 :not(:disabled)hover:bg-gray-100 rounded-md',
+                        'w-16 px-2 h-8 border caption border-gray-700/50 :not(:disabled)hover:bg-gray-100 rounded',
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                     )}
                 />
                 <button
                     className={cn(
-                        'px-2 h-8 bg-aoi-800 rounded-md text-white hover:bg-aoi-900',
+                        'px-2 h-8 bg-aoi-800 rounded text-white hover:bg-aoi-900',
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400',
                         'disabled:bg-gray-400 disabled:text-gray-800'
                     )}

@@ -8,8 +8,8 @@ import { LayoutSidebar } from './layoutSidebar'
 import { LayoutTitle } from './LayoutTitle'
 import { LayoutPaginator } from './LayoutPaginator'
 
-const surfaceCell = 'bg-surface border-[1px] border-tetsu-500/30'
-const elevatedCell = 'bg-elevated border-[1px] border-tetsu-500/30'
+const surfaceCell = 'bg-surface border border-tetsu-500/30'
+const elevatedCell = 'bg-elevated border border-tetsu-500/30'
 
 export const Layout = () => {
     const { config, toggleTheme } = useConfig()
