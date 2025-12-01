@@ -31,7 +31,7 @@ export const TagsInputController = ({ onTagsChange }: TagsInputControllerProps) 
     const addTag = (tag: InternalTag) => {
         csvInputProps.setCsvText((prev) => {
             const lines = prev.split('\n')
-            lines[lines.length - 1] = parseTagToCSVString(tag) + '\n' + ''
+            lines[lines.length - 1] = parseTagToCSVString(tag)
             return lines.join('\n')
         })
         csvInputProps.ref.current?.focus()
