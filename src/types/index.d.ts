@@ -5,5 +5,6 @@
 /// <reference path="./tags.d.ts" />
 /// <reference path="./functions.d.ts" />
 /// <reference path="./errors.d.ts" />
+/// <reference path="./report.d.ts" />
 
 declare module 'node-exiftool'

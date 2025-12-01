@@ -35,7 +35,7 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         setPage(1)
-    }, [search.length])
+    }, [search.length, images.length])
 
     useEffect(() => {
         refreshImages()

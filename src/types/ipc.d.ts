@@ -44,6 +44,10 @@ type ApiEventMap = {
         args: []
         return: { success: boolean; data?: { path: string }; error?: unknown }
     }
+    generateHealthReport: {
+        args: []
+        return: { success: boolean; data?: HealthReport; error?: unknown }
+    }
 }
 
 interface Window {

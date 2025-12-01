@@ -1,4 +1,9 @@
 import { db } from '../../database/index.js'
+import * as fs from 'fs'
+import * as fsAsync from 'fs/promises'
+import { ImageDB } from './images.types.js'
+import { getDestinationFolder } from '../../config/index.js'
+import path from 'path'
 
 type GetImageFilesArgs = {
     situation: InternalImage['situation']
@@ -73,6 +78,12 @@ export function countCommittedImages() {
     return row.count
 }
 
+export function countAllImages() {
+    const row = db.prepare(`SELECT COUNT(id) AS count FROM images;`).get() as { count: number }
+
+    return row.count
+}
+
 type LinkTagsToImageArgs = {
     imageId: string
     tags: InternalTagNew[]
@@ -114,4 +125,50 @@ export function getImagesIdsByTagIds(tagIds: string[]): { id: string }[] {
         WHERE it.tag_id IN (${tagIds.map(() => '?').join(',')});
     `
     return db.prepare(query).all(...tagIds) as { id: string }[]
+}
+
+export async function generateImageDBReport() {
+    const query = `
+        SELECT id, image_path, thumbnail_path
+        FROM images;
+    `
+    const dbImages = db.prepare(query).all() as ImageDB[]
+
+    const broken = []
+
+    for (const { id, image_path, thumbnail_path } of dbImages) {
+        const imgExists = image_path ? fs.existsSync(image_path) : false
+        const thumbExists = thumbnail_path ? fs.existsSync(thumbnail_path) : false
+
+        if (!imgExists || !thumbExists) {
+            broken.push({ id, missingImage: !imgExists, missingThumb: !thumbExists })
+        }
+    }
+    return broken
+}
+
+export async function generateImageFileReport(folder: 'images' | 'thumbnails') {
+    const folderPath = await getDestinationFolder(folder)
+
+    const imageFiles = await fsAsync.readdir(folderPath)
+
+    const broken: string[] = []
+
+    const query = 'SELECT 1 FROM images WHERE id = ?;'
+    const statement = db.prepare(query)
+
+    for (const file of imageFiles) {
+        if (file.startsWith('.')) continue
+
+        const filename = path.basename(file)
+
+        const ext = path.extname(file).toLowerCase()
+
+        if (!['.jpg', '.webp', '.gif'].includes(ext)) continue
+
+        const exists = statement.get(filename)
+
+        if (!exists) broken.push(filename)
+    }
+    return broken
 }

@@ -1,10 +1,11 @@
 import { Button } from 'react-aria-components'
 import { cn, useConfig } from '../utils'
+import { HealthReport } from '../components/report/healthReport'
 
 export const SettingsPage = () => {
     const { config } = useConfig()
 
-    const exportDB = () => {
+    function exportDB() {
         window.api.exportDB().then((res) => {
             if (!res.success) alert(`Failed to export DB! - ${JSON.stringify(res.error)}`)
             else if (res.data) alert(`Database exported successfully to ${res.data.path}`)
@@ -36,6 +37,8 @@ export const SettingsPage = () => {
                     Export DB
                 </Button>
             </div>
+
+            <HealthReport />
         </div>
     )
 }
