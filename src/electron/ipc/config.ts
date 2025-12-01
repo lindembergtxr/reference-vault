@@ -1,4 +1,5 @@
 import { getConfig, setDestinationFolder, setTheme } from '../config/index.js'
+import { copyDatabaseToFolder } from '../features/filesystem/exportDB.js'
 
 import { ipcAsyncHandle } from './ipc.utils.js'
 
@@ -8,4 +9,6 @@ export const registerConfigIpc = () => {
     ipcAsyncHandle('setTheme', setTheme)
 
     ipcAsyncHandle('setDestinationFolder', setDestinationFolder)
+
+    ipcAsyncHandle('exportDB', copyDatabaseToFolder)
 }

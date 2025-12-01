@@ -11,6 +11,7 @@ import { ConfigProvider } from './components/ConfigProvider.js'
 import { Layout } from './components/layout/Layout.js'
 import { ImageListContext } from './components/contexts/imageListContext.js'
 import { TagsContext } from './components/contexts/tagsContext.js'
+import { SettingsPage } from './pages/settings.js'
 
 const main = async () => {
     const root = createRoot(document.getElementById('root')!)
@@ -26,6 +27,7 @@ const main = async () => {
                                     <Route path="" element={<HomePage />} />
                                     <Route path="import" element={<ImportPage />} />
                                     <Route path="tags" element={<TagsPage />} />
+                                    <Route path="settings" element={<SettingsPage />} />
                                 </Route>
                             </Routes>
                         </TagsContext>

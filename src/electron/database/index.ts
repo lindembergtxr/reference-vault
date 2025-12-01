@@ -6,7 +6,7 @@ import { getAppPathHelper, getUserDataPath } from '../utils/index.js'
 
 dotenv.config()
 
-const dbPath = path.join(getUserDataPath(), 'reference_vault.db')
+export const dbPath = path.join(getUserDataPath(), 'reference_vault.db')
 
 fs.mkdirSync(path.dirname(dbPath), { recursive: true })
 

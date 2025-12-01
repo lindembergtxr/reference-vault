@@ -11,6 +11,7 @@ const navbarItems = [
     { link: '', label: 'Home' },
     { link: 'tags', label: 'Tags' },
     { link: 'import', label: 'Import' },
+    { link: 'settings', label: 'Settings' },
 ]
 
 export const LayoutMenu = () => {

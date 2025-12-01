@@ -40,6 +40,10 @@ type ApiEventMap = {
         args: []
         return: { success: boolean; data?: number; error?: unknown }
     }
+    exportDB: {
+        args: []
+        return: { success: boolean; data?: { path: string }; error?: unknown }
+    }
 }
 
 interface Window {
