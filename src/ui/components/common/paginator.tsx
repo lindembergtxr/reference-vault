@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     MdKeyboardArrowLeft,
     MdKeyboardArrowRight,
@@ -23,6 +23,10 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
         onPageChange(newPage)
         setInputPage(newPage)
     }
+
+    useEffect(() => {
+        if (inputPage > total) setInputPage(total)
+    }, [inputPage, total])
 
     return (
         <div className="flex items-center gap-2 p-2">
