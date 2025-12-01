@@ -68,6 +68,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
             })
             setIsEdit(false)
             setIsExpanded(false)
+            refreshImages()
             refreshTags()
         } catch (error) {
             alert(`Operation failed ${error}`)

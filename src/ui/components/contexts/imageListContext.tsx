@@ -34,6 +34,10 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
     const totalPages = Math.ceil(images.length / PAGE_SIZE)
 
     useEffect(() => {
+        setPage(1)
+    }, [search.length])
+
+    useEffect(() => {
         refreshImages()
     }, [refreshImages])
 
