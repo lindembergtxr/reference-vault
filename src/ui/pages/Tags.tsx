@@ -3,6 +3,7 @@ import { SelectionIndicator, Tab, TabList, TabPanel, Tabs } from 'react-aria-com
 import { TagsCreator } from '../components/tags/tagsCreator'
 import { cn } from '../utils'
 import { TagsRemover } from '../components/tags/tagsRemover'
+import { TagsEditor } from '../components/tags/tagsEditor'
 
 export const TagsPage = () => {
     return (
@@ -36,6 +37,18 @@ export const TagsPage = () => {
                     <span>Remove</span>
                     <SelectionIndicator />
                 </Tab>
+
+                <Tab
+                    id="tag-tab-edit"
+                    className={cn(
+                        'px-4 py-2 cursor-pointer label text-sm hover:bg-tetsu-200',
+                        'data-[selected]:border-b-2 data-[selected]:border-tetsu-500 dark:data-[selected]:border-tetsu-200',
+                        'dark:hover:bg-tetsu-600 dark:hover:text-tetsu-200'
+                    )}
+                >
+                    <span>Edit</span>
+                    <SelectionIndicator />
+                </Tab>
             </TabList>
 
             <TabPanel id="tag-tab-create" className="flex w-full flex-1 px-4 py-2 pb-5">
@@ -44,6 +57,10 @@ export const TagsPage = () => {
 
             <TabPanel id="tag-tab-remove" className="flex w-full flex-1 px-4 py-2 pb-5">
                 <TagsRemover />
+            </TabPanel>
+
+            <TabPanel id="tag-tab-edit" className="flex w-full flex-1 px-4 py-2 pb-5">
+                <TagsEditor />
             </TabPanel>
         </Tabs>
     )

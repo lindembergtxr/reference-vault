@@ -1,3 +1,9 @@
+type ApiReturn<T = void> = {
+    success: boolean
+    data?: T
+    error?: unknown
+}
+
 type ApiEventMap = {
     getAllTags: { args: []; return: InternalTag[] }
     getConfig: { args: []; return: ConfigData }
@@ -9,45 +15,23 @@ type ApiEventMap = {
     createTags: { args: [InternalTagNew[]]; return: void }
     addTagsToImage: {
         args: [ImageTagsChangeArgs]
-        return: {
-            success: boolean
-            data?: { imageId: string; tags: InternalTag[] }
-            error?: unknown
-        }
+        return: ApiReturn<{ imageId: string; tags: InternalTag[] }>
     }
     removeTagsFromImage: {
         args: [ImageTagsChangeArgs]
-        return: {
-            success: boolean
-            data?: { imageId: string; tags: InternalTag[] }
-            error?: unknown
-        }
+        return: ApiReturn<{ imageId: string; tags: InternalTag[] }>
     }
-    removeTags: {
-        args: [RemoveTagsPayload]
-        return: { success: boolean; error?: unknown }
-    }
+    removeTags: { args: [RemoveTagsPayload]; return: ApiReturn }
     logError: { args: [LogErrorArgs]; return: void }
     commitImage: {
         args: [InternalImage<InternalTagNew>]
-        return: { success: boolean; data?: { imageId: string }; error?: unknown }
+        return: ApiReturn<{ imageId: string }>
     }
-    deleteImage: {
-        args: [string]
-        return: { success: boolean; data?: void; error?: unknown }
-    }
-    countImages: {
-        args: []
-        return: { success: boolean; data?: number; error?: unknown }
-    }
-    exportDB: {
-        args: []
-        return: { success: boolean; data?: { path: string }; error?: unknown }
-    }
-    generateHealthReport: {
-        args: []
-        return: { success: boolean; data?: HealthReport; error?: unknown }
-    }
+    deleteImage: { args: [string]; return: ApiReturn }
+    countImages: { args: []; return: ApiReturn<number> }
+    exportDB: { args: []; return: ApiReturn<{ path: string }> }
+    generateHealthReport: { args: []; return: ApiReturn<HealthReport> }
+    updateTag: { args: [InternalTag]; return: ApiReturn }
 }
 
 interface Window {

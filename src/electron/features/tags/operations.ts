@@ -2,7 +2,7 @@ import { db } from '../../database/index.js'
 import { logError } from '../../utils/errors.js'
 import { getImagesIdsByTagIds, syncImageMetadata } from '../images/index.js'
 
-import { deleteTagsAndCascadeRelations } from './tags.services.js'
+import { alterTagValues, deleteTagsAndCascadeRelations } from './tags.services.js'
 
 export async function removeTags({ tagIds }: RemoveTagsPayload) {
     if (tagIds.length === 0) return { success: true }
@@ -30,5 +30,15 @@ export async function removeTags({ tagIds }: RemoveTagsPayload) {
         logError({ message: 'Failed to remove tags', error })
 
         return { success: false, error }
+    }
+}
+
+export async function updateTag(tag: InternalTag) {
+    try {
+        await alterTagValues(tag)
+        return { success: true }
+    } catch (error) {
+        logError({ message: `Failed to update tag ID=${tag.id}`, error })
+        return { success: false }
     }
 }

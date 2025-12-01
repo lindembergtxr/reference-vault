@@ -64,3 +64,12 @@ export function deleteTagsAndCascadeRelations(tagIds: string[]) {
     `
     return db.prepare(query).run(...tagIds)
 }
+
+export async function alterTagValues(tag: InternalTag) {
+    const query = `
+        UPDATE tags
+        SET name = @name, category = @category, franchise = @franchise
+        WHERE id = @id;
+    `
+    return db.prepare(query).run(tag)
+}
