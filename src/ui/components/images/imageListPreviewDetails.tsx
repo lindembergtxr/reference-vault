@@ -5,7 +5,7 @@ import { ImageListPreviewEdit } from './imageListPreviewEdit'
 import { EditableTag } from './images.types'
 import { useImageListContext } from '../contexts/imageListCore'
 import { useTagsContext } from '../contexts/tagsCore'
-import { MdOutlineDelete } from 'react-icons/md'
+import { MdOutlineDelete, MdOutlineEdit } from 'react-icons/md'
 
 type ImageListPreviewDetailsProps = {
     image: InternalImage
@@ -13,25 +13,35 @@ type ImageListPreviewDetailsProps = {
 export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps) {
     const [isExpanded, setIsExpanded] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
+    const [confirming, setConfirming] = useState(false)
 
     const [tags, setTags] = useState<EditableTag[]>([])
 
     const { refreshTags } = useTagsContext()
     const { setImages, refreshImages } = useImageListContext()
 
-    const discardChanges = () => {
+    function discardChanges() {
         setIsEdit(false)
         setTags(image.tags.map((tag) => ({ ...tag, status: 'original' })))
     }
 
-    const deleteImage = () => {
+    function deleteImage() {
         window.api.deleteImage(image.id).then((res) => {
             if (res.success) refreshImages()
             else alert(`Failed to delete image - ${res.error}`)
         })
     }
 
-    const saveChanges = async () => {
+    function onDeleteClick() {
+        if (!confirming) setConfirming(true)
+        else deleteImage()
+    }
+
+    function onDeleteBlur() {
+        setConfirming(false)
+    }
+
+    async function saveChanges() {
         try {
             const toRemove: InternalTagNew[] = tags.filter((t) => t.status === 'removed')
             const toAdd: InternalTagNew[] = tags
@@ -117,7 +127,19 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
                 {image.tags.map((tag) => parseTag(tag)).join(', ')}
             </div>
 
-            <div className="flex items-center justify-center gap-3 w-full">
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full gap-3">
+                <Button
+                    className={cn(
+                        'flex items-center gap-1 justify-self-end',
+                        'caption text-xs bg-aoi-800 text-aoi-100 rounded px-3 py-2',
+                        'hover:bg-aoi-700 hover:cursor-pointer'
+                    )}
+                    onClick={() => setIsEdit(true)}
+                >
+                    <MdOutlineEdit className="h-3 w-3" />
+                    Edit image
+                </Button>
+
                 <Button
                     className={cn(
                         'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-2',
@@ -125,28 +147,21 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
                     )}
                     onClick={() => setIsExpanded(false)}
                 >
-                    Collapse details
+                    Hide details
                 </Button>
 
                 <Button
                     className={cn(
-                        'caption text-xs bg-aoi-800 text-aoi-100 rounded w-fit px-3 py-2',
-                        'hover:bg-aoi-700 hover:cursor-pointer'
-                    )}
-                    onClick={() => setIsEdit(true)}
-                >
-                    Edit image
-                </Button>
-
-                <Button
-                    className={cn(
-                        'flex items-center gap-1 caption text-xs bg-transparent text-aoi-800 rounded w-fit px-3 py-2',
-                        'outline-none border border-aoi-800',
+                        'flex items-center gap-1 justify-self-start',
+                        'px-3 py-2 caption text-xs bg-transparent text-aoi-800',
+                        'outline-none rounded border border-aoi-800',
                         'hover:bg-red-400 hover:border-red-400 hover:text-red-50 hover:cursor-pointer'
                     )}
-                    onClick={deleteImage}
+                    onBlur={onDeleteBlur}
+                    onClick={onDeleteClick}
                 >
-                    <MdOutlineDelete className="h-3 w-3" /> Delete image
+                    <MdOutlineDelete className="h-3 w-3" />
+                    {confirming ? 'Yes, delete it' : 'Delete image'}
                 </Button>
             </div>
         </div>

@@ -21,8 +21,8 @@ export const ImagePreviewController = ({
     onClose,
 }: ImagePreviewControllerProps) => {
     return (
-        <div className="absolute top-2 left-2 right-2 z-10 flex justify-between pointer-events-none">
-            <div className="flex gap-2 bg-white backdrop-blur rounded shadow-lg pointer-events-auto">
+        <div className="absolute bottom-2 left-2 right-2 z-10 flex justify-between pointer-events-none">
+            <div className="flex gap-2 bg-tetsu-50 backdrop-blur rounded shadow-lg pointer-events-auto">
                 <div className="flex items-center gap-2">
                     <button
                         className={cn(
@@ -64,7 +64,7 @@ export const ImagePreviewController = ({
 
                 <button
                     className={cn(
-                        'bg-white/80 backdrop-blur px-3 h-10 shadow hover:bg-gray-300 pointer-events-auto',
+                        'bg-tetsu-50 backdrop-blur px-3 h-10 shadow hover:bg-gray-300 pointer-events-auto',
                         'outline-none focus:ring-2 focus:ring-aoi-400 focus:border-aoi-400'
                     )}
                     onClick={onClose}
