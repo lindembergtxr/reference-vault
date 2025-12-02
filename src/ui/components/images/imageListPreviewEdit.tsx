@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
 import { MdOutlineClose, MdOutlineUndo } from 'react-icons/md'
 
-import { cn, parseTag, parseTagFull } from '../../utils'
-import { parseCsv } from '../tags/tags.utils'
+import { cn, parseTag } from '../../utils'
+import { parseCsv, parseTagToCSVString } from '../tags/tags.utils'
 import { useCSVShortcuts, useTagFilter } from '../tags/tags.hooks'
 
 import { EditableTag } from './images.types'
@@ -180,7 +180,7 @@ export function ImageListPreviewEdit({
                                 )}
                                 key={tag.id}
                             >
-                                <p className="w-full">{parseTagFull(tag)}</p>
+                                <p className="w-full">{parseTagToCSVString(tag)}</p>
                                 <p>{tag.status}</p>
                                 {tag.status !== 'removed' && (
                                     <Button

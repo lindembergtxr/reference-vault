@@ -6,7 +6,7 @@ import { cn } from '../../utils'
 import { useTagsContext } from '../contexts/tagsCore'
 
 import { useCSVShortcuts, useTagFilter } from './tags.hooks'
-import { parseCsv, parseTagToCSVString } from './tags.utils'
+import { parseCsv, parseTagToCSVString, parseTagToFullString } from './tags.utils'
 
 export function TagsEditor() {
     const inputRef = useRef<HTMLInputElement>(null)
@@ -137,7 +137,7 @@ export function TagsEditor() {
                                 className="hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer"
                                 onClick={() => selectTag(tag)}
                             >
-                                {parseTagToCSVString(tag)}
+                                {parseTagToFullString(tag)}
                             </li>
                         ))}
                         {filteredTags.length === 0 && (

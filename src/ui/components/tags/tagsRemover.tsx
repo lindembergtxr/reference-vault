@@ -2,10 +2,11 @@ import { useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
 import { MdOutlineClose, MdOutlineDelete } from 'react-icons/md'
 
-import { cn, parseTagFull } from '../../utils'
+import { cn } from '../../utils'
 import { useTagsContext } from '../contexts/tagsCore'
 
 import { useCSVShortcuts, useTagFilter } from './tags.hooks'
+import { parseTagToFullString } from './tags.utils'
 
 export function TagsRemover() {
     const [selectedTags, setSelectedTags] = useState<InternalTag[]>([])
@@ -60,7 +61,7 @@ export function TagsRemover() {
                             className="hover:bg-gray-300 hover:text-gray-900 hover:cursor-pointer"
                             onClick={() => selectTag(tag)}
                         >
-                            {parseTagFull(tag)}
+                            {parseTagToFullString(tag)}
                         </li>
                     ))}
                     {filteredTags.length === 0 && (
@@ -95,7 +96,7 @@ export function TagsRemover() {
                             key={tag.id}
                             className="flex items-center justify-between w-full font-mono text-xs py-0.5 pr-4 hover:bg-gray-300"
                         >
-                            <p className="w-full">{parseTagFull(tag)}</p>
+                            <p className="w-full">{parseTagToFullString(tag)}</p>
 
                             <Button
                                 className="p-2 rounded caption text-sm font-semibold text-black hover:bg-red-300"

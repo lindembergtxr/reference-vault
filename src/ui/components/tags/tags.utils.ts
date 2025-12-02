@@ -52,6 +52,12 @@ export function parseTagToCSVString(tag: InternalTag | CSVTag): string {
     return `${tag.name.replaceAll('_', ' ')}, ${tag.category.replaceAll('_', ' ')}${tag.franchise ? `, ${tag.franchise.replaceAll('_', ' ')}` : ''}`
 }
 
+export function parseTagToFullString(tag: InternalTag | CSVTag): string {
+    if (!tag) return ''
+
+    return `NAME=${tag.name}, CATEGORY=${tag.category}${tag.franchise ? `, FRANCHISE=${tag.franchise}` : ''}`
+}
+
 export function parseTagString(input: string) {
     input = input.trim()
 
