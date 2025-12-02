@@ -43,18 +43,18 @@ async function writeImage({ image, situation }: WriteImageArgs) {
                 tags.push(newTag)
 
                 linkTagsToImage({ imageId: image.id, tags: [newTag] })
+            }
 
-                if (image.imagePath) {
-                    const originalPath = image.imagePath
-                    fs.renameSync(originalPath, imagePath)
-                    undoStack.push(async () => fs.renameSync(imagePath, originalPath))
-                }
+            if (image.imagePath) {
+                const originalPath = image.imagePath
+                fs.renameSync(originalPath, imagePath)
+                undoStack.push(async () => fs.renameSync(imagePath, originalPath))
+            }
 
-                if (image.thumbnailPath) {
-                    const originalThumb = image.thumbnailPath
-                    fs.renameSync(originalThumb, thumbnailPath)
-                    undoStack.push(async () => fs.renameSync(thumbnailPath, originalThumb))
-                }
+            if (image.thumbnailPath) {
+                const originalThumb = image.thumbnailPath
+                fs.renameSync(originalThumb, thumbnailPath)
+                undoStack.push(async () => fs.renameSync(thumbnailPath, originalThumb))
             }
         })
 

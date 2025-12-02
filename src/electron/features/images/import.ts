@@ -33,7 +33,7 @@ export async function importFromFolder() {
 
                 upsertImage({
                     id: filename,
-                    thumbnailPath: outputDir,
+                    thumbnailPath: thumbnailPath,
                     imagePath: destination,
                     groupId: null,
                     situation: 'pending',
