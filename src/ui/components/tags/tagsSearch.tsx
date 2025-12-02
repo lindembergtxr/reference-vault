@@ -18,6 +18,10 @@ export const TagsSearch = () => {
 
     const [selectedTags, setSelectedTags] = useState<InternalTag[]>([])
 
+    const includedCount = selectedTags.reduce((acc, curr) => {
+        return curr.mode === 'include' ? acc + 1 : acc
+    }, 0)
+
     function removeTag(tagId: string) {
         setSelectedTags((prev) => prev.filter((tag) => tag.id !== tagId))
     }
@@ -112,8 +116,11 @@ export const TagsSearch = () => {
                         'flex items-center justify-center py-2 w-full gap-1 caption font-semibold',
                         'rounded outline-none bg-tetsu-800 text-tetsu-100',
                         'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
-                        'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200'
+                        'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200',
+                        'disabled:cursor-default disabled:bg-gray-400 disabled:text-gray-100',
+                        'dark:disabled:bg-gray-500 dark:disabled:text-gray-300'
                     )}
+                    isDisabled={includedCount === 0}
                     onClick={onSearch}
                 >
                     <MdSearch size={16} /> SEARCH

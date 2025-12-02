@@ -17,11 +17,27 @@ export function getImages({ situation, include, exclude }: GetImagesArgs): Inter
 }
 
 export function getStagedImages({ include, exclude }: GetImagesSearchArgs): InternalImage[] {
-    return getImages({ include, exclude, situation: 'pending' })
+    try {
+        if (include?.length === 0)
+            throw new Error('There needs to have at least one array included!')
+
+        return getImages({ include, exclude, situation: 'pending' })
+    } catch (error) {
+        logError({ message: 'Failed to get images', error })
+        return []
+    }
 }
 
 export function getCommittedImages({ include, exclude }: GetImagesSearchArgs): InternalImage[] {
-    return getImages({ include, exclude, situation: 'committed' })
+    try {
+        if (include?.length === 0)
+            throw new Error('There needs to have at least one array included!')
+
+        return getImages({ include, exclude, situation: 'committed' })
+    } catch (error) {
+        logError({ message: 'Failed to get images', error })
+        return []
+    }
 }
 
 export function getImagesIdsByTagIds(tagIds: string[]): string[] {
