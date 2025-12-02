@@ -1,6 +1,12 @@
 import { useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
-import { MdOutlineAdd, MdOutlineClose, MdOutlineRemove, MdSearch } from 'react-icons/md'
+import {
+    MdOutlineAdd,
+    MdOutlineClearAll,
+    MdOutlineClose,
+    MdOutlineRemove,
+    MdSearch,
+} from 'react-icons/md'
 
 import { parseTag } from '../../utils/tags'
 import { cn } from '../../utils/classname'
@@ -59,8 +65,6 @@ export const TagsSearch = () => {
     return (
         <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
             <div className="flex flex-col gap-2 h-full w-full p-3 overflow-hidden border border-tetsu-300/80 dark:border-tetsu-700 rounded">
-                <p className="font-semibold dark:text-tetsu-300 text-sm">Selected tags</p>
-
                 <ul className="min-h-0 overflow-scroll">
                     {selectedTags.map((searchTag, index) => (
                         <li
@@ -92,7 +96,7 @@ export const TagsSearch = () => {
                     ))}
                     {selectedTags.length === 0 && (
                         <li className="font-mono text-xs font-normal text-tetsu-300 dark:text-tetsu-500">
-                            No tag selected to search...
+                            No tag selected...
                         </li>
                     )}
                 </ul>
@@ -101,19 +105,20 @@ export const TagsSearch = () => {
             <div className="flex w-full items-center gap-4">
                 <Button
                     className={cn(
-                        'flex items-center caption font-semibold px-3 py-2 text-gray-800 whitespace-nowrap',
+                        'flex items-center justify-center gap-1 caption font-semibold w-1/2 py-2 text-gray-800 whitespace-nowrap',
                         'rounded border border-tetsu-800',
                         'hover:bg-tetsu-700 hover:text-tetsu-100 hover:cursor-pointer',
                         'dark:border-tetsu-300 dark:text-tetsu-200 dark:hover:bg-tetsu-200 dark:hover:text-tetsu-700'
                     )}
                     onClick={() => clearSearch()}
                 >
-                    CLEAR SEARCH
+                    <MdOutlineClearAll className="w-4 h-4" />
+                    CLEAR
                 </Button>
 
                 <Button
                     className={cn(
-                        'flex items-center justify-center py-2 w-full gap-1 caption font-semibold',
+                        'flex items-center justify-center py-2 w-1/2 gap-1 caption font-semibold',
                         'rounded outline-none bg-tetsu-800 text-tetsu-100',
                         'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
                         'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200',
@@ -123,7 +128,7 @@ export const TagsSearch = () => {
                     isDisabled={includedCount === 0}
                     onClick={onSearch}
                 >
-                    <MdSearch size={16} /> SEARCH
+                    <MdSearch className="w-4 h-4" /> SEARCH
                 </Button>
             </div>
 

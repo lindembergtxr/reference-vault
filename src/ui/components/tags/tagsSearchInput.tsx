@@ -148,7 +148,7 @@ export const TagsSearchInput = ({
                 )}
                 {tags.length === 0 && (
                     <li className="font-mono text-xs font-normal text-tetsu-300 dark:text-tetsu-500 pl-3 pt-3">
-                        Type something for suggestions...
+                        Nothing to suggest...
                     </li>
                 )}
             </div>
