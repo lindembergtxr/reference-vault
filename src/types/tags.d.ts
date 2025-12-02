@@ -5,6 +5,7 @@ type InternalTag = {
     name: string
     franchise: string
     category: TagCategory
+    mode?: 'include' | 'exclude'
 }
 
 type InternalTagNew = {

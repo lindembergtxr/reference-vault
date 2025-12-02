@@ -18,7 +18,10 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
     const refreshImages = useCallback(() => {
         if (search.length > 0) {
             window.api
-                .getImageFiles({ tagIds: search.map((tag) => tag.id) })
+                .getImageFiles({
+                    include: search.filter((tag) => tag.mode !== 'exclude').map((tag) => tag.id),
+                    exclude: search.filter((tag) => tag.mode === 'exclude').map((tag) => tag.id),
+                } satisfies GetImagesSearchArgs)
                 .then((res) => setImages(res.filter((images) => images?.thumbnailPath)))
         } else setImages([])
         updateCount()

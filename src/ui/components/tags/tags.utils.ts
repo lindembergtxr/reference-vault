@@ -49,7 +49,7 @@ export function CSVTagToInternalTag(tag: CSVTag): InternalTagNew {
 export function parseTagToCSVString(tag: InternalTag | CSVTag): string {
     if (!tag) return ''
 
-    return `${tag.name.replaceAll('_', ' ')}, ${tag.category}${tag.franchise ? `, ${tag.franchise}` : ''}`
+    return `${tag.name.replaceAll('_', ' ')}, ${tag.category.replaceAll('_', ' ')}${tag.franchise ? `, ${tag.franchise.replaceAll('_', ' ')}` : ''}`
 }
 
 export function parseTagString(input: string) {

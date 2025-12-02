@@ -6,9 +6,10 @@ import path from 'path'
 
 type GetImageFilesArgs = {
     situation: InternalImage['situation']
-    tagIds?: string[]
+    include?: string[]
+    exclude?: string[]
 }
-export function getImages({ situation, tagIds }: GetImageFilesArgs) {
+export function getImages({ situation, include, exclude }: GetImageFilesArgs) {
     let query = `
         SELECT i.*,
             COALESCE(
@@ -24,17 +25,28 @@ export function getImages({ situation, tagIds }: GetImageFilesArgs) {
     `
     const params: (string | number)[] = [situation]
 
-    if (tagIds && tagIds.length > 0) {
+    if (include && include.length > 0) {
         query += `
             AND i.id IN (
                 SELECT image_id
                 FROM image_tags
-                WHERE tag_id IN (${tagIds.map(() => '?').join(',')})
+                WHERE tag_id IN (${include.map(() => '?').join(',')})
                 GROUP BY image_id
                 HAVING COUNT(DISTINCT tag_id) = ?
             )
         `
-        params.push(...tagIds, tagIds.length)
+        params.push(...include, include.length)
+    }
+
+    if (exclude && exclude.length > 0) {
+        query += `
+            AND i.id NOT IN (
+                SELECT image_id
+                FROM image_tags
+                WHERE tag_id IN (${exclude.map(() => '?').join(',')})
+            )
+        `
+        params.push(...exclude)
     }
 
     query += 'GROUP BY i.id ORDER BY i.id;'

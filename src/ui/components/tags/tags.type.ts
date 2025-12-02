@@ -4,3 +4,7 @@ export type CSVTag = Omit<InternalTagNew, 'id'> & {
     line: number
     error?: string
 }
+
+export type LocalTag = InternalTag & {
+    mode: 'include' | 'exclude'
+}

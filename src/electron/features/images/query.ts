@@ -7,24 +7,21 @@ import {
 } from './images.services.js'
 import { ImageDB } from './images.types.js'
 
-export type GetImagesSearchArgs = {
-    tagIds?: string[]
-}
 type GetImagesArgs = GetImagesSearchArgs & {
     situation: InternalImage['situation']
 }
-export function getImages({ situation, tagIds }: GetImagesArgs): InternalImage[] {
-    const dbFiles = getImagesService({ situation, tagIds }) as ImageDB[]
+export function getImages({ situation, include, exclude }: GetImagesArgs): InternalImage[] {
+    const dbFiles = getImagesService({ situation, include, exclude }) as ImageDB[]
 
     return dbFiles.map(adaptDBImageToInternal)
 }
 
-export function getStagedImages({ tagIds }: GetImagesSearchArgs): InternalImage[] {
-    return getImages({ tagIds, situation: 'pending' })
+export function getStagedImages({ include, exclude }: GetImagesSearchArgs): InternalImage[] {
+    return getImages({ include, exclude, situation: 'pending' })
 }
 
-export function getCommittedImages({ tagIds }: GetImagesSearchArgs): InternalImage[] {
-    return getImages({ tagIds, situation: 'committed' })
+export function getCommittedImages({ include, exclude }: GetImagesSearchArgs): InternalImage[] {
+    return getImages({ include, exclude, situation: 'committed' })
 }
 
 export function getImagesIdsByTagIds(tagIds: string[]): string[] {

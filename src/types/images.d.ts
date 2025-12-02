@@ -9,6 +9,11 @@ interface InternalImage<T = InternalTag> {
     situation: ImageSituation
 }
 
+type GetImagesSearchArgs = {
+    include?: string[]
+    exclude?: string[]
+}
+
 type ImageTagsChangeArgs = {
     imageId: string
     tags: InternalTagNew[]
