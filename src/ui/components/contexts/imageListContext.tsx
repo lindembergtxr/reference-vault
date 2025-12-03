@@ -6,7 +6,8 @@ const PAGE_SIZE = 50
 export const ImageListContext = ({ children }: PropsWithChildren) => {
     const [search, setSearch] = useState<InternalTag[]>([])
     const [images, setImages] = useState<InternalImage[]>([])
-    const [page, setPage] = useState<number>(1)
+    const [page, setPage] = useState(1)
+    const [scrollPosition, setScrollPosition] = useState(1)
     const [committedImagesCount, setCount] = useState(0)
 
     const updateCount = useCallback(() => {
@@ -38,7 +39,11 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
         setPage(1)
-    }, [search.length, images.length])
+    }, [search.length])
+
+    useEffect(() => {
+        setPage((prev) => Math.min(prev, Math.ceil(images.length / PAGE_SIZE) || 1))
+    }, [images.length])
 
     useEffect(() => {
         refreshImages()
@@ -53,6 +58,8 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
                 paginatedImages,
                 search,
                 committedImagesCount,
+                scrollPosition,
+                setScrollPosition,
                 setSearch,
                 setImages,
                 setPage,

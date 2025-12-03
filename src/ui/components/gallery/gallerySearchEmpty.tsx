@@ -1,4 +1,4 @@
-export function ImageListEmpty() {
+export function GallerySearchEmpty() {
     return (
         <div className="flex h-full w-full justify-center p-10">
             <p className="caption font-mono text-sm text-tetsu-400">

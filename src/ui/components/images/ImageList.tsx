@@ -1,14 +1,16 @@
+import { RefObject } from 'react'
 import { cn } from '../../utils'
 
 type ImageListProps = {
+    divRef?: RefObject<HTMLDivElement | null>
     images: InternalImage[]
     totalCount: number
     openImage: (imageId: string) => void
 }
-export const ImageList = ({ images, totalCount, openImage }: ImageListProps) => {
+export const ImageList = ({ divRef, images, totalCount, openImage }: ImageListProps) => {
     return (
         <div className="flex flex-col h-full w-full">
-            <div className="px-4 py-10 h-full overflow-y-auto">
+            <div ref={divRef} className="px-4 py-10 h-full overflow-y-auto">
                 <p className="font-mono text-sm text-tetsu-300 dark:text-tetsu-100 mb-3">
                     {totalCount} {totalCount === 1 ? 'image' : 'images'}
                 </p>

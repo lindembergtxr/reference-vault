@@ -5,6 +5,8 @@ export type ImportContextType = {
     setImages: Dispatch<SetStateAction<InternalImage[]>>
     page: number
     setPage: Dispatch<SetStateAction<number>>
+    scrollPosition: number
+    setScrollPosition: Dispatch<SetStateAction<number>>
     totalPages: number
     search: InternalTag[]
     committedImagesCount: number

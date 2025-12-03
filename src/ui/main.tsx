@@ -6,7 +6,7 @@ import './styles/index.css'
 
 import './errorLogging.js'
 
-import { HomePage, ImportPage, TagsPage } from './pages'
+import { Gallery, ImportPage, TagsPage } from './pages'
 import { ConfigProvider } from './components/ConfigProvider.js'
 import { Layout } from './components/layout/Layout.js'
 import { ImageListContext } from './components/contexts/imageListContext.js'
@@ -24,7 +24,7 @@ const main = async () => {
                         <TagsContext>
                             <Routes>
                                 <Route element={<Layout />}>
-                                    <Route path="" element={<HomePage />} />
+                                    <Route path="" element={<Gallery />} />
                                     <Route path="import" element={<ImportPage />} />
                                     <Route path="tags" element={<TagsPage />} />
                                     <Route path="settings" element={<SettingsPage />} />
