@@ -8,25 +8,48 @@ import { app, dialog, BrowserWindow, ipcMain, WebContents, WebFrameMain } from '
     creating these wrappers and using them instead we can mock these functions instead.
 */
 
-export const getAppPathHelper = () => app.getAppPath()
+export function getAppPathHelper() {
+    try {
+        return app.getAppPath()
+    } catch (error) {
+        console.error('Failed to resolve app path', error)
 
-export const getUserDataPath = () => app.getPath('userData')
+        throw new Error('Critical failure: cannot resolve app installation path')
+    }
+}
 
-export const showOpenDialog = () => dialog.showOpenDialog({ properties: ['openDirectory'] })
+export function getUserDataPath() {
+    try {
+        return app.getPath('userData')
+    } catch (error) {
+        console.error('Failed to resolve userData path', error)
 
-export const createBrowserWindow = (options: Electron.BrowserWindowConstructorOptions) => {
+        throw new Error('Critical failure: cannot resolve userData path')
+    }
+}
+
+export async function showOpenDialog() {
+    try {
+        return await dialog.showOpenDialog({ properties: ['openDirectory'] })
+    } catch (error) {
+        console.error('Failed to open dialog', error)
+        return { canceled: true, filePaths: [] }
+    }
+}
+
+export function createBrowserWindow(options: Electron.BrowserWindowConstructorOptions) {
     return new BrowserWindow(options)
 }
 
-export const whenElectronAppReady = () => {
+export function whenElectronAppReady() {
     return app.whenReady()
 }
 
-export const handleWrapper = (...args: Parameters<Electron.IpcMain['handle']>) => {
+export function handleWrapper(...args: Parameters<Electron.IpcMain['handle']>) {
     return ipcMain.handle(...args)
 }
 
-export const onWrapper = (...args: Parameters<Electron.IpcMain['on']>) => {
+export function onWrapper(...args: Parameters<Electron.IpcMain['on']>) {
     return ipcMain.on(...args)
 }
 
