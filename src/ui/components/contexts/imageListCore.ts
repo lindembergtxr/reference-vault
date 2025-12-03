@@ -4,7 +4,6 @@ export type ImportContextType = {
     images: InternalImage[]
     setImages: Dispatch<SetStateAction<InternalImage[]>>
     duplicateImages: InternalImage[]
-    setDuplicateImages: Dispatch<SetStateAction<InternalImage[]>>
     page: number
     setPage: Dispatch<SetStateAction<number>>
     scrollPosition: number

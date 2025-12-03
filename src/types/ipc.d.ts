@@ -28,6 +28,7 @@ type ApiEventMap = {
         return: ApiReturn<{ imageId: string }>
     }
     deleteImage: { args: [string]; return: ApiReturn }
+    batchDeleteImages: { args: [Array<string>]; return: ApiReturn }
     countImages: { args: []; return: ApiReturn<number> }
     exportDB: { args: []; return: ApiReturn<{ path: string }> }
     generateHealthReport: { args: []; return: ApiReturn<HealthReport> }

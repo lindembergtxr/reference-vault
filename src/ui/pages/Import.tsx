@@ -10,7 +10,7 @@ import { ImageList } from '../components/images/imageList'
 export const ImportPage = () => {
     const [images, setImages] = useState<InternalImage[]>([])
 
-    const { refreshImages } = useImageListContext()
+    const { refresh } = useImageListContext()
     const { refreshTags } = useTagsContext()
 
     const { preview, openImage, closePreview, ...previewProps } = useImagePreview({ images })
@@ -26,7 +26,7 @@ export const ImportPage = () => {
             if (res.success) {
                 refreshData()
                 refreshTags()
-                refreshImages()
+                refresh()
             } else {
                 alert(`Commit failed! - ${JSON.stringify(res.error)}`)
             }

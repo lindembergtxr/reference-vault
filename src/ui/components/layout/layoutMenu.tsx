@@ -18,10 +18,10 @@ export const LayoutMenu = () => {
     const { config } = useConfig()
 
     const { refreshTags } = useTagsContext()
-    const { refreshImages, committedImagesCount } = useImageListContext()
+    const { refresh, committedImagesCount } = useImageListContext()
 
-    const refresh = () => {
-        refreshImages()
+    const refreshData = () => {
+        refresh()
         refreshTags()
     }
 
@@ -63,7 +63,7 @@ export const LayoutMenu = () => {
                         'hover:bg-aoi-800 focus:ring-2 focus:ring-aoi-400 focus:border focus:border-aoi-400',
                         'dark:bg-tetsu-200 dark:text-tetsu-700 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-200'
                     )}
-                    onClick={refresh}
+                    onClick={refreshData}
                 >
                     <MdOutlineRefresh className="h-4 w-4" /> REFRESH
                 </Button>

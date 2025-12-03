@@ -31,6 +31,7 @@ electron.contextBridge.exposeInMainWorld('api', {
     removeTagsFromImage: (args) => ipcInvoke('removeTagsFromImage', args),
     removeTags: (args) => ipcInvoke('removeTags', args),
     deleteImage: (args) => ipcInvoke('deleteImage', args),
+    batchDeleteImages: (args) => ipcInvoke('batchDeleteImages', args),
     countImages: () => ipcInvoke('countImages'),
     exportDB: () => ipcInvoke('exportDB'),
     generateHealthReport: () => ipcInvoke('generateHealthReport'),

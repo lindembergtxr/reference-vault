@@ -8,6 +8,7 @@ import {
     removeImage,
     countImages,
     getDuplicateImages,
+    batchRemoveImages,
 } from '../features/images/index.js'
 
 import { ipcAsyncHandle, ipcHandle } from './ipc.utils.js'
@@ -26,6 +27,8 @@ export const registerImageIpc = () => {
     ipcAsyncHandle('removeTagsFromImage', removeTagsFromImage)
 
     ipcAsyncHandle('deleteImage', removeImage)
+
+    ipcAsyncHandle('batchDeleteImages', batchRemoveImages)
 
     ipcHandle('countImages', countImages)
 

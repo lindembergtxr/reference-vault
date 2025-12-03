@@ -73,7 +73,6 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
                 setScrollPosition,
                 setSearch,
                 setImages,
-                setDuplicateImages,
                 setPage,
                 refresh,
             }}

@@ -153,3 +153,37 @@ export async function removeImage(imageId: string) {
         return { success: false, error }
     }
 }
+
+export async function batchRemoveImages(imageIds: string[]) {
+    try {
+        await transactionalFileAndDB(async (undoStack) => {
+            for (const imageId of imageIds) {
+                deleteImage(imageId)
+
+                const imagePath = getImagePath(imageId)
+                const thumbnailPath = getThumbnailPath(imageId)
+
+                if (imagePath && fs.existsSync(imagePath)) {
+                    const backup = imagePath + '.bak'
+
+                    fs.renameSync(imagePath, backup)
+                    undoStack.push(async () => fs.renameSync(backup, imagePath))
+                    fs.unlinkSync(backup)
+                }
+
+                if (thumbnailPath && fs.existsSync(thumbnailPath)) {
+                    const backup = thumbnailPath + '.bak'
+
+                    fs.renameSync(thumbnailPath, backup)
+                    undoStack.push(async () => fs.renameSync(backup, thumbnailPath))
+                    fs.unlinkSync(backup)
+                }
+            }
+        })
+
+        return { success: true }
+    } catch (error) {
+        logError({ message: `Failed to batch delete images`, error })
+        return { success: false, error }
+    }
+}
