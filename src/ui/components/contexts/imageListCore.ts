@@ -3,6 +3,8 @@ import { createContext, useContext, type Dispatch, type SetStateAction } from 'r
 export type ImportContextType = {
     images: InternalImage[]
     setImages: Dispatch<SetStateAction<InternalImage[]>>
+    duplicateImages: InternalImage[]
+    setDuplicateImages: Dispatch<SetStateAction<InternalImage[]>>
     page: number
     setPage: Dispatch<SetStateAction<number>>
     scrollPosition: number
@@ -12,7 +14,7 @@ export type ImportContextType = {
     committedImagesCount: number
     setSearch: Dispatch<SetStateAction<InternalTag[]>>
     paginatedImages: InternalImage[]
-    refreshImages: () => void
+    refresh: () => void
 }
 
 export const Context = createContext<ImportContextType | undefined>(undefined)

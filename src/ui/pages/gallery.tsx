@@ -1,6 +1,7 @@
 import { SelectionIndicator, Tab, TabList, TabPanel, Tabs } from 'react-aria-components'
 import { cn } from '../utils'
 import { GallerySearch } from '../components/gallery/gallerySearch'
+import { GalleryDuplicates } from '../components/gallery/galleryDuplicates'
 
 export const Gallery = () => {
     return (
@@ -40,11 +41,8 @@ export const Gallery = () => {
                 <GallerySearch />
             </TabPanel>
 
-            <TabPanel
-                id="gallery-tab-duplicates"
-                className="flex w-full flex-1 px-4 py-2 pb-5 overflow-hidden"
-            >
-                <span>Duplicates</span>
+            <TabPanel id="gallery-tab-duplicates" className="flex w-full flex-1 overflow-hidden">
+                <GalleryDuplicates />
             </TabPanel>
         </Tabs>
     )

@@ -35,4 +35,5 @@ electron.contextBridge.exposeInMainWorld('api', {
     exportDB: () => ipcInvoke('exportDB'),
     generateHealthReport: () => ipcInvoke('generateHealthReport'),
     updateTag: (args) => ipcInvoke('updateTag', args),
+    getDuplicateImages: () => ipcInvoke('getDuplicateImages'),
 } satisfies Window['api'])

@@ -6,6 +6,7 @@ const PAGE_SIZE = 50
 export const ImageListContext = ({ children }: PropsWithChildren) => {
     const [search, setSearch] = useState<InternalTag[]>([])
     const [images, setImages] = useState<InternalImage[]>([])
+    const [duplicateImages, setDuplicateImages] = useState<InternalImage[]>([])
     const [page, setPage] = useState(1)
     const [scrollPosition, setScrollPosition] = useState(1)
     const [committedImagesCount, setCount] = useState(0)
@@ -28,6 +29,15 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
         updateCount()
     }, [search, updateCount])
 
+    const refreshDuplicateImages = useCallback(() => {
+        window.api.getDuplicateImages().then((res) => setDuplicateImages(res))
+    }, [])
+
+    const refresh = useCallback(() => {
+        refreshImages()
+        refreshDuplicateImages()
+    }, [refreshDuplicateImages, refreshImages])
+
     const paginatedImages = useMemo(() => {
         const startIndex = (page - 1) * PAGE_SIZE
         const endIndex = startIndex + PAGE_SIZE
@@ -46,13 +56,14 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
     }, [images.length])
 
     useEffect(() => {
-        refreshImages()
-    }, [refreshImages])
+        refresh()
+    }, [refresh])
 
     return (
         <Context
             value={{
                 images,
+                duplicateImages,
                 page,
                 totalPages,
                 paginatedImages,
@@ -62,8 +73,9 @@ export const ImageListContext = ({ children }: PropsWithChildren) => {
                 setScrollPosition,
                 setSearch,
                 setImages,
+                setDuplicateImages,
                 setPage,
-                refreshImages,
+                refresh,
             }}
         >
             {children}

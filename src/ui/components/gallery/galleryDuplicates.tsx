@@ -1,21 +1,26 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useImageListContext } from '../contexts/imageListCore'
 import { ImageList } from '../images/imageList'
 import { ImageListPreview } from '../images/imageListPreview'
 import { useImagePreview } from '../images/images.hooks'
 
-import { GallerySearchEmpty } from './gallerySearchEmpty'
+import { GalleryDuplicatesEmpty } from './galleryDuplicatesEmpty'
+import { useImageListContext } from '../contexts/imageListCore'
 
-export function GallerySearch() {
-    const { images, page, paginatedImages, scrollPosition, setScrollPosition } =
-        useImageListContext()
+export function GalleryDuplicates() {
+    const [scrollPosition, setScrollPosition] = useState(0)
 
-    const { preview, openImage, ...previewProps } = useImagePreview({ images })
+    const { duplicateImages, setDuplicateImages } = useImageListContext()
 
-    const currentIndex = images.findIndex((img) => preview && img.id === preview.id)
+    const { preview, openImage, ...previewProps } = useImagePreview({ images: duplicateImages })
+
+    const currentIndex = duplicateImages.findIndex((img) => preview && img.id === preview.id)
 
     const divRef = useRef<HTMLDivElement>(null)
+
+    function refreshData() {
+        window.api.getDuplicateImages().then((res) => setDuplicateImages(res))
+    }
 
     function onImageOpen(id: string) {
         const container = divRef.current
@@ -35,25 +40,18 @@ export function GallerySearch() {
     }, [preview])
 
     useEffect(() => {
-        requestAnimationFrame(() => {
-            if (divRef.current) divRef.current.scrollTop = 0
-        })
         setScrollPosition(0)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page])
-
-    useEffect(() => {
-        setScrollPosition(0)
+        refreshData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    if (images.length === 0) return <GallerySearchEmpty />
+    if (duplicateImages.length === 0) return <GalleryDuplicatesEmpty />
 
     if (preview) {
         return (
             <ImageListPreview
                 preview={preview}
-                disableNext={currentIndex === images.length - 1}
+                disableNext={currentIndex === duplicateImages.length - 1}
                 disablePrev={currentIndex === 0}
                 {...previewProps}
             />
@@ -63,8 +61,8 @@ export function GallerySearch() {
     return (
         <ImageList
             divRef={divRef}
-            images={paginatedImages}
-            totalCount={images.length}
+            images={duplicateImages}
+            totalCount={duplicateImages.length}
             openImage={onImageOpen}
         />
     )

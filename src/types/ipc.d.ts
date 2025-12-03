@@ -32,6 +32,7 @@ type ApiEventMap = {
     exportDB: { args: []; return: ApiReturn<{ path: string }> }
     generateHealthReport: { args: []; return: ApiReturn<HealthReport> }
     updateTag: { args: [InternalTag]; return: ApiReturn }
+    getDuplicateImages: { args: []; return: InternalImage[] }
 }
 
 interface Window {

@@ -4,6 +4,7 @@ import {
     countCommittedImages,
     getImages as getImagesService,
     getImagesIdsByTagIds as getImagesIdsByTagIdsService,
+    getAllImagesWithDuplicateTags,
 } from './images.services.js'
 import { ImageDB } from './images.types.js'
 
@@ -36,6 +37,15 @@ export function getCommittedImages({ include, exclude }: GetImagesSearchArgs): I
         return getImages({ include, exclude, situation: 'committed' })
     } catch (error) {
         logError({ message: 'Failed to get images', error })
+        return []
+    }
+}
+
+export function getDuplicateImages(): InternalImage[] {
+    try {
+        return getAllImagesWithDuplicateTags().map(adaptDBImageToInternal)
+    } catch (error) {
+        logError({ message: 'Failed to get duplicate images', error })
         return []
     }
 }

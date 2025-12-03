@@ -49,7 +49,7 @@ export function getImages({ situation, include, exclude }: GetImageFilesArgs) {
         params.push(...exclude)
     }
 
-    query += 'GROUP BY i.id ORDER BY i.id;'
+    query += 'GROUP BY i.id ORDER BY i.created_at;'
 
     return db.prepare(query).all(...params)
 }
@@ -182,4 +182,29 @@ export function generateImageFileReport(folder: 'images' | 'thumbnails') {
         if (!exists) broken.push(filename)
     }
     return broken
+}
+
+export function getAllImagesWithDuplicateTags(): ImageDB[] {
+    const query = `
+        SELECT i.*,
+            COALESCE(
+                JSON_GROUP_ARRAY(
+                    JSON_OBJECT('id', t.id, 'name', t.name, 'category', t.category, 'franchise', t.franchise)
+                ) FILTER (WHERE t.id IS NOT NULL),
+                json('[]')
+            ) AS tags
+        FROM images i
+        LEFT JOIN image_tags it ON i.id = it.image_id
+        LEFT JOIN tags t ON t.id = it.tag_id
+        WHERE EXISTS (
+            SELECT 1
+            FROM image_tags it2
+            JOIN tags t2 ON t2.id = it2.tag_id
+            WHERE it2.image_id = i.id
+            AND t2.name = 'duplicate'
+        )
+        GROUP BY i.id
+        ORDER BY i.created_at;
+    `
+    return db.prepare(query).all() as ImageDB[]
 }

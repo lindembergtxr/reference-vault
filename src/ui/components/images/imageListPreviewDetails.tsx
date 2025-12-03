@@ -18,7 +18,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
     const [tags, setTags] = useState<EditableTag[]>([])
 
     const { refreshTags } = useTagsContext()
-    const { setImages, refreshImages } = useImageListContext()
+    const { setImages, refresh } = useImageListContext()
 
     function discardChanges() {
         setIsEdit(false)
@@ -27,7 +27,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
 
     function deleteImage() {
         window.api.deleteImage(image.id).then((res) => {
-            if (res.success) refreshImages()
+            if (res.success) refresh()
             else alert(`Failed to delete image - ${res.error}`)
         })
     }
@@ -78,7 +78,7 @@ export function ImageListPreviewDetails({ image }: ImageListPreviewDetailsProps)
             })
             setIsEdit(false)
             setIsExpanded(false)
-            refreshImages()
+            refresh()
             refreshTags()
         } catch (error) {
             alert(`Operation failed ${error}`)
