@@ -24,6 +24,9 @@ function myToast({ type, id, title, message }: ToastArgs) {
     const options: ToastOptions = {
         id,
         position: 'bottom-center',
+        style: {
+            maxWidth: '50vw',
+        },
         className: toastClass[type],
     }
 

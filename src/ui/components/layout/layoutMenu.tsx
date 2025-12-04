@@ -1,9 +1,8 @@
 import { NavLink } from 'react-router-dom'
-
-import { cn } from '../../utils/classname'
-import { useSettings } from '../settings/settingsContext'
 import { Button } from 'react-aria-components'
 import { MdOutlineRefresh } from 'react-icons/md'
+
+import { cn } from '../../utils/classname'
 import { useImageListContext } from '../contexts/imageListCore'
 import { useTagsContext } from '../contexts/tagsCore'
 
@@ -15,8 +14,6 @@ const navbarItems = [
 ]
 
 export const LayoutMenu = () => {
-    const { destinationFolder } = useSettings()
-
     const { refreshTags } = useTagsContext()
 
     const { refresh, committedImagesCount } = useImageListContext()
@@ -29,26 +26,23 @@ export const LayoutMenu = () => {
     return (
         <div className="flex h-full w-full items-center justify-between pr-4">
             <nav className="flex h-full gap-[2px]">
-                {!!destinationFolder &&
-                    navbarItems.map((item) => (
-                        <NavLink
-                            key={item.link}
-                            to={item.link}
-                            className={({ isActive }) => {
-                                return cn(
-                                    'flex items-center gap-x-1 paragraph-lg font-medium py-2 px-4',
-                                    'text-tetsu-900 dark:text-tetsu-300 outline-none',
-                                    'hover:bg-tetsu-300 hover:text-tetsu-900 dark:hover:text-tetsu-900',
-                                    'focus:bg-tetsu-300 focus:text-tetsu-900 focus:dark:text-tetsu-900',
-                                    isActive
-                                        ? 'bg-tetsu-300 text-tetsu-900 dark:text-tetsu-900'
-                                        : ''
-                                )
-                            }}
-                        >
-                            {item.label}
-                        </NavLink>
-                    ))}
+                {navbarItems.map((item) => (
+                    <NavLink
+                        key={item.link}
+                        to={item.link}
+                        className={({ isActive }) => {
+                            return cn(
+                                'flex items-center gap-x-1 paragraph-lg font-medium py-2 px-4',
+                                'text-tetsu-900 dark:text-tetsu-300 outline-none',
+                                'hover:bg-tetsu-300 hover:text-tetsu-900 dark:hover:text-tetsu-900',
+                                'focus:bg-tetsu-300 focus:text-tetsu-900 focus:dark:text-tetsu-900',
+                                isActive ? 'bg-tetsu-300 text-tetsu-900 dark:text-tetsu-900' : ''
+                            )
+                        }}
+                    >
+                        {item.label}
+                    </NavLink>
+                ))}
             </nav>
 
             <div className="flex items-center gap-4">

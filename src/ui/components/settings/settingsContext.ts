@@ -5,6 +5,7 @@ type SettingsContextType = {
     destinationFolder: string | undefined
     toggleTheme: () => void
     setDestinationFolder: () => Promise<void>
+    refresh: () => void
 }
 
 export const SettingsContext = createContext<SettingsContextType>({
@@ -12,6 +13,7 @@ export const SettingsContext = createContext<SettingsContextType>({
     destinationFolder: undefined,
     toggleTheme: () => {},
     setDestinationFolder: () => new Promise(() => {}),
+    refresh: () => {},
 })
 
 export const useSettings = () => {

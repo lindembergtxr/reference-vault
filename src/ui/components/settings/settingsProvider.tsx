@@ -33,7 +33,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
             )
     }
 
-    useEffect(() => {
+    function refresh() {
         window.api
             .getConfig()
             .then((res) => setConfig(res))
@@ -44,6 +44,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
                     message: JSON.stringify(e),
                 })
             )
+    }
+
+    useEffect(() => {
+        refresh()
     }, [])
 
     useEffect(() => {
@@ -54,7 +58,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     return (
         <SettingsContext.Provider
-            value={{ config, destinationFolder, toggleTheme, setDestinationFolder }}
+            value={{ config, destinationFolder, refresh, toggleTheme, setDestinationFolder }}
         >
             {children}
         </SettingsContext.Provider>
