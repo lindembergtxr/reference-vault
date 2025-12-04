@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from 'react-aria-components'
 import {
     MdOutlineAdd,
@@ -21,7 +21,7 @@ export const TagsSearch = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    const { filteredTags, inputValue, setInputValue } = useTagFilter()
+    const { tags, filteredTags, inputValue, setInputValue } = useTagFilter()
 
     const { setSearch } = useImageListContext()
 
@@ -65,6 +65,14 @@ export const TagsSearch = () => {
         setInputValue('')
         inputRef.current?.focus()
     }
+
+    useEffect(() => {
+        const validIds = new Set(tags.map((t) => t.id))
+
+        setSelectedTags((current) => current.filter((tag) => validIds.has(tag.id)))
+        setSearch((current) => current.filter((tag) => validIds.has(tag.id)))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tags])
 
     return (
         <div className="flex flex-col items-center gap-2 w-full h-full px-1 pr-2">
