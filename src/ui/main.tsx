@@ -8,10 +8,10 @@ import './styles/index.css'
 import './errorLogging.js'
 
 import { Gallery, ImportPage, TagsPage } from './pages'
-import { SettingsProvider } from './components/settings'
-import { Layout } from './components/layout/layout.js'
-import { ImageListContext } from './components/contexts/imageListContext.js'
-import { TagsContext } from './components/contexts/tagsContext.js'
+import { SettingsProvider } from './features/settings/index.js'
+import { Layout } from './features/layout/layout.js'
+import { ImageListContext } from './features/contexts/imageListContext.js'
+import { TagsContext } from './features/contexts/tagsContext.js'
 import { SettingsPage } from './pages/settings.js'
 
 async function main() {

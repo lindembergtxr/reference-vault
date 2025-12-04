@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { useTagsContext } from '../components/contexts/tagsCore'
-import { useImageListContext } from '../components/contexts/imageListCore'
-import { ImageImportDetails } from '../components/images/imageImportDetails'
-import { ImageImportEmpty } from '../components/images/imageImportEmpty'
-import { useImagePreview } from '../components/images/images.hooks'
-import { ImageList } from '../components/images/imageList'
+import { useTagsContext } from '../features/contexts/tagsCore'
+import { useImageListContext } from '../features/contexts/imageListCore'
+import { ImageImportDetails } from '../features/images/imageImportDetails'
+import { ImageImportEmpty } from '../features/images/imageImportEmpty'
+import { useImagePreview } from '../features/images/images.hooks'
+import { ImageList } from '../features/images/imageList'
 
 export const ImportPage = () => {
     const [images, setImages] = useState<InternalImage[]>([])

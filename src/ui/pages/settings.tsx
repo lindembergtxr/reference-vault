@@ -1,6 +1,6 @@
-import { HealthReport } from '../components/report/healthReport'
-import { TabRoot, TabList, TabItem, TabPanel } from '../components/common/index'
-import { SettingsWorkspaceList } from '../components/settings/settingsWorkspaceList'
+import { HealthReport } from '../features/report/healthReport'
+import { TabRoot, TabList, TabItem, TabPanel } from '../features/common/index'
+import { SettingsWorkspaceList } from '../features/settings/settingsWorkspaceList'
 
 export const SettingsPage = () => {
     return (

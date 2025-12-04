@@ -1,7 +1,7 @@
 import { SelectionIndicator, Tab, TabList, TabPanel, Tabs } from 'react-aria-components'
 import { cn } from '../utils'
-import { GallerySearch } from '../components/gallery/gallerySearch'
-import { GalleryDuplicates } from '../components/gallery/galleryDuplicates'
+import { GallerySearch } from '../features/gallery/gallerySearch'
+import { GalleryDuplicates } from '../features/gallery/galleryDuplicates'
 
 export const Gallery = () => {
     return (

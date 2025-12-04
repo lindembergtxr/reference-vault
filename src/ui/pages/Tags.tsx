@@ -1,9 +1,9 @@
 import { SelectionIndicator, Tab, TabList, TabPanel, Tabs } from 'react-aria-components'
 
-import { TagsCreator } from '../components/tags/tagsCreator'
+import { TagsCreator } from '../features/tags/tagsCreator'
 import { cn } from '../utils'
-import { TagsRemover } from '../components/tags/tagsRemover'
-import { TagsEditor } from '../components/tags/tagsEditor'
+import { TagsRemover } from '../features/tags/tagsRemover'
+import { TagsEditor } from '../features/tags/tagsEditor'
 
 export const TagsPage = () => {
     return (
