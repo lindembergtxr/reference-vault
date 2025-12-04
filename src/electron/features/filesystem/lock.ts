@@ -5,7 +5,7 @@ import { exec } from 'child_process'
 
 import { logError } from '../../utils/errors.js'
 import { getDB } from '../../database/index.js'
-import { rollback } from './filesystem.utils.js'
+import { ensureFolder, rollback } from './filesystem.utils.js'
 import { getDestinationFolder } from '../config/workspace.js'
 
 let fsBusy = false
@@ -49,6 +49,9 @@ export async function withUnlockedFilesystem<T = void>(callback: () => Promise<T
     let unlocked = false
 
     try {
+        await ensureFolder(imagesPath)
+        await ensureFolder(thumbsPath)
+
         await unlockFolder(imagesPath)
         await unlockFolder(thumbsPath)
         unlocked = true

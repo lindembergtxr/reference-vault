@@ -52,3 +52,7 @@ export async function rollback(undoStack: Array<() => Promise<void>>) {
         }
     }
 }
+
+export async function ensureFolder(dir: string) {
+    await fs.promises.mkdir(dir, { recursive: true })
+}
