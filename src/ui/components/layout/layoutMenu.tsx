@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
 import { cn } from '../../utils/classname'
-import { useConfig } from '../contexts/configCore'
+import { useSettings } from '../settings/settingsContext'
 import { Button } from 'react-aria-components'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { useImageListContext } from '../contexts/imageListCore'
@@ -15,7 +15,7 @@ const navbarItems = [
 ]
 
 export const LayoutMenu = () => {
-    const { destinationFolder } = useConfig()
+    const { destinationFolder } = useSettings()
 
     const { refreshTags } = useTagsContext()
 

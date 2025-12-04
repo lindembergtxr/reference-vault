@@ -2,11 +2,11 @@ import { useRef } from 'react'
 import { Button } from 'react-aria-components'
 import { MdOutlineFolder } from 'react-icons/md'
 
-import { useConfig } from '../contexts/configCore'
+import { useSettings } from '../settings/settingsContext'
 import { cn } from '../../utils/classname'
 
 export const LayoutFolder = () => {
-    const { config, setDestinationFolder } = useConfig()
+    const { config, setDestinationFolder } = useSettings()
 
     const buttonRef = useRef<HTMLButtonElement>(null)
 

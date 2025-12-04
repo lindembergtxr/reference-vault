@@ -1,24 +1,25 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 import './styles/index.css'
 
 import './errorLogging.js'
 
 import { Gallery, ImportPage, TagsPage } from './pages'
-import { ConfigProvider } from './components/contexts/configContext.js'
-import { Layout } from './components/layout/Layout.js'
+import { SettingsProvider } from './components/settings'
+import { Layout } from './components/layout/layout.js'
 import { ImageListContext } from './components/contexts/imageListContext.js'
 import { TagsContext } from './components/contexts/tagsContext.js'
 import { SettingsPage } from './pages/settings.js'
 
-const main = async () => {
+async function main() {
     const root = createRoot(document.getElementById('root')!)
 
     root.render(
         <StrictMode>
-            <ConfigProvider>
+            <SettingsProvider>
                 <HashRouter>
                     <ImageListContext>
                         <TagsContext>
@@ -33,7 +34,8 @@ const main = async () => {
                         </TagsContext>
                     </ImageListContext>
                 </HashRouter>
-            </ConfigProvider>
+            </SettingsProvider>
+            <Toaster />
         </StrictMode>
     )
 }

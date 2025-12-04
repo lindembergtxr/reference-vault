@@ -2,17 +2,18 @@ import { Outlet } from 'react-router-dom'
 import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 import { cn } from '../../utils/classname'
-import { useConfig } from '../contexts/configCore'
+import { useSettings } from '../settings/settingsContext'
+
 import { LayoutMenu } from './layoutMenu'
 import { LayoutSidebar } from './layoutSidebar'
-import { LayoutTitle } from './LayoutTitle'
+import { LayoutTitle } from './layoutTitle'
 import { LayoutPaginator } from './layoutPaginator'
 
 const surfaceCell = 'bg-surface border border-tetsu-500/30'
 const elevatedCell = 'bg-elevated border border-tetsu-500/30'
 
 export const Layout = () => {
-    const { config, toggleTheme } = useConfig()
+    const { config, toggleTheme } = useSettings()
 
     const theme = config?.theme ?? null
 

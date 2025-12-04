@@ -1,5 +1,6 @@
 import { TagsSearch } from '../tags/tagsSearch'
-import { LayoutFolder } from './LayoutFolder'
+
+import { LayoutFolder } from './layoutFolder'
 
 export const LayoutSidebar = () => {
     return (

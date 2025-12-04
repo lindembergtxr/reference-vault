@@ -1,12 +1,14 @@
 import { Button } from 'react-aria-components'
 
 import { cn } from '../../utils'
-import { useConfig } from '../contexts/configCore'
+import { useSettings } from './settingsContext'
 
 import { SettingsWorkspace } from './settingsWorkspace'
 
 export function SettingsWorkspaceList() {
-    const { config } = useConfig()
+    const { config } = useSettings()
+
+    function createWorkspace() {}
 
     return (
         <div className="flex flex-col gap-10 w-full">
@@ -19,7 +21,7 @@ export function SettingsWorkspaceList() {
                         'dark:bg-tetsu-300 dark:text-tetsu-900 hover:bg-tetsu-600 dark:hover:bg-tetsu-700 dark:hover:text-tetsu-100',
                         'disabled:bg-gray-200 disabled:text-gray-500'
                     )}
-                    onClick={() => {}}
+                    onClick={createWorkspace}
                 >
                     New workspace
                 </Button>
