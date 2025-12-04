@@ -1,26 +1,28 @@
-import { db } from '../../database/index.js'
+import { getDB } from '../../database/operations.js'
 import { linkTagsToImage } from '../images/images.services.js'
 
 import { adaptInternalTabToDB } from './tags.adapters.js'
 import { type TagDB } from './tags.types.js'
 
 export function getAllTags() {
-    return db.prepare('SELECT * FROM tags ORDER BY id ASC').all() as InternalTag[]
+    return getDB().prepare('SELECT * FROM tags ORDER BY id ASC').all() as InternalTag[]
 }
 
-export function createTag(tag: TagDB, context = db) {
+export function createTag(tag: TagDB) {
+    const db = getDB()
+
     const createQuery = `
         INSERT OR IGNORE INTO tags (id, name, franchise, category)
         VALUES (@id, @name, @franchise, @category);
     `
-    context.prepare(createQuery).run(tag)
+    db.prepare(createQuery).run(tag)
 
     const readQuery = `
         SELECT id FROM tags
         WHERE name = @name AND franchise = @franchise AND category = @category
         LIMIT 1;
     `
-    const row = context.prepare(readQuery).get(tag)
+    const row = db.prepare(readQuery).get(tag)
 
     if (!row) throw new Error('Failed to insert or retrieve tag')
 
@@ -28,6 +30,8 @@ export function createTag(tag: TagDB, context = db) {
 }
 
 export function createTags(tags: InternalTagNew[]): void {
+    const db = getDB()
+
     const query = `
         INSERT INTO tags (id, name, franchise, category)
         VALUES (@id, @name, @franchise, @category)
@@ -50,7 +54,7 @@ export function createTags(tags: InternalTagNew[]): void {
 }
 
 export function updateImageTags({ id, tags }: InternalImage) {
-    const transaction = db.transaction(() => {
+    const transaction = getDB().transaction(() => {
         createTags(tags)
         linkTagsToImage({ imageId: id, tags: tags })
     })
@@ -62,7 +66,9 @@ export function deleteTagsAndCascadeRelations(tagIds: string[]) {
         DELETE FROM tags
         WHERE id IN (${tagIds.map(() => '?').join(',')});
     `
-    return db.prepare(query).run(...tagIds)
+    return getDB()
+        .prepare(query)
+        .run(...tagIds)
 }
 
 export function alterTagValues(tag: TagDB) {
@@ -71,5 +77,5 @@ export function alterTagValues(tag: TagDB) {
         SET name = @name, category = @category, franchise = @franchise
         WHERE id = @id;
     `
-    return db.prepare(query).run(tag)
+    return getDB().prepare(query).run(tag)
 }

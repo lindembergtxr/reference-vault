@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Button } from 'react-aria-components'
 import { MdOutlineFolder } from 'react-icons/md'
 
-import { useConfig } from '../../utils/configProvider'
+import { useConfig } from '../contexts/configCore'
 import { cn } from '../../utils/classname'
 
 export const LayoutFolder = () => {
@@ -10,7 +10,10 @@ export const LayoutFolder = () => {
 
     const buttonRef = useRef<HTMLButtonElement>(null)
 
-    const outputDir = config?.outputDir ?? ''
+    const outputDir =
+        config?.workspaces.find((ws) => {
+            return ws.name === config?.currentWorkspace
+        })?.outputDir ?? null
 
     const formatFolder = (folder: string) => {
         const elements = folder.split('/')

@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 import * as utils from '../utils/index.js'
-import { db } from './index.js'
+import { getDB } from './operations.js'
 
 const relativeDir = '/src/electron/database/migrations'
 
@@ -15,6 +15,8 @@ export const runSqlMigrations = (): void => {
         .sort()
 
     console.log(`Found ${files.length} migration(s) to process.`)
+
+    const db = getDB()
 
     for (const file of files) {
         const migrationName = path.basename(file)
@@ -38,7 +40,9 @@ export const runSqlMigrations = (): void => {
             console.log(`Migration executed: ${migrationName}`)
         } catch (err) {
             const message = utils.errorMessages['MigrationError'](migrationName)
+
             utils.logError({ message, error: err })
+
             throw utils.generateError('MigrationError', migrationName)
         }
     }

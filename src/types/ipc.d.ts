@@ -7,8 +7,10 @@ type ApiReturn<T = void> = {
 type ApiEventMap = {
     getAllTags: { args: []; return: InternalTag[] }
     getConfig: { args: []; return: ConfigData }
+    createWorkspace: { args: [string]; return: ConfigData }
+    selectWorkspace: { args: [string]; return: ConfigData }
     setTheme: { args: [ConfigDataTheme]; return: ConfigData }
-    setDestinationFolder: { args: []; return: ConfigData }
+    setDestinationFolder: { args: [string]; return: ConfigData }
     importFiles: { args: []; return: void }
     getStagedFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
     getImageFiles: { args: [GetImagesSearchArgs]; return: InternalImage[] }
@@ -30,7 +32,7 @@ type ApiEventMap = {
     deleteImage: { args: [string]; return: ApiReturn }
     batchDeleteImages: { args: [Array<string>]; return: ApiReturn }
     countImages: { args: []; return: ApiReturn<number> }
-    exportDB: { args: []; return: ApiReturn<{ path: string }> }
+    exportDB: { args: [string]; return: ApiReturn<{ path: string }> }
     generateHealthReport: { args: []; return: ApiReturn<HealthReport> }
     updateTag: { args: [InternalTag]; return: ApiReturn }
     getDuplicateImages: { args: []; return: InternalImage[] }

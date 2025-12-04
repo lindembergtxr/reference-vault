@@ -2,11 +2,11 @@ import { Outlet } from 'react-router-dom'
 import { MdDarkMode, MdLightMode } from 'react-icons/md'
 
 import { cn } from '../../utils/classname'
-import { useConfig } from '../../utils/configProvider'
+import { useConfig } from '../contexts/configCore'
 import { LayoutMenu } from './layoutMenu'
 import { LayoutSidebar } from './layoutSidebar'
 import { LayoutTitle } from './LayoutTitle'
-import { LayoutPaginator } from './LayoutPaginator'
+import { LayoutPaginator } from './layoutPaginator'
 
 const surfaceCell = 'bg-surface border border-tetsu-500/30'
 const elevatedCell = 'bg-elevated border border-tetsu-500/30'

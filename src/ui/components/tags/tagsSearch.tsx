@@ -14,9 +14,12 @@ import { useImageListContext } from '../contexts/imageListCore'
 
 import { useTagFilter } from './tags.hooks'
 import { TagsSearchInput } from './tagsSearchInput'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 export const TagsSearch = () => {
     const inputRef = useRef<HTMLInputElement>(null)
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const { filteredTags, inputValue, setInputValue } = useTagFilter()
 
@@ -51,6 +54,7 @@ export const TagsSearch = () => {
     function onSearch() {
         setInputValue('')
         setSearch(selectedTags)
+        if (location.pathname !== '/') navigate('/')
     }
 
     function selectItem(tag: InternalTag) {

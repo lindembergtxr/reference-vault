@@ -1,13 +1,15 @@
 import { createContext, useContext } from 'react'
 
 type ConfigContextType = {
-    config: ConfigData | null
+    config: ConfigData | undefined
+    destinationFolder: string | undefined
     toggleTheme: () => void
     setDestinationFolder: () => Promise<void>
 }
 
 export const ConfigContext = createContext<ConfigContextType>({
-    config: null,
+    config: undefined,
+    destinationFolder: undefined,
     toggleTheme: () => {},
     setDestinationFolder: () => new Promise(() => {}),
 })

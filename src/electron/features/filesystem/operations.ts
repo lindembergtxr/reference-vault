@@ -3,8 +3,8 @@ import path from 'path'
 import sharp from 'sharp'
 
 import * as utils from '../../utils/index.js'
-import { getTemporaryFolderPath } from './filesystem.utils.js'
 import { copyImageToFolder } from '../images/storage.js'
+import { getTemporaryFolderPath } from '../config/config.js'
 
 type FileToFolderHandler = {
     src: string

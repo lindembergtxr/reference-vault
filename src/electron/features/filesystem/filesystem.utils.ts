@@ -1,17 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { getUserDataPath, logError, showOpenDialog } from '../../utils/index.js'
-
-const folderNames = {
-    images: 'temp_images',
-    thumbnails: 'temp_thumbnails',
-    temporary: 'temporary',
-}
-
-export function getTemporaryFolderPath(folder: keyof typeof folderNames) {
-    return path.join(getUserDataPath(), 'gallery', folderNames[folder])
-}
+import { logError, showOpenDialog } from '../../utils/index.js'
 
 export async function selectFolder() {
     const result = await showOpenDialog()
@@ -23,11 +13,7 @@ export async function selectFolder() {
     return result.filePaths[0]
 }
 
-export function createFolder(directory: string) {
-    fs.mkdirSync(directory, { recursive: true })
-}
-
-export function getFolderImages(src: string): string[] {
+export function listImageFilesInDirectory(src: string): string[] {
     const imageRegex = /\.(jpe?g|png|gif|webp|bmp|tiff)$/i
 
     const files = fs.readdirSync(src)

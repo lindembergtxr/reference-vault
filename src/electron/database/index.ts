@@ -1,25 +1,36 @@
-import Database from 'better-sqlite3'
-import dotenv from 'dotenv'
-import fs from 'fs'
 import path from 'path'
-import { getAppPathHelper, getUserDataPath } from '../utils/index.js'
+import { mkdirSync } from 'fs'
+import Database, { type Database as DatabaseType } from 'better-sqlite3'
 
-dotenv.config()
+import { logError } from '../utils/index.js'
 
-export const dbPath = path.join(getUserDataPath(), 'reference_vault.db')
+import { applySchema, closeDB, getDBPath, setDB } from './operations.js'
 
-fs.mkdirSync(path.dirname(dbPath), { recursive: true })
+export * from './operations.js'
 
-export const db = new Database(dbPath)
+export function initDatabase(workspaceName: string): DatabaseType | undefined {
+    const safeName = workspaceName.trim()
 
-db.pragma('journal_mode = WAL')
+    if (!safeName) throw new Error('Workspace name required to init DB')
 
-const schemaPath = path.join(getAppPathHelper(), 'src/electron/database/schema.sql')
+    const dbPath = getDBPath(safeName)
 
-if (fs.existsSync(schemaPath)) {
-    const schema = fs.readFileSync(schemaPath, 'utf8')
-    db.exec(schema)
-    console.log('Database started and schema applied!')
-} else {
-    console.log('Database started, but schema not found')
+    try {
+        mkdirSync(path.dirname(dbPath), { recursive: true })
+
+        closeDB()
+
+        const db = new Database(dbPath)
+        db.pragma('journal_mode = WAL')
+
+        applySchema(db)
+
+        setDB(db)
+
+        return db
+    } catch (error) {
+        logError({ message: 'Failed to initialize database', error })
+
+        throw error
+    }
 }

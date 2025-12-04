@@ -1,10 +1,10 @@
 import fs from 'fs'
 
-import { getDestinationFolder } from '../../config/index.js'
 import { logError } from '../../utils/errors.js'
-import { db } from '../../database/index.js'
 import { adaptInternalTabToDB, createTag } from '../../features/tags/index.js'
 import { transactionalFileAndDB } from '../filesystem/lock.js'
+import { getDestinationFolder } from '../config/workspace.js'
+import { getDB } from '../../database/operations.js'
 
 import {
     deleteImage,
@@ -36,7 +36,7 @@ async function writeImage({ image, situation }: WriteImageArgs) {
             const tags: InternalTag[] = []
 
             for (const tag of image.tags) {
-                const tagId = createTag(adaptInternalTabToDB(tag), db)
+                const tagId = createTag(adaptInternalTabToDB(tag))
 
                 const newTag = { ...tag, id: tagId }
 
@@ -77,11 +77,13 @@ export async function updateImage(image: InternalImage<InternalTagNew>) {
 export async function addTagsToImage({ imageId, tags }: ImageTagsChangeArgs) {
     const internalTags: InternalTag[] = []
 
+    const db = getDB()
+
     try {
         db.prepare('BEGIN').run()
 
         for (const tag of tags) {
-            const tagId = createTag(adaptInternalTabToDB(tag), db)
+            const tagId = createTag(adaptInternalTabToDB(tag))
 
             const newTag: InternalTag = { ...tag, id: tagId }
 
@@ -102,6 +104,18 @@ export async function addTagsToImage({ imageId, tags }: ImageTagsChangeArgs) {
 }
 
 export async function removeTagsFromImage({ imageId, tags }: ImageTagsChangeArgs) {
+    let db
+
+    try {
+        db = getDB()
+    } catch (error) {
+        logError({
+            message: `Database not initialized, cannot remove tags for image ID=${imageId}`,
+            error,
+        })
+        return { success: false, error }
+    }
+
     try {
         db.prepare('BEGIN').run()
 

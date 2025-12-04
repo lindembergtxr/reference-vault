@@ -1,4 +1,4 @@
-import { db } from '../../database/index.js'
+import { getDB } from '../../database/index.js'
 import { logError } from '../../utils/errors.js'
 import { adaptInternalTabToDB } from './tags.adapters.js'
 
@@ -6,6 +6,8 @@ import { alterTagValues, deleteTagsAndCascadeRelations } from './tags.services.j
 
 export async function removeTags({ tagIds }: RemoveTagsPayload) {
     if (tagIds.length === 0) return { success: true }
+
+    const db = getDB()
 
     try {
         db.prepare('BEGIN').run()
@@ -25,6 +27,8 @@ export async function removeTags({ tagIds }: RemoveTagsPayload) {
 }
 
 export async function updateTag(tag: InternalTag) {
+    const db = getDB()
+
     try {
         db.prepare('BEGIN').run()
 

@@ -1,8 +1,9 @@
-import { db } from '../../database/index.js'
-import * as fs from 'fs'
-import { ImageDB } from './images.types.js'
-import { getDestinationFolder } from '../../config/index.js'
 import path from 'path'
+import * as fs from 'fs'
+
+import { ImageDB } from './images.types.js'
+import { getDB } from '../../database/operations.js'
+import { getDestinationFolder } from '../config/workspace.js'
 
 type GetImageFilesArgs = {
     situation: InternalImage['situation']
@@ -51,7 +52,9 @@ export function getImages({ situation, include, exclude }: GetImageFilesArgs) {
 
     query += 'GROUP BY i.id ORDER BY i.created_at;'
 
-    return db.prepare(query).all(...params)
+    return getDB()
+        .prepare(query)
+        .all(...params)
 }
 
 export function upsertImage(image: Omit<InternalImage, 'tags'>) {
@@ -64,7 +67,7 @@ export function upsertImage(image: Omit<InternalImage, 'tags'>) {
             group_id = excluded.group_id,
             situation = excluded.situation
     `
-    return db.prepare(query).run(image)
+    return getDB().prepare(query).run(image)
 }
 
 export function getTagsForImage(imageId: string) {
@@ -74,15 +77,15 @@ export function getTagsForImage(imageId: string) {
         JOIN tags t ON t.id = it.tag_id
         WHERE it.image_id = ?;
     `
-    return db.prepare(query).all(imageId) as InternalTag[]
+    return getDB().prepare(query).all(imageId) as InternalTag[]
 }
 
 export function deleteImage(id: string) {
-    db.prepare('DELETE FROM images WHERE id = ?').run(id)
+    getDB().prepare('DELETE FROM images WHERE id = ?').run(id)
 }
 
 export function countCommittedImages() {
-    const row = db
+    const row = getDB()
         .prepare(`SELECT COUNT(id) AS count FROM images WHERE situation = 'committed';`)
         .get() as { count: number }
 
@@ -90,7 +93,7 @@ export function countCommittedImages() {
 }
 
 export function countAllImages() {
-    const row = db.prepare(`SELECT COUNT(id) AS count FROM images;`).get() as { count: number }
+    const row = getDB().prepare(`SELECT COUNT(id) AS count FROM images;`).get() as { count: number }
 
     return row.count
 }
@@ -100,6 +103,8 @@ type LinkTagsToImageArgs = {
     tags: InternalTagNew[]
 }
 export function linkTagsToImage({ imageId, tags }: LinkTagsToImageArgs) {
+    const db = getDB()
+
     const insert = db.prepare(`
         INSERT INTO image_tags (image_id, tag_id)
         VALUES (@imageId, @tagId)
@@ -117,6 +122,8 @@ type UnlinkTagsFromImageArgs = {
     tags: InternalTagNew[]
 }
 export function unlinkTagsFromImage({ imageId, tags }: UnlinkTagsFromImageArgs) {
+    const db = getDB()
+
     const insert = db.prepare(`
         DELETE FROM image_tags
         WHERE image_id = @imageId AND tag_id = @tagId
@@ -135,7 +142,9 @@ export function getImagesIdsByTagIds(tagIds: string[]): { id: string }[] {
         INNER JOIN image_tags it ON it.image_id = i.id
         WHERE it.tag_id IN (${tagIds.map(() => '?').join(',')});
     `
-    return db.prepare(query).all(...tagIds) as { id: string }[]
+    return getDB()
+        .prepare(query)
+        .all(...tagIds) as { id: string }[]
 }
 
 export function generateImageDBReport() {
@@ -143,7 +152,7 @@ export function generateImageDBReport() {
         SELECT id, image_path, thumbnail_path
         FROM images;
     `
-    const dbImages = db.prepare(query).all() as ImageDB[]
+    const dbImages = getDB().prepare(query).all() as ImageDB[]
 
     const broken = []
 
@@ -166,7 +175,7 @@ export function generateImageFileReport(folder: 'images' | 'thumbnails') {
     const broken: string[] = []
 
     const query = 'SELECT 1 FROM images WHERE id = ?;'
-    const statement = db.prepare(query)
+    const statement = getDB().prepare(query)
 
     for (const file of imageFiles) {
         if (file.startsWith('.')) continue
@@ -206,5 +215,5 @@ export function getAllImagesWithDuplicateTags(): ImageDB[] {
         GROUP BY i.id
         ORDER BY i.created_at;
     `
-    return db.prepare(query).all() as ImageDB[]
+    return getDB().prepare(query).all() as ImageDB[]
 }

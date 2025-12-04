@@ -1,16 +1,17 @@
 import * as utils from '../../utils/index.js'
 import * as filesystem from '../filesystem/index.js'
+import { transactionalFileAndDB } from '../filesystem/lock.js'
+import { getTemporaryFolderPath } from '../config/config.js'
 
 import { upsertImage } from './images.services.js'
 import { createThumbnailFromImage } from './thumbnail.js'
-import { transactionalFileAndDB } from '../filesystem/lock.js'
 
 export async function importFromFolder() {
     const folderPath = await filesystem.selectFolder()
 
     if (!folderPath) return
 
-    const fileURLs = filesystem.getFolderImages(folderPath)
+    const fileURLs = filesystem.listImageFilesInDirectory(folderPath)
     const failures: string[] = []
 
     let success = 0
@@ -18,8 +19,8 @@ export async function importFromFolder() {
     for (const url of fileURLs) {
         try {
             await transactionalFileAndDB(async (undoStack) => {
-                const path = filesystem.getTemporaryFolderPath('images')
-                const outputDir = filesystem.getTemporaryFolderPath('thumbnails')
+                const path = getTemporaryFolderPath('images')
+                const outputDir = getTemporaryFolderPath('thumbnails')
 
                 const { filename, destination } = await filesystem.copyImageWithCleanup(url, path)
 

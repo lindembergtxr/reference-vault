@@ -7,7 +7,7 @@ import './styles/index.css'
 import './errorLogging.js'
 
 import { Gallery, ImportPage, TagsPage } from './pages'
-import { ConfigProvider } from './components/ConfigProvider.js'
+import { ConfigProvider } from './components/contexts/configContext.js'
 import { Layout } from './components/layout/Layout.js'
 import { ImageListContext } from './components/contexts/imageListContext.js'
 import { TagsContext } from './components/contexts/tagsContext.js'

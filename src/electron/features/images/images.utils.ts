@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { getDestinationFolder } from '../../config/index.js'
+import { getDestinationFolder } from '../config/workspace.js'
 
 export function getImagePath(imageId: string) {
     const folder = getDestinationFolder('images')

@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 
 import { cn } from '../../utils/classname'
-import { useConfig } from '../../utils/configProvider'
+import { useConfig } from '../contexts/configCore'
 import { Button } from 'react-aria-components'
 import { MdOutlineRefresh } from 'react-icons/md'
 import { useImageListContext } from '../contexts/imageListCore'
@@ -15,9 +15,10 @@ const navbarItems = [
 ]
 
 export const LayoutMenu = () => {
-    const { config } = useConfig()
+    const { destinationFolder } = useConfig()
 
     const { refreshTags } = useTagsContext()
+
     const { refresh, committedImagesCount } = useImageListContext()
 
     const refreshData = () => {
@@ -28,7 +29,7 @@ export const LayoutMenu = () => {
     return (
         <div className="flex h-full w-full items-center justify-between pr-4">
             <nav className="flex h-full gap-[2px]">
-                {!!config?.outputDir &&
+                {!!destinationFolder &&
                     navbarItems.map((item) => (
                         <NavLink
                             key={item.link}

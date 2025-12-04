@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { getUserDataPath } from './electron.js'
+import { createFolder } from './filesystem.js'
 
 type ErrorMessageMap = {
     MissingConfig: () => string
@@ -40,28 +41,46 @@ export const generateError = <K extends keyof ErrorMessageMap>(
     return new Error(message)
 }
 
-export type LogError = {
+type LogLevel = 'error' | 'warn' | 'info'
+
+async function writeLog(level: LogLevel, message: string) {
+    try {
+        const folderPath = createFolder(path.join(getUserDataPath(), 'logs'))
+
+        const now = new Date()
+
+        const fileName = `${format(now, 'yyyy-ww')}-${level}.log`
+
+        const logFile = path.join(folderPath, fileName)
+
+        const timestamp = format(now, 'yyyy-MM-dd HH:mm:ss')
+
+        const logLine = `[${timestamp}] [${level.toUpperCase()}] ${message}\n`
+
+        await fs.promises.appendFile(logFile, logLine)
+    } catch (err) {
+        console.error('Logger failed to write file', err)
+    }
+}
+
+export type LogArgs = {
     message: string
     error?: unknown
+    meta?: Record<string, unknown>
 }
-export const logError = async (args: LogError) => {
-    const { message, error } = args || { message: 'Invalid properties' }
+export async function logError({ message, error, meta }: LogArgs) {
+    let errorMsg = ''
 
-    const errorLogFolderPath = path.join(getUserDataPath(), 'error_log')
+    if (error instanceof Error) errorMsg = error.stack || error.message
+    else errorMsg = error ? String(error) : ''
 
-    await fs.promises.mkdir(errorLogFolderPath, { recursive: true })
+    const metaStr = meta ? ` :: ${JSON.stringify(meta)}` : ''
 
-    const now = new Date()
+    const data = `${message}${errorMsg ? ' :: ' + errorMsg : ''}${metaStr}`
 
-    const fileName = `${format(now, 'yyyy-MM')}.log`
+    await writeLog('error', data)
+}
 
-    const logFile = path.join(errorLogFolderPath, fileName)
-
-    const timestamp = format(now, 'yyyy-MM-dd HH:mm:ss')
-
-    const errorMsg = error instanceof Error ? error.stack || error.message : String(error)
-
-    const logLine = `[${timestamp}] ${message}${error ? ': ' + errorMsg : ''}\n`
-
-    await fs.promises.appendFile(logFile, logLine)
+export async function logInfo({ message, meta }: LogArgs) {
+    await writeLog('info', `${message}${meta ? ` :: ${JSON.stringify(meta)}` : ''}`)
 }
