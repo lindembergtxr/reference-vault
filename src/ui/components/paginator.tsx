@@ -5,7 +5,7 @@ import {
     MdKeyboardDoubleArrowLeft,
     MdKeyboardDoubleArrowRight,
 } from 'react-icons/md'
-import { cn } from '../../utils/classname'
+import { cn } from '../utils/classname'
 
 type PaginationProps = {
     currentPage: number

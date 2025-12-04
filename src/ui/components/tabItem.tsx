@@ -1,5 +1,5 @@
 import { SelectionIndicator, Tab } from 'react-aria-components'
-import { cn } from '../../utils'
+import { cn } from '../utils'
 
 type TabItemProps = {
     id: string

@@ -1,5 +1,6 @@
 import { useLocation } from 'react-router-dom'
-import { Pagination } from '../common/paginator'
+
+import { Pagination } from '../../components/paginator'
 import { useImageListContext } from '../contexts/imageListCore'
 
 export const LayoutPaginator = () => {

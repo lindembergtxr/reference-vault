@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
+import { toastError } from '../../components/toast'
+
 import { SettingsContext } from './settingsContext'
-import { toastError } from '../common/toast'
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const [config, setConfig] = useState<ConfigData | undefined>(undefined)
@@ -57,10 +58,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }, [config])
 
     return (
-        <SettingsContext.Provider
+        <SettingsContext
             value={{ config, destinationFolder, refresh, toggleTheme, setDestinationFolder }}
         >
             {children}
-        </SettingsContext.Provider>
+        </SettingsContext>
     )
 }

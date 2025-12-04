@@ -1,8 +1,10 @@
 import { Button } from 'react-aria-components'
+
 import { cn } from '../../utils'
-import { useSettings } from './settingsContext'
 import { useTagsContext } from '../contexts/tagsCore'
-import { toastError, toastSuccess } from '../common/toast'
+import { toastError, toastSuccess } from '../../components/toast'
+
+import { useSettings } from './settingsContext'
 
 type SettingsWorkspaceProps = {
     workspace: Workspace

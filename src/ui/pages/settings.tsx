@@ -1,5 +1,5 @@
 import { HealthReport } from '../features/report/healthReport'
-import { TabRoot, TabList, TabItem, TabPanel } from '../features/common/index'
+import { TabRoot, TabList, TabItem, TabPanel } from '../components/index'
 import { SettingsWorkspaceList } from '../features/settings/settingsWorkspaceList'
 
 export const SettingsPage = () => {

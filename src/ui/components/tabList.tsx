@@ -1,5 +1,5 @@
 import { TabList as BaseList } from 'react-aria-components'
-import { cn } from '../../utils'
+import { cn } from '../utils'
 
 type TabListProps = {
     id: string
