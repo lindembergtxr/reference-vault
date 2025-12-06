@@ -23,6 +23,7 @@ export function ImageListPreviewEdit({
     const [isAdding, setIsAdding] = useState(false)
 
     const listRef = useRef<HTMLUListElement>(null)
+    const tagSuggestionRef = useRef<HTMLUListElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
 
     const { filteredTags, inputValue, setInputValue } = useTagFilter()
@@ -78,7 +79,11 @@ export function ImageListPreviewEdit({
         setIsAdding(false)
     }
 
-    const clearTag = () => {
+    function toggleAddForm() {
+        setIsAdding(true)
+    }
+
+    function clearTag() {
         setIsAdding(false)
         setInputValue('')
     }
@@ -88,8 +93,18 @@ export function ImageListPreviewEdit({
 
         if (!el) return
 
-        requestAnimationFrame(() => (el.scrollTop = el.scrollHeight))
+        requestAnimationFrame(() => {
+            const height = el.scrollHeight
+
+            requestAnimationFrame(() => {
+                el.scrollTop = height
+            })
+        })
     }, [currentTags.length])
+
+    useEffect(() => {
+        if (isAdding) inputRef.current?.focus()
+    }, [isAdding])
 
     return (
         <div className="flex flex-col items-center gap-3 w-full px-4 py-2 rounded border border-gray-400 mb-3">
@@ -136,7 +151,10 @@ export function ImageListPreviewEdit({
                             </div>
 
                             <div className="flex flex-col h-16 w-full overflow-hidden rounded border border-gray-400">
-                                <ul className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll">
+                                <ul
+                                    ref={tagSuggestionRef}
+                                    className="flex flex-col min-h-0 w-full px-3 py-1 overflow-scroll"
+                                >
                                     {filteredTags.map((tag) => (
                                         <li
                                             key={tag.id}
@@ -158,7 +176,7 @@ export function ImageListPreviewEdit({
                                 'caption text-xs bg-transparent text-aoi-800 rounded border border-aoi-800 w-fit px-3 py-1',
                                 'hover:bg-aoi-800 hover:text-aoi-100 hover:cursor-pointer'
                             )}
-                            onClick={() => setIsAdding(true)}
+                            onClick={toggleAddForm}
                         >
                             Add tag
                         </Button>

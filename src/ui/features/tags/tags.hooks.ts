@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { TagsCSVInputRef } from './tagsCSVInput'
 import { CATEGORY_SHORTCUTS, filterTagFunction, parseCsv } from './tags.utils'
@@ -31,12 +31,10 @@ type UseCSVShortcutsArgs = {
     onChange: (value: string) => void
 }
 export function useCSVShortcuts({ ref, text, onChange }: UseCSVShortcutsArgs) {
-    useEffect(() => {
-        const el = ref.current
+    const textRef = useRef(text)
 
-        if (!el) return
-
-        const handler = (evt: Event) => {
+    const handler = useCallback(
+        (evt: Event) => {
             const ke = evt as unknown as KeyboardEvent
 
             if (!ke.metaKey) return
@@ -49,11 +47,16 @@ export function useCSVShortcuts({ ref, text, onChange }: UseCSVShortcutsArgs) {
 
             evt.preventDefault()
 
+            const el = ref.current
+
+            if (!el) return
+
+            const text = textRef.current || ''
+
             const start = el.selectionStart ?? 0
             const end = el.selectionEnd ?? 0
 
             const before = text.slice(0, start).replace(/,\s*$/, '')
-
             const updated = before + ', ' + shortcut + text.slice(end)
 
             onChange(updated)
@@ -62,12 +65,23 @@ export function useCSVShortcuts({ ref, text, onChange }: UseCSVShortcutsArgs) {
                 const pos = before.length + 2 + shortcut.length
                 el.setSelectionRange(pos, pos)
             })
-        }
+        },
+        [ref, onChange]
+    )
+
+    useEffect(() => {
+        textRef.current = text
+    }, [text])
+
+    useEffect(() => {
+        const el = ref.current
+
+        if (!el) return
 
         el.addEventListener('keydown', handler)
 
         return () => el.removeEventListener('keydown', handler)
-    }, [ref, text, onChange])
+    }, [ref, handler])
 }
 
 export function useTagFilter() {

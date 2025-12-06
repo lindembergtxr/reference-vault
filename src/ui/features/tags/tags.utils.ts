@@ -78,31 +78,77 @@ export function parseTagString(input: string) {
     return { franchise, name: tagName }
 }
 
-export function validateTagsCSV(text: string): boolean {
-    const parsedList = parseCsv(text)
+function pad(n: number, width = 4) {
+    const s = String(Math.max(0, Math.floor(n)))
+    return s.padStart(width, '0')
+}
 
-    return parsedList.some((item) => item.error)
+function levenshtein(a: string, b: string): number {
+    const m = a.length,
+        n = b.length
+    if (m === 0) return n
+    if (n === 0) return m
+
+    const dp: number[][] = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0))
+
+    for (let i = 0; i <= m; i++) dp[i][0] = i
+    for (let j = 0; j <= n; j++) dp[0][j] = j
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1
+            dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
+        }
+    }
+    return dp[m][n]
 }
 
 export function filterTagFunction(tags: InternalTag[]) {
     return (inputValue: string) => {
         if (!inputValue || inputValue.length < 2) return []
 
-        const lowerInput = normalize(inputValue)
+        const needle = normalize(inputValue)
 
-        return tags
-            .map((tag) => {
-                const nameScore = normalize(tag.name).includes(lowerInput) ? 2 : 0
-                const franchiseScore = normalize(tag.franchise).includes(lowerInput) ? 1 : 0
-                const totalScore = nameScore + franchiseScore
+        const mapped = tags.map((tag) => {
+            const name = normalize(tag.name)
+            const franchise = normalize(tag.franchise ?? '')
+            const category = normalize(tag.category ?? '')
 
-                return { tag, score: totalScore }
-            })
-            .filter((item) => item.score > 0)
-            .sort((a, b) => {
-                if (b.score !== a.score) return b.score - a.score
-                return a.tag.name.localeCompare(b.tag.name)
-            })
-            .map((item) => item.tag)
+            const namePos = name.indexOf(needle)
+            const franPos = franchise.indexOf(needle)
+
+            const nameMatch = namePos !== -1
+            const franchiseMatch = franPos !== -1
+
+            if (!nameMatch && !franchiseMatch) return null
+
+            const primaryPriority = nameMatch ? 0 : 1
+
+            const pos = nameMatch ? namePos : franchiseMatch ? franPos : 9999
+
+            const slice = nameMatch
+                ? name.slice(namePos, namePos + Math.max(needle.length, 1))
+                : franchiseMatch
+                  ? franchise.slice(franPos, franPos + Math.max(needle.length, 1))
+                  : ''
+            const dist = slice ? levenshtein(needle, slice) : 9999
+
+            const nameLen = tag.name.length
+
+            const sortKey = [
+                pad(primaryPriority, 1),
+                pad(pos, 4),
+                pad(dist, 3),
+                pad(nameLen, 4),
+                category || 'zzzz',
+                normalize(tag.name),
+            ].join('|')
+
+            return { tag, sortKey, primaryPriority, pos, dist, nameLen, category }
+        })
+
+        return mapped
+            .filter((x): x is NonNullable<typeof x> => x != null)
+            .sort((a, b) => a.sortKey.localeCompare(b.sortKey))
+            .map((x) => x.tag)
     }
 }
