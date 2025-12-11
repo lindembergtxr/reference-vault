@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useTagsContext } from '../features/contexts/tagsCore'
 import { useImageListContext } from '../features/contexts/imageListCore'
@@ -10,7 +10,7 @@ import { ImageList } from '../features/images/imageList'
 export const ImportPage = () => {
     const [images, setImages] = useState<InternalImage[]>([])
 
-    const { refresh } = useImageListContext()
+    const { refresh, scrollPosition, setScrollPosition } = useImageListContext()
     const { refreshTags } = useTagsContext()
 
     const { preview, openImage, closePreview, ...previewProps } = useImagePreview({ images })
@@ -33,6 +33,30 @@ export const ImportPage = () => {
         })
     }
 
+    const divRef = useRef<HTMLDivElement>(null)
+
+    function onImageOpen(id: string) {
+        const container = divRef.current
+
+        setScrollPosition(container?.scrollTop ?? 0)
+        openImage(id)
+    }
+
+    useEffect(() => {
+        if (!preview) {
+            requestAnimationFrame(() => {
+                if (divRef.current) divRef.current.scrollTop = scrollPosition
+            })
+            setScrollPosition(0)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [preview])
+
+    useEffect(() => {
+        setScrollPosition(0)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     useEffect(() => {
         refreshData()
     }, [])
@@ -51,5 +75,12 @@ export const ImportPage = () => {
             />
         )
 
-    return <ImageList images={images} totalCount={images.length} openImage={openImage} />
+    return (
+        <ImageList
+            divRef={divRef}
+            images={images}
+            totalCount={images.length}
+            openImage={onImageOpen}
+        />
+    )
 }

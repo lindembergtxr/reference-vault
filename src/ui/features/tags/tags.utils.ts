@@ -1,4 +1,4 @@
-import { normalize } from '../../utils'
+import { generateId, normalize } from '../../utils'
 import { type CSVTag } from './tags.type'
 
 export const CATEGORY_SHORTCUTS: Record<number, TagCategory> = {
@@ -20,6 +20,7 @@ export function parseCsv(text: string): CSVTag[] {
         const parts = line.split(',')
 
         const result: CSVTag = {
+            id: generateId(),
             name: parts[0]?.trim() || '',
             category: parts[1]?.trim() as TagCategory,
             franchise: parts[2]?.trim() || '',

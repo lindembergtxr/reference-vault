@@ -1,4 +1,4 @@
-export type CSVTag = Omit<InternalTagNew, 'id'> & {
+export type CSVTag = InternalTagNew & {
     category: TagCategory
     franchise: string
     line: number
