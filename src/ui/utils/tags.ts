@@ -2,7 +2,7 @@ import { customAlphabet } from 'nanoid'
 
 export function parseTag(tag: InternalTagNew) {
     if (!tag?.name) return ''
-    return `${tag.name.replaceAll('_', ' ')}${tag.franchise ? ` (${tag.franchise.replaceAll('_', ' ')})` : ''}`
+    return `${tag.name.replaceAll('_', ' ')}${tag.franchise ? ` (${tag.franchise.replaceAll('_', ' ')})` : ''} - ${tag.category.replaceAll('_', ' ')}`
 }
 
 export function normalize(text: string) {

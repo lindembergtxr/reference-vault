@@ -15,7 +15,10 @@ export const TagsInputController = ({ onTagsChange }: TagsInputControllerProps) 
     const dirtyTags = useMemo(() => {
         return csvInputProps.parsedTags
             .filter((tag) => tag.error)
-            .map((tag) => `Error in "${tag.name}" - ${tag.error}`)
+            .map((tag) => ({
+                id: tag.id,
+                message: `Error in "${tag.name}" - ${tag.error}`,
+            }))
     }, [csvInputProps.parsedTags])
 
     const { tags } = useTagsContext()
@@ -52,9 +55,9 @@ export const TagsInputController = ({ onTagsChange }: TagsInputControllerProps) 
                     {dirtyTags.length > 0 && (
                         <p className="font-mono text-sm font-semibold text-red-700/90">Errors:</p>
                     )}
-                    {dirtyTags.map((error) => (
-                        <li key={error} className="font-mono text-sm text-red-700/80">
-                            {error}
+                    {dirtyTags.map((tag) => (
+                        <li key={tag.id} className="font-mono text-sm text-red-700/80">
+                            {tag.message}
                         </li>
                     ))}
 

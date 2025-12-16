@@ -139,7 +139,10 @@ export const TagsSearchInput = ({
                                         ? 'bg-tetsu-300/80 dark:bg-tetsu-500/80'
                                         : ''
                                 )}
-                                onMouseDown={() => selectItem(index)}
+                                onMouseDown={(e) => {
+                                    e.preventDefault()
+                                    selectItem(index)
+                                }}
                             >
                                 {parseTag(tag)}
                             </li>
