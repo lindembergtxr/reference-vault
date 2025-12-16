@@ -6,22 +6,35 @@ import { ImageImportDetails } from '../features/images/imageImportDetails'
 import { ImageImportEmpty } from '../features/images/imageImportEmpty'
 import { useImagePreview } from '../features/images/images.hooks'
 import { ImageList } from '../features/images/imageList'
+import { ImageImportLoading } from '../features/images/imageImportLoading'
 
 export const ImportPage = () => {
+    const divRef = useRef<HTMLDivElement>(null)
+
     const [images, setImages] = useState<InternalImage[]>([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const { refresh, scrollPosition, setScrollPosition } = useImageListContext()
+
     const { refreshTags } = useTagsContext()
 
     const { preview, openImage, closePreview, ...previewProps } = useImagePreview({ images })
 
     const currentIndex = images.findIndex((img) => preview && img.id === preview.id)
 
-    const refreshData = () => window.api.getStagedFiles({}).then((res) => setImages(res))
+    function refreshData() {
+        window.api.getStagedFiles({}).then((res) => setImages(res))
+    }
 
-    const importData = () => window.api.importFiles().then(() => refreshData())
+    function importData() {
+        setIsLoading(true)
+        window.api
+            .importFiles()
+            .then(() => refreshData())
+            .finally(() => setIsLoading(false))
+    }
 
-    const onCommit = (image: InternalImage<InternalTagNew>) => {
+    function onCommit(image: InternalImage<InternalTagNew>) {
         window.api.commitImage(image).then((res) => {
             if (res.success) {
                 refreshData()
@@ -32,8 +45,6 @@ export const ImportPage = () => {
             }
         })
     }
-
-    const divRef = useRef<HTMLDivElement>(null)
 
     function onImageOpen(id: string) {
         const container = divRef.current
@@ -60,6 +71,8 @@ export const ImportPage = () => {
     useEffect(() => {
         refreshData()
     }, [])
+
+    if (isLoading) return <ImageImportLoading />
 
     if (images.length === 0) return <ImageImportEmpty importData={importData} />
 

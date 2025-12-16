@@ -189,7 +189,8 @@ export function ImageListPreviewEdit({
                             <li
                                 className={cn(
                                     'flex items-center justify-between w-full font-mono text-xs px-2 py-1',
-                                    'rounded border border-gray-500',
+                                    'rounded border border-gray-500 cursor-pointer',
+                                    'hover:bg-opacity-90',
                                     tag.status === 'original'
                                         ? 'bg-gray-300'
                                         : tag.status === 'removed'
@@ -197,24 +198,19 @@ export function ImageListPreviewEdit({
                                           : 'bg-green-200'
                                 )}
                                 key={tag.id}
+                                onClick={() => {
+                                    if (tag.status === 'removed') undoRemoveTag(tag)
+                                    else removeTag(tag)
+                                }}
                             >
                                 <p className="w-full">{parseTagToCSVString(tag)}</p>
+
                                 <p>{tag.status}</p>
-                                {tag.status !== 'removed' && (
-                                    <Button
-                                        className="p-0.5 rounded hover:bg-red-300"
-                                        onClick={() => removeTag(tag)}
-                                    >
-                                        <MdOutlineClose className="w-3 h-3" />
-                                    </Button>
-                                )}
-                                {tag.status === 'removed' && (
-                                    <Button
-                                        className="p-0.5 rounded hover:bg-red-300"
-                                        onClick={() => undoRemoveTag(tag)}
-                                    >
-                                        <MdOutlineUndo className="w-3 h-3" />
-                                    </Button>
+
+                                {tag.status === 'removed' ? (
+                                    <MdOutlineUndo className="w-3 h-3 ml-2" />
+                                ) : (
+                                    <MdOutlineClose className="w-3 h-3 ml-2" />
                                 )}
                             </li>
                         ))}
